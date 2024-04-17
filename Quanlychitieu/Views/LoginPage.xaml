@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="LoginPage"
+    Shell.NavBarIsVisible="False">
+    <VerticalStackLayout
+        Padding="30,0"
+        Spacing="25"
+        VerticalOptions="Center">
+        <Label
+            BackgroundColor="Red"
+            HeightRequest="150"
+            WidthRequest="150" />
+        <VerticalStackLayout Spacing="5">
+            <Label
+                FontSize="28"
+                HorizontalTextAlignment="Center"
+                Text="Xin chào!"
+                TextColor="Gray" />
+            <Label
+                FontSize="18"
+                HorizontalTextAlignment="Center"
+                Text="Vui lòng đăng nhập tài khoản của bạn"
+                TextColor="Gray" />
+        </VerticalStackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Border
+                BackgroundColor="White"
+                HeightRequest="56"
+                Stroke="LightGray"
+                StrokeShape="RoundRectangle 26"
+                StrokeThickness="2"
+                WidthRequest="56"
+                ZIndex="1">
+                <Image
+                    HeightRequest="20"
+                    Source="user.png"
+                    WidthRequest="20" />
+            </Border>
+            <Border
+                Margin="-20,0,0,0"
+                Padding="0"
+                HeightRequest="45"
+                HorizontalOptions="FillAndExpand"
+                Stroke="LightGray"
+                StrokeShape="RoundRectangle 6">
+                <Entry
+                    Margin="20,0,0,0"
+                    Keyboard="Email"
+                    Placeholder="Tên đăng nhập"
+                    VerticalOptions="Center" />
+            </Border>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Border
+                BackgroundColor="White"
+                HeightRequest="56"
+                Stroke="LightGray"
+                StrokeShape="RoundRectangle 26"
+                StrokeThickness="2"
+                WidthRequest="56"
+                ZIndex="1">
+                <Image
+                    HeightRequest="20"
+                    Source="lock.png"
+                    WidthRequest="20" />
+            </Border>
+            <Border
+                Margin="-20,0,0,0"
+                Padding="0"
+                HeightRequest="45"
+                HorizontalOptions="FillAndExpand"
+                Stroke="LightGray"
+                StrokeShape="RoundRectangle 6">
+                <Entry
+                    Margin="20,0,0,0"
+                    IsPassword="True"
+                    Placeholder="Mật khẩu"
+                    VerticalOptions="Center" />
+            </Border>
+        </StackLayout>
+
+        <Button
+            CornerRadius="20"
+            HorizontalOptions="Center"
+            Text="Đăng nhập"
+            WidthRequest="100" />
+
+        <StackLayout
+            HorizontalOptions="Center"
+            Orientation="Horizontal"
+            Spacing="5">
+            <Label Text="Bạn chưa có tài khoản?" TextColor="Gray" />
+            <Label Text="Đăng ký tại đây" TextColor="#50b3f2" />
+        </StackLayout>
+    </VerticalStackLayout>
+</ContentPage>
