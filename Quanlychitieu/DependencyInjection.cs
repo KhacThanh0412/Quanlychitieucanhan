@@ -21,6 +21,7 @@ namespace Quanlychitieu
 
             services.AddTransient<HomeViewModel>();
             services.AddTransient<RecentTransactionsViewModel>();
+            services.AddSingleton<LoginViewModel>();
             return services;
         }
     }

@@ -85,6 +85,7 @@
         </StackLayout>
 
         <Button
+            Command="{Binding GoToLoginCommand}"
             CornerRadius="20"
             HorizontalOptions="Center"
             Text="Đăng nhập"
