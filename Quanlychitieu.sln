@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quanlychitieu", "Quanlychitieu\Quanlychitieu.csproj", "{AD729B3D-7F70-4278-83DE-E9724843DAAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quanlychitieu.Models", "Quanlychitieu.Models\Quanlychitieu.Models\Quanlychitieu.Models.csproj", "{50C1F6F4-E17C-482E-A99C-C9C2E56DD756}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{AD729B3D-7F70-4278-83DE-E9724843DAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD729B3D-7F70-4278-83DE-E9724843DAAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD729B3D-7F70-4278-83DE-E9724843DAAC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{50C1F6F4-E17C-482E-A99C-C9C2E56DD756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50C1F6F4-E17C-482E-A99C-C9C2E56DD756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50C1F6F4-E17C-482E-A99C-C9C2E56DD756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50C1F6F4-E17C-482E-A99C-C9C2E56DD756}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
