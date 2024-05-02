@@ -27,6 +27,7 @@ namespace Quanlychitieu
 
             .UseUraniumUI()
             .UseUraniumUIMaterial()
+            .UseUraniumUIBlurs()
             .UseMauiCommunityToolkit();
 
             builder.Services.AddApplication();
