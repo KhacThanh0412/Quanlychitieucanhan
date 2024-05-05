@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
+using UraniumUI;
 
 namespace Quanlychitieu
 {
@@ -14,7 +15,16 @@ namespace Quanlychitieu
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("cocogoose.otf", "Cocogoose");
+                fonts.AddMaterialIconFonts();
+                fonts.AddFontAwesomeIconFonts();
             })
+                .ConfigureEssentials(essentials =>
+                {
+                    essentials
+                    .AddAppAction("add_flow_out", "Add Flow Out", "Add a Flow Out")
+                    //.AddAppAction("add_flow_in", "Add Flow In", "Add a Flow In", "request_money_d.png")
+                    .OnAppAction(App.HandleAppActions);
+                })
                 .UseMauiCommunityToolkit()
                 .UseMauiCompatibility();
 
