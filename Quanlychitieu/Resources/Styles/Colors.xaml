@@ -40,4 +40,28 @@
     <Color x:Key="Blue100Accent">#3E8EED</Color>
     <Color x:Key="Blue200Accent">#72ACF1</Color>
     <Color x:Key="Blue300Accent">#A7CBF6</Color>
+
+    <!--  Additional Colors inspired from Uranium UI material color palette  -->
+
+    <Color x:Key="SecondaryContainer">#E8DEF8</Color>
+    <Color x:Key="SecondaryContainerDark">#4A4458</Color>
+    <Color x:Key="Surface">#FFFBFE</Color>
+    <Color x:Key="SurfaceDark">#201F24</Color>
+
+    <!--  Color Paletter 'Power' from Twitter  -->
+
+    <Color x:Key="BackGroundDark">#201F24</Color>
+    <Color x:Key="BorderDark">#1B1B1B</Color>
+    <Color x:Key="BackGroundLight">#D8D8D8</Color>
+    <Color x:Key="DataGridColorDark">#263238</Color>
+    <Color x:Key="PositiveActionBtnDark">#6B69D6</Color>
+    <Color x:Key="NegativeActionBtnDark">#A3FF0000</Color>
+    <Color x:Key="WhiteColor">#FFFFFF</Color>
+    <Color x:Key="SaveBtnColor">darkslateblue</Color>
+    <Color x:Key="UtilityBtn">#0078D7</Color>
+
+    <Color x:Key="RussianViolet">#231758</Color>
+    <Color x:Key="WildBlueYonder">#8CA0D7</Color>
+    <Color x:Key="CeruleanBlue">#3F58B0</Color>
+    <Color x:Key="SpaceCadet">#1A255B</Color>
 </ResourceDictionary>

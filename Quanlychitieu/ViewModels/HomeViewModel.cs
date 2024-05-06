@@ -1,6 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Quanlychitieu.ViewModels.Expenditures;
+using Quanlychitieu.DataAccess.IRepositories;
 using Quanlychitieu.Models;
+using Quanlychitieu.PopUpPages;
+using Quanlychitieu.Utilities;
 using Quanlychitieu.Views;
 using System;
 using System.Collections.Generic;
@@ -10,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Quanlychitieu.ViewModels
 {
-    public partial class HomePageViewModel : ObservableObject
+    public partial class HomeViewModel : ObservableObject
     {
         private readonly IExpendituresRepository expenditureRepo;
         private readonly ISettingsServiceRepository settingsService;
@@ -18,7 +22,7 @@ namespace Quanlychitieu.ViewModels
         private readonly IIncomeRepository incomeRepo;
         private readonly IDebtRepository debtRepo;
 
-        public HomePageViewModel(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
+        public HomeViewModel(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
                         IUsersRepository usersRepository, IIncomeRepository incomeRepository,
                         IDebtRepository debtRepository)
         {
@@ -145,7 +149,7 @@ namespace Quanlychitieu.ViewModels
         {
             var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
 
-            var NewUpSertVM = new UpSertExpenditureVM(expenditureRepo, userRepo);
+            var NewUpSertVM = new UpSertExpenditureViewModel(expenditureRepo, userRepo);
             var newUpSertExpPopUp = new UpSertExpendituresPopUp(NewUpSertVM);
             try
             {

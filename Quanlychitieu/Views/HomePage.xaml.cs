@@ -1,17 +1,71 @@
+using Quanlychitieu.ViewModels.Expenditures;
 using Quanlychitieu.ViewModels;
+using Quanlychitieu.Views.Expenditures;
 
 namespace Quanlychitieu.Views;
 
-public partial class HomePage : ContentPage
+[QueryProperty(nameof(StartAction), nameof(StartAction))]
+public partial class HomePage : UraniumContentPage
 {
-	public HomePage(HomeViewModel viewmodel)
-	{
-		InitializeComponent();
-		BindingContext = this;
-	}
-
-    private async void TapGestureRecognizer_TappedAsync(object sender, TappedEventArgs e)
+    int startAction;
+    public int StartAction
     {
-       await Shell.Current.GoToAsync(nameof(RecentTransactionsView), true);
+        get => startAction;
+        set
+        {
+            startAction = value;
+            OnPropertyChanged(nameof(StartAction));
+            RunAppStartAction();
+        }
+    }
+
+    public readonly HomeViewModel viewModel;
+    public readonly UpSertExpenditureViewModel UpSertExpVM;
+    private UpSertExpenditureBottomSheet UpSertExpbSheet;
+    public HomePage(HomeViewModel vm, UpSertExpenditureViewModel UpSertExpVm)
+	{
+        InitializeComponent();
+        viewModel = vm;
+        BindingContext = vm;
+        UpSertExpVM = UpSertExpVm;
+
+        UpSertExpbSheet = new(UpSertExpVm);
+        Attachments.Add(UpSertExpbSheet);
+    }
+
+    protected override async void OnAppearing()
+    {
+        if (UpSertExpbSheet.IsPresented)
+        {
+            UpSertExpbSheet.IsPresented = false;
+        }
+        base.OnAppearing();
+        viewModel.GetUserData();
+        if (!viewModel._isInitialized)
+        {
+            await viewModel.DisplayInfo();
+            viewModel._isInitialized = true;
+        }
+    }
+
+    void RunAppStartAction()
+    {
+        if (StartAction is 1)
+        {
+            MainThread.BeginInvokeOnMainThread(async () => await viewModel.GoToAddExpenditurePage());
+        }
+    }
+
+    private void AddExpBtn_Clicked(object sender, EventArgs e)
+    {
+        UpSertExpVM.SingleExpenditureDetails = new()
+        {
+            DateSpent = DateTime.Now,
+        };
+
+        UpSertExpVM.PageLoaded();
+        UpSertExpbSheet.IsPresented = true;
+        Shell.Current.IsEnabled = false;
+
     }
 }

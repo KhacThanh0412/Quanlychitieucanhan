@@ -2,12 +2,15 @@
 //This is the view model for the page that shows ALL expenditures
 
 using CommunityToolkit.Maui.Storage;
+using Quanlychitieu.DataAccess.IRepositories;
 using Quanlychitieu.Models;
 using Quanlychitieu.Platforms.Android.NavigationsMethods;
 using Quanlychitieu.Platforms.Android.PDFClasses;
+using Quanlychitieu.PopUpPages;
 using Quanlychitieu.Utilities;
+using Quanlychitieu.Views;
 
-namespace Quanlychiteu.ViewModels.Expenditures;
+namespace Quanlychitieu.ViewModels.Expenditures;
 public partial class ManageExpendituresViewModel : ObservableObject
 {
     readonly IExpendituresRepository expendituresService;

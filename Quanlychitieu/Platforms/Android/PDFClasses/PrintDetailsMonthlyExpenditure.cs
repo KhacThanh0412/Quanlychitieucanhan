@@ -2,275 +2,276 @@
 using iText.Kernel.Pdf.Canvas.Draw;
 using iText.Kernel.Pdf;
 using iText.Layout.Element;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Quanlychitieu.Models;
+using static Quanlychitieu.AdditionalResourcefulApiClasses.ExchangeRateAPI;
+using Quanlychitieu.AdditionalResourcefulApiClasses;
+using Color = iText.Kernel.Colors.Color;
+using TextAlignment = iText.Layout.Properties.TextAlignment;
+using iText.Layout;
 
 namespace Quanlychitieu.Platforms.Android.PDFClasses
 {
     public class PrintDetailsMonthlyExpenditure
     {
-        //public async Task SaveListDetailMonthlyPlanned(List<ExpendituresModel> expList, string userCurrency, string printDisplayCurrency, string userName, string monthYear)
-        //{
-        //    ConvertedRate ObjectWithRate = new();
+        public async Task SaveListDetailMonthlyPlanned(List<ExpendituresModel> expList, string userCurrency, string printDisplayCurrency, string userName, string monthYear)
+        {
+            ConvertedRate ObjectWithRate = new();
 
-        //    if (!userCurrency.Equals(printDisplayCurrency))
-        //    {
-        //        ExchangeRateAPI JSONWithRates = new();
+            if (!userCurrency.Equals(printDisplayCurrency))
+            {
+                ExchangeRateAPI JSONWithRates = new();
 
-        //        ObjectWithRate = JSONWithRates.GetConvertedRate(userCurrency, printDisplayCurrency);
-        //    }
+                ObjectWithRate = JSONWithRates.GetConvertedRate(userCurrency, printDisplayCurrency);
+            }
 
-        //    string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-        //    string fileName = $"MonthlyPlanned_{monthYear}.pdf";
-        //    string PathFile = $"{path}/{fileName}";
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            string fileName = $"MonthlyPlanned_{monthYear}.pdf";
+            string PathFile = $"{path}/{fileName}";
 
-        //    string pdfTitle = $"List Of Estimated Expenditures For {monthYear}";
+            string pdfTitle = $"List Of Estimated Expenditures For {monthYear}";
 
-        //    await Task.Run(() => CreatePDFDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.conversion_rate, ObjectWithRate.TimeLastUpdateUtc, pdfTitle, userName));
-        //}
-        //public async Task SaveListDetailMonthlyPlanned(List<List<ExpendituresModel>> expLists, string userCurrency, string printDisplayCurrency, string userName, List<string> ListOfTitles)
-        //{
-        //    ConvertedRate ObjectWithRate = new();// { result = 1, date = DateTime.UtcNow };
+            await Task.Run(() => CreatePDFDoc(expList, PathFile, userCurrency, printDisplayCurrency, ObjectWithRate.conversion_rate, ObjectWithRate.TimeLastUpdateUtc, pdfTitle, userName));
+        }
+        public async Task SaveListDetailMonthlyPlanned(List<List<ExpendituresModel>> expLists, string userCurrency, string printDisplayCurrency, string userName, List<string> ListOfTitles)
+        {
+            ConvertedRate ObjectWithRate = new();// { result = 1, date = DateTime.UtcNow };
 
-        //    if (!userCurrency.Equals(printDisplayCurrency))
-        //    {
-        //        ExchangeRateAPI JSONWithRates = new();
+            if (!userCurrency.Equals(printDisplayCurrency))
+            {
+                ExchangeRateAPI JSONWithRates = new();
 
-        //        ObjectWithRate = JSONWithRates.GetConvertedRate(userCurrency, printDisplayCurrency);
-        //    }
+                ObjectWithRate = JSONWithRates.GetConvertedRate(userCurrency, printDisplayCurrency);
+            }
 
-        //    string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-        //    const string fileName = "Report_Multiple_MonthlyPlanned.pdf";
-        //    string PathFile = $"{path}/{fileName}";
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            const string fileName = "Report_Multiple_MonthlyPlanned.pdf";
+            string PathFile = $"{path}/{fileName}";
 
-        //    await Task.Run(() => CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency, ObjectWithRate.conversion_rate, ObjectWithRate.TimeLastUpdateUtc));
-        //}
+            await Task.Run(() => CreatePDFDocOfMultipleLists(expLists, PathFile, ListOfTitles, userName, userCurrency, printDisplayCurrency, ObjectWithRate.conversion_rate, ObjectWithRate.TimeLastUpdateUtc));
+        }
 
-        //static async Task CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, string dateOfRateUpdate, string pdfTitle, string username)
-        //{
-        //    Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
+        static async Task CreatePDFDoc(List<ExpendituresModel> expList, string pathFile, string userCurrency, string printDisplayCurrency, double rate, string dateOfRateUpdate, string pdfTitle, string username)
+        {
+            Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
-        //    using PdfWriter writer = new(pathFile);
-        //    using PdfDocument pdf = new(writer);
-        //    Document document = new(pdf, pageSize: iText.Kernel.Geom.PageSize.A4, immediateFlush: false);
+            using PdfWriter writer = new(pathFile);
+            using PdfDocument pdf = new(writer);
+            Document document = new(pdf, pageSize: iText.Kernel.Geom.PageSize.A4, immediateFlush: false);
 
-        //    Paragraph header = new Paragraph(pdfTitle)
-        //        .SetTextAlignment(TextAlignment.CENTER)
-        //        .SetFontColor(HeaderColor)
-        //        .SetBold()
-        //        .SetFontSize(20);
-        //    document.Add(header);
-        //    document.Flush();
+            Paragraph header = new Paragraph(pdfTitle)
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetFontColor(HeaderColor)
+                .SetBold()
+                .SetFontSize(20);
+            document.Add(header);
+            document.Flush();
 
-        //    document.Add(new Paragraph());
-        //    document.Flush();
+            document.Add(new Paragraph());
+            document.Flush();
 
-        //    Table table = new Table(4, false).UseAllAvailableWidth();
+            Table table = new Table(4, false).UseAllAvailableWidth();
 
-        //    table.AddHeaderCell("#")
-        //        .SetTextAlignment(TextAlignment.CENTER);
-        //    table.AddHeaderCell("Description")
-        //        .SetTextAlignment(TextAlignment.CENTER);
-        //    table.AddHeaderCell("Amount")
-        //        .SetTextAlignment(TextAlignment.CENTER);
-        //    table.AddHeaderCell("Comments")
-        //        .SetTextAlignment(TextAlignment.CENTER);
+            table.AddHeaderCell("#")
+                .SetTextAlignment(TextAlignment.CENTER);
+            table.AddHeaderCell("Description")
+                .SetTextAlignment(TextAlignment.CENTER);
+            table.AddHeaderCell("Amount")
+                .SetTextAlignment(TextAlignment.CENTER);
+            table.AddHeaderCell("Comments")
+                .SetTextAlignment(TextAlignment.CENTER);
 
-        //    double totalOfAllExp = 0;
-        //    foreach (ExpendituresModel item in expList)
-        //    {
-        //        double amount = item.AmountSpent * rate;
+            double totalOfAllExp = 0;
+            foreach (ExpendituresModel item in expList)
+            {
+                double amount = item.AmountSpent * rate;
 
-        //        table.AddCell(new Paragraph($"{expList.IndexOf(item) + 1}")
-        //            .SetTextAlignment(TextAlignment.CENTER));
+                table.AddCell(new Paragraph($"{expList.IndexOf(item) + 1}")
+                    .SetTextAlignment(TextAlignment.CENTER));
 
-        //        table.AddCell(new Paragraph($"{item.Reason}")
-        //            .SetTextAlignment(TextAlignment.CENTER));
+                table.AddCell(new Paragraph($"{item.Reason}")
+                    .SetTextAlignment(TextAlignment.CENTER));
 
-        //        table.AddCell(new Paragraph($"{amount:n2} {printDisplayCurrency}")
-        //            .SetTextAlignment(TextAlignment.CENTER));
-        //        table.AddCell(new Paragraph($"{item.Comment}")
-        //            .SetTextAlignment(TextAlignment.CENTER));
+                table.AddCell(new Paragraph($"{amount:n2} {printDisplayCurrency}")
+                    .SetTextAlignment(TextAlignment.CENTER));
+                table.AddCell(new Paragraph($"{item.Comment}")
+                    .SetTextAlignment(TextAlignment.CENTER));
 
-        //        if (item.IncludeInReport)
-        //        {
-        //            totalOfAllExp += amount;
-        //        }
-        //    }
+                if (item.IncludeInReport)
+                {
+                    totalOfAllExp += amount;
+                }
+            }
 
-        //    document.Add(table);
-        //    document.Flush();
+            document.Add(table);
+            document.Flush();
 
-        //    Paragraph footerText = new Paragraph($"Total Amount {totalOfAllExp:n3} {printDisplayCurrency}")
-        //        .SetTextAlignment(TextAlignment.CENTER)
-        //        .SetFontSize(24)
-        //        .SetBold();
+            Paragraph footerText = new Paragraph($"Total Amount {totalOfAllExp:n3} {printDisplayCurrency}")
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetFontSize(24)
+                .SetBold();
 
-        //    Paragraph waterMarkText = new Paragraph($"Report Generated by Quanlychitieu App for {username}")
-        //        .SetTextAlignment(TextAlignment.LEFT)
-        //        .SetFontSize(15);
-        //    Paragraph bottomNotesText = new Paragraph($"Converted using the rate of 1 {userCurrency} = {rate:n3} {printDisplayCurrency} \nRate updated on {dateOfRateUpdate:D}")
-        //        .SetTextAlignment(TextAlignment.LEFT)
-        //        .SetFontSize(10);
+            Paragraph waterMarkText = new Paragraph($"Report Generated by Quanlychitieu App for {username}")
+                .SetTextAlignment(TextAlignment.LEFT)
+                .SetFontSize(15);
+            Paragraph bottomNotesText = new Paragraph($"Converted using the rate of 1 {userCurrency} = {rate:n3} {printDisplayCurrency} \nRate updated on {dateOfRateUpdate:D}")
+                .SetTextAlignment(TextAlignment.LEFT)
+                .SetFontSize(10);
 
-        //    document.Add(new Paragraph());
-        //    document.Flush();
+            document.Add(new Paragraph());
+            document.Flush();
 
-        //    document.Add(footerText);
-        //    document.Flush();
+            document.Add(footerText);
+            document.Flush();
 
-        //    document.Add(new Paragraph());
-        //    document.Flush();
+            document.Add(new Paragraph());
+            document.Flush();
 
-        //    document.Add(waterMarkText);
-        //    document.Flush();
+            document.Add(waterMarkText);
+            document.Flush();
 
-        //    document.Add(new Paragraph());
-        //    document.Flush();
+            document.Add(new Paragraph());
+            document.Flush();
 
-        //    document.Add(bottomNotesText);
-        //    document.Flush();
+            document.Add(bottomNotesText);
+            document.Flush();
 
-        //    int numberPages = pdf.GetNumberOfPages();
-        //    for (int i = 1; i <= numberPages; i++)
-        //    {
-        //        document.ShowTextAligned(new Paragraph(string
-        //           .Format("Page" + i + " of " + numberPages)),
-        //           559, 806, i, TextAlignment.LEFT,
-        //           iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
-        //    }
+            int numberPages = pdf.GetNumberOfPages();
+            for (int i = 1; i <= numberPages; i++)
+            {
+                document.ShowTextAligned(new Paragraph(string
+                   .Format("Page" + i + " of " + numberPages)),
+                   559, 806, i, TextAlignment.LEFT,
+                   iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
+            }
 
-        //    document.Close();
+            document.Close();
 
-        //    await SharePdfFile(pdfTitle, pathFile);
-        //}
+            await SharePdfFile(pdfTitle, pathFile);
+        }
 
-        //async Task CreatePDFDocOfMultipleLists(List<List<ExpendituresModel>> expLists, string pathFile, List<string> ListOfTitles, string username, string userCurrency, string printDisplayCurrency, double rate, string dateOfRateUpdate)
-        //{
-        //    Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
+        async Task CreatePDFDocOfMultipleLists(List<List<ExpendituresModel>> expLists, string pathFile, List<string> ListOfTitles, string username, string userCurrency, string printDisplayCurrency, double rate, string dateOfRateUpdate)
+        {
+            Color HeaderColor = WebColors.GetRGBColor("DarkSlateBlue");
 
-        //    PdfWriter writer = new(pathFile);
-        //    PdfDocument pdf = new(writer);
-        //    Document document = new(pdf, pageSize: iText.Kernel.Geom.PageSize.A4, immediateFlush: false);
+            PdfWriter writer = new(pathFile);
+            PdfDocument pdf = new(writer);
+            Document document = new(pdf, pageSize: iText.Kernel.Geom.PageSize.A4, immediateFlush: false);
 
-        //    double FinalTotal = 0;
-        //    for (int i = 0; i < expLists.Count; i++)
-        //    {
-        //        Paragraph header = new Paragraph($"Expenditures for {ListOfTitles[i]}")
-        //        .SetTextAlignment(TextAlignment.CENTER)
-        //        .SetFontColor(HeaderColor)
-        //        .SetBold()
-        //        .SetFontSize(25);
-        //        document.Add(header);
-        //        document.Flush();
+            double FinalTotal = 0;
+            for (int i = 0; i < expLists.Count; i++)
+            {
+                Paragraph header = new Paragraph($"Expenditures for {ListOfTitles[i]}")
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetFontColor(HeaderColor)
+                .SetBold()
+                .SetFontSize(25);
+                document.Add(header);
+                document.Flush();
 
-        //        document.Add(new Paragraph());
-        //        document.Flush();
+                document.Add(new Paragraph());
+                document.Flush();
 
-        //        Table table = new Table(4, false).UseAllAvailableWidth();
+                Table table = new Table(4, false).UseAllAvailableWidth();
 
-        //        table.AddHeaderCell("#")
-        //            .SetTextAlignment(TextAlignment.CENTER);
-        //        table.AddHeaderCell("Description")
-        //            .SetTextAlignment(TextAlignment.CENTER);
-        //        table.AddHeaderCell("Amount")
-        //            .SetTextAlignment(TextAlignment.CENTER);
-        //        table.AddHeaderCell("Comments")
-        //            .SetTextAlignment(TextAlignment.CENTER);
+                table.AddHeaderCell("#")
+                    .SetTextAlignment(TextAlignment.CENTER);
+                table.AddHeaderCell("Description")
+                    .SetTextAlignment(TextAlignment.CENTER);
+                table.AddHeaderCell("Amount")
+                    .SetTextAlignment(TextAlignment.CENTER);
+                table.AddHeaderCell("Comments")
+                    .SetTextAlignment(TextAlignment.CENTER);
 
-        //        double totalOfAllExp = 0;
-        //        var ExpList = expLists[i];
-        //        for (int j = 0; j < ExpList.Count; j++)
-        //        {
-        //            ExpendituresModel item = ExpList[j];
-        //            double amount = item.AmountSpent * rate;
+                double totalOfAllExp = 0;
+                var ExpList = expLists[i];
+                for (int j = 0; j < ExpList.Count; j++)
+                {
+                    ExpendituresModel item = ExpList[j];
+                    double amount = item.AmountSpent * rate;
 
-        //            table.AddCell(new Paragraph($"{ExpList.IndexOf(item) + 1}")
-        //                .SetTextAlignment(TextAlignment.CENTER));
+                    table.AddCell(new Paragraph($"{ExpList.IndexOf(item) + 1}")
+                        .SetTextAlignment(TextAlignment.CENTER));
 
-        //            table.AddCell(new Paragraph($"{item.Reason}")
-        //                .SetTextAlignment(TextAlignment.CENTER));
+                    table.AddCell(new Paragraph($"{item.Reason}")
+                        .SetTextAlignment(TextAlignment.CENTER));
 
-        //            table.AddCell(new Paragraph($"{amount:n3} {printDisplayCurrency}")
-        //                .SetTextAlignment(TextAlignment.CENTER));
-        //            table.AddCell(new Paragraph($"{item.Comment}")
-        //                .SetTextAlignment(TextAlignment.CENTER));
+                    table.AddCell(new Paragraph($"{amount:n3} {printDisplayCurrency}")
+                        .SetTextAlignment(TextAlignment.CENTER));
+                    table.AddCell(new Paragraph($"{item.Comment}")
+                        .SetTextAlignment(TextAlignment.CENTER));
 
-        //            if (item.IncludeInReport)
-        //            {
-        //                totalOfAllExp += amount;
-        //                FinalTotal += amount;
-        //            }
-        //        }
+                    if (item.IncludeInReport)
+                    {
+                        totalOfAllExp += amount;
+                        FinalTotal += amount;
+                    }
+                }
 
-        //        document.Add(table);
-        //        document.Flush();
+                document.Add(table);
+                document.Flush();
 
-        //        Paragraph footerText = new Paragraph($"Total Amount {totalOfAllExp:n3} {printDisplayCurrency}")
-        //            .SetTextAlignment(TextAlignment.LEFT)
-        //            .SetFontSize(15);
-        //        document.Add(new Paragraph());
-        //        document.Flush();
+                Paragraph footerText = new Paragraph($"Total Amount {totalOfAllExp:n3} {printDisplayCurrency}")
+                    .SetTextAlignment(TextAlignment.LEFT)
+                    .SetFontSize(15);
+                document.Add(new Paragraph());
+                document.Flush();
 
-        //        document.Add(footerText);
-        //        document.Flush();
-        //    }
+                document.Add(footerText);
+                document.Flush();
+            }
 
-        //    Paragraph FinalTotalParagraph = new Paragraph($"Grand Total : {FinalTotal:n3} {printDisplayCurrency}")
-        //        .SetTextAlignment(TextAlignment.CENTER)
-        //        .SetFontSize(20)
-        //        .SetBold();
+            Paragraph FinalTotalParagraph = new Paragraph($"Grand Total : {FinalTotal:n3} {printDisplayCurrency}")
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetFontSize(20)
+                .SetBold();
 
-        //    Paragraph waterMarkText = new Paragraph($"Report Generated by Quanlychitieu App for {username}")
-        //        .SetTextAlignment(TextAlignment.LEFT)
-        //        .SetFontSize(15);
-        //    Paragraph bottomNotesText = new Paragraph($"Converted using the rate of 1 {userCurrency} = {rate:n3} {printDisplayCurrency} \nRate updated on {dateOfRateUpdate:D}")
-        //        .SetTextAlignment(TextAlignment.LEFT)
-        //        .SetFontSize(10);
+            Paragraph waterMarkText = new Paragraph($"Report Generated by Quanlychitieu App for {username}")
+                .SetTextAlignment(TextAlignment.LEFT)
+                .SetFontSize(15);
+            Paragraph bottomNotesText = new Paragraph($"Converted using the rate of 1 {userCurrency} = {rate:n3} {printDisplayCurrency} \nRate updated on {dateOfRateUpdate:D}")
+                .SetTextAlignment(TextAlignment.LEFT)
+                .SetFontSize(10);
 
-        //    LineSeparator ls = new LineSeparator(new SolidLine());
-        //    document.Add(ls);
-        //    document.Flush();
+            LineSeparator ls = new LineSeparator(new SolidLine());
+            document.Add(ls);
+            document.Flush();
 
-        //    document.Add(FinalTotalParagraph);
-        //    document.Flush();
+            document.Add(FinalTotalParagraph);
+            document.Flush();
 
-        //    document.Add(new Paragraph());
-        //    document.Flush();
+            document.Add(new Paragraph());
+            document.Flush();
 
-        //    document.Add(waterMarkText);
-        //    document.Flush();
+            document.Add(waterMarkText);
+            document.Flush();
 
-        //    document.Add(new Paragraph());
-        //    document.Flush();
+            document.Add(new Paragraph());
+            document.Flush();
 
-        //    document.Add(bottomNotesText);
-        //    document.Flush();
+            document.Add(bottomNotesText);
+            document.Flush();
 
-        //    int numberPages = pdf.GetNumberOfPages();
-        //    for (int i = 1; i <= numberPages; i++)
-        //    {
-        //        document.ShowTextAligned(new Paragraph(string
-        //           .Format("Page" + i + " of " + numberPages)),
-        //           559, 806, i, TextAlignment.LEFT,
-        //           iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
-        //    }
+            int numberPages = pdf.GetNumberOfPages();
+            for (int i = 1; i <= numberPages; i++)
+            {
+                document.ShowTextAligned(new Paragraph(string
+                   .Format("Page" + i + " of " + numberPages)),
+                   559, 806, i, TextAlignment.LEFT,
+                   iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
+            }
 
-        //    document.Close();
+            document.Close();
 
-        //    await SharePdfFile("Report of Multiple Months", pathFile);
-        //}
+            await SharePdfFile("Report of Multiple Months", pathFile);
+        }
 
-        //static async Task SharePdfFile(string PdfTitle, string PathFile)
-        //{
-        //    await Share.Default.RequestAsync(new ShareFileRequest
-        //    {
-        //        Title = PdfTitle,
-        //        File = new ShareFile(PathFile)
-        //    });
-        //}
+        static async Task SharePdfFile(string PdfTitle, string PathFile)
+        {
+            await Share.Default.RequestAsync(new ShareFileRequest
+            {
+                Title = PdfTitle,
+                File = new ShareFile(PathFile)
+            });
+        }
     }
 }

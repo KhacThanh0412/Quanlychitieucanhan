@@ -3,100 +3,345 @@
     x:Class="Quanlychitieu.Views.LoginPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="LoginPage"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels"
+    x:DataType="viewModel:LoginViewModel"
+    Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
-    <VerticalStackLayout
-        Padding="30,0"
-        Spacing="25"
-        VerticalOptions="Center">
-        <Label
-            BackgroundColor="Red"
-            HeightRequest="150"
-            WidthRequest="150" />
+    <ScrollView>
         <VerticalStackLayout Spacing="5">
-            <Label
-                FontSize="28"
-                HorizontalTextAlignment="Center"
-                Text="Xin chào!"
-                TextColor="Gray" />
-            <Label
-                FontSize="18"
-                HorizontalTextAlignment="Center"
-                Text="Vui lòng đăng nhập tài khoản của bạn"
-                TextColor="Gray" />
+            <Button
+                Margin="5,10,10,0"
+                BackgroundColor="{AppThemeBinding Dark=white,
+                                                  Light=black}"
+                Command="{Binding ThemeTogglerCommand}"
+                HorizontalOptions="End"
+                Text="Light"
+                TextColor="{AppThemeBinding Dark=black,
+                                            Light=white}"
+                ToolTipProperties.Text="Click to Switch to Light Theme">
+                <Button.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsLightTheme}"
+                        TargetType="Button"
+                        Value="true">
+                        <Setter Property="Text" Value="Dark" />
+                        <Setter Property="ToolTipProperties.Text" Value="Click to Switch to Dark Theme" />
+                    </DataTrigger>
+                </Button.Triggers>
+                <Button.Shadow>
+                    <Shadow
+                        Brush="{AppThemeBinding Dark=white,
+                                                Light=black}"
+                        Opacity="0.3"
+                        Offset="4,15" />
+                </Button.Shadow>
+            </Button>
+            <VerticalStackLayout>
+
+                <Image
+                    Grid.Row="0"
+                    Margin="5"
+                    HeightRequest="70"
+                    HorizontalOptions="Center"
+                    Source="{AppThemeBinding Dark=user_icon_d,
+                                             Light=user_icon_l}" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Title"
+                    HorizontalTextAlignment="Center"
+                    Text="Hello." />
+                <Label
+                    Margin="0,0,0,40"
+                    FontAttributes="Bold"
+                    FontSize="Title"
+                    HorizontalTextAlignment="Center"
+                    Text="Welcome to FlowHub" />
+
+
+
+                <Border
+                    x:Name="LoginSignUpTab"
+                    Margin="5,0,5,10"
+                    BackgroundColor="{AppThemeBinding Dark=#1A1A1A,
+                                                      Light=grey}"
+                    HeightRequest="85"
+                    Stroke="transparent">
+
+                    <Grid ColumnSpacing="0" RowSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.Resources>
+                            <ResourceDictionary>
+                                <Style TargetType="Border">
+                                    <Setter Property="WidthRequest" Value="180" />
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </Style>
+                                <Style TargetType="Label">
+                                    <Setter Property="FontSize" Value="23" />
+                                    <Setter Property="FontAttributes" Value="Bold" />
+                                    <Setter Property="HorizontalTextAlignment" Value="Center" />
+                                </Style>
+                            </ResourceDictionary>
+                        </Grid.Resources>
+
+                        <Border
+                            x:Name="LoginFocused"
+                            Grid.Column="0"
+                            Margin="0,10"
+                            HorizontalOptions="Center"
+                            IsVisible="True"
+                            WidthRequest="100">
+
+                            <Label
+                                HorizontalOptions="CenterAndExpand"
+                                Text="Login"
+                                TextColor="DarkSlateBlue"
+                                VerticalOptions="CenterAndExpand" />
+
+                        </Border>
+
+                        <Border
+                            x:Name="LoginUnFocused"
+                            Grid.Column="0"
+                            BackgroundColor="Transparent"
+                            HorizontalOptions="Center"
+                            IsVisible="false"
+                            Opacity="0"
+                            ToolTipProperties.Text="Tap To Show Login Form"
+                            WidthRequest="100">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="LoginUnFocused_Tapped" />
+                            </Border.GestureRecognizers>
+                            <Label
+                                HorizontalOptions="CenterAndExpand"
+                                Opacity="0.3"
+                                Text="Login"
+                                TextColor="{AppThemeBinding Dark=white}"
+                                VerticalOptions="CenterAndExpand" />
+
+                        </Border>
+
+
+                        <Border
+                            x:Name="SignUpUnFocused"
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            HorizontalOptions="Center"
+                            IsVisible="True"
+                            ToolTipProperties.Text="Tap To Show SignUp Form"
+                            WidthRequest="100">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SignUpUnFocused_Tapped" />
+                            </Border.GestureRecognizers>
+                            <Label
+                                HorizontalOptions="CenterAndExpand"
+                                Opacity="0.3"
+                                Text="Sign Up"
+                                TextColor="{AppThemeBinding Dark=white}"
+                                VerticalOptions="CenterAndExpand" />
+                        </Border>
+
+                        <Border
+                            x:Name="SignUpFocused"
+                            Grid.Column="1"
+                            Margin="0,10"
+                            HorizontalOptions="Center"
+                            IsVisible="false"
+                            WidthRequest="120">
+                            <Label
+                                HorizontalOptions="CenterAndExpand"
+                                Text="Sign Up"
+                                TextColor="DarkSlateBlue"
+                                VerticalOptions="CenterAndExpand" />
+                        </Border>
+                    </Grid>
+
+
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <!--  Section for Login begins below  -->
+                <VerticalStackLayout x:Name="LoginForm" Margin="25">
+
+                    <input:FormView Spacing="25" SubmitCommand="{Binding GoToHomePageFromLoginCommand}">
+                        <Label
+                            x:Name="NoUserFoundText"
+                            FontAttributes="Bold"
+                            FontSize="23"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding ErrorMessageVisible}"
+                            Text="Press the Online login button again"
+                            TextColor="CadetBlue" />
+                        <Label IsVisible="{Binding IsBusy}" Text="Syncing Up Your Flows" />
+                        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+                        <material:TextField
+                            Title="Email"
+                            AllowClear="True"
+                            Icon="{AppThemeBinding Dark=email_icon_d.png,
+                                                   Light=email_icon_l.png}"
+                            IsTextPredictionEnabled="True"
+                            Text="{Binding CurrentUser.Email}">
+                            <material:TextField.Validations>
+                                <validation:RequiredValidation />
+                            </material:TextField.Validations>
+                        </material:TextField>
+
+                        <material:TextField
+                            Title="Password"
+                            Icon="{AppThemeBinding Dark=password_d.png,
+                                                   Light=password_l.png}"
+                            IsPassword="True"
+                            Text="{Binding CurrentUser.Password}">
+                            <material:TextField.Attachments>
+                                <material:TextFieldPasswordShowHideAttachment />
+                            </material:TextField.Attachments>
+                            <material:TextField.Validations>
+                                <validation:RequiredValidation />
+                            </material:TextField.Validations>
+                        </material:TextField>
+                        <ImageButton
+                            input:FormView.IsSubmitButton="True"
+                            IsVisible="false"
+                            Source="{AppThemeBinding Dark=login_d,
+                                                     Light=login_l}" />
+
+                        <ImageButton
+                            x:Name="LoginButton"
+                            input:FormView.IsSubmitButton="True"
+                            Clicked="LoginOnlineBtn_Clicked"
+                            Source="{AppThemeBinding Dark=login_online_d,
+                                                     Light=login_online_l}" />
+
+
+                    </input:FormView>
+
+                </VerticalStackLayout>
+
+                <!--  Section for Registration begins below  -->
+                <VerticalStackLayout
+                    x:Name="RegisterForm"
+                    Margin="25"
+                    Opacity="0">
+                    <input:FormView Spacing="20" SubmitCommand="{Binding GoToHomePageFromRegisterCommand}">
+                        <material:TextField
+                            Title="User Name"
+                            Icon="{AppThemeBinding Dark=user_icon_d.png,
+                                                   Light=user_icon_l.png}"
+                            Text="{Binding CurrentUser.Username}">
+                            <validation:RequiredValidation />
+                        </material:TextField>
+
+                        <material:TextField
+                            Title="Email"
+                            Icon="{AppThemeBinding Dark=email_icon_d.png,
+                                                   Light=email_icon_l.png}"
+                            Text="{Binding CurrentUser.Email}">
+                            <material:TextField.Validations>
+                                <validation:RequiredValidation />
+                            </material:TextField.Validations>
+                        </material:TextField>
+                        <material:TextField
+                            Title="Password"
+                            Icon="{AppThemeBinding Dark=password_d.png,
+                                                   Light=password_l.png}"
+                            Text="{Binding CurrentUser.Password}">
+                            <validation:RequiredValidation />
+                            <material:TextField.Attachments>
+                                <material:TextFieldPasswordShowHideAttachment />
+                            </material:TextField.Attachments>
+                        </material:TextField>
+
+                        <material:TextField
+                            Title="Current Balance"
+                            Icon="{AppThemeBinding Dark=pocket_money_icon_d.png,
+                                                   Light=pocket_money_icon_l.png}"
+                            Keyboard="Numeric"
+                            Text="{Binding PocketMoney}">
+                            <material:TextField.Validations>
+                                <validation:MinValueValidation Message="Current Balance can not be less than 1" MinValue="1" />
+                                <validation:RequiredValidation />
+                            </material:TextField.Validations>
+                        </material:TextField>
+
+                        <material:PickerField
+                            Title="Select Your Country"
+                            Grid.Column="1"
+                            AccentColor="DarkSlateBlue"
+                            BackgroundColor="Transparent"
+                            Icon="{AppThemeBinding Dark=globe,
+                                                   Light=globe_l}"
+                            ItemsSource="{Binding CountryNamesList}"
+                            SelectedItem="{Binding SelectedCountry}"
+                            SelectedValueChangedCommand="{Binding CurrencyFromCountryPickedCommand}">
+                            <material:PickerField.Validations>
+                                <validation:RequiredValidation />
+                            </material:PickerField.Validations>
+                        </material:PickerField>
+
+
+                        <Grid ColumnDefinitions="340,*">
+                            <material:CheckBox
+                                Grid.Column="0"
+                                IsChecked="{Binding RegisterAccountOnline}"
+                                Text="Register Account Online (Requires Internet)"
+                                TextFontSize="16"
+                                Color="{AppThemeBinding Light=black,
+                                                        Dark=white}" />
+                            <ImageButton
+                                Grid.Column="1"
+                                HeightRequest="25"
+                                HorizontalOptions="End"
+                                Source="information" />
+                        </Grid>
+                        <ImageButton input:FormView.IsSubmitButton="True" Source="{AppThemeBinding Dark=register_account_d, Light=register_account_l}" />
+                        <Button
+                            input:FormView.IsSubmitButton="True"
+                            BackgroundColor="DarkSlateBlue"
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            IsVisible="False"
+                            Text="Register Account" />
+
+                    </input:FormView>
+
+                </VerticalStackLayout>
+
+
+                <!--  Section for QUICK Login begins below  -->
+                <VerticalStackLayout
+                    x:Name="QuickLogin"
+                    Margin="0,200,0,0"
+                    IsVisible="false"
+                    Spacing="15"
+                    VerticalOptions="Center">
+                    <Label
+                        x:Name="WelcomeLabel"
+                        FontAttributes="Bold"
+                        FontSize="Title"
+                        HorizontalOptions="Center"
+                        Text="{Binding Username, StringFormat='Signed in as {0}'}" />
+
+                    <Button
+                        x:Name="QuickLoginBtn"
+                        Margin="70,70,70,0"
+                        Clicked="QuickLoginBtn_Clicked"
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        HeightRequest="50"
+                        Text="Quick Login"
+                        TextColor="White" />
+
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
-
-        <StackLayout Orientation="Horizontal">
-            <Border
-                BackgroundColor="White"
-                HeightRequest="56"
-                Stroke="LightGray"
-                StrokeShape="RoundRectangle 26"
-                StrokeThickness="2"
-                WidthRequest="56"
-                ZIndex="1">
-                <Image
-                    HeightRequest="20"
-                    Source="user.png"
-                    WidthRequest="20" />
-            </Border>
-            <Border
-                Margin="-20,0,0,0"
-                Padding="0"
-                HeightRequest="45"
-                HorizontalOptions="FillAndExpand"
-                Stroke="LightGray"
-                StrokeShape="RoundRectangle 6">
-                <Entry
-                    Margin="20,0,0,0"
-                    Keyboard="Email"
-                    Placeholder="Tên đăng nhập"
-                    VerticalOptions="Center" />
-            </Border>
-        </StackLayout>
-
-        <StackLayout Orientation="Horizontal">
-            <Border
-                BackgroundColor="White"
-                HeightRequest="56"
-                Stroke="LightGray"
-                StrokeShape="RoundRectangle 26"
-                StrokeThickness="2"
-                WidthRequest="56"
-                ZIndex="1">
-                <Image
-                    HeightRequest="20"
-                    Source="lock.png"
-                    WidthRequest="20" />
-            </Border>
-            <Border
-                Margin="-20,0,0,0"
-                Padding="0"
-                HeightRequest="45"
-                HorizontalOptions="FillAndExpand"
-                Stroke="LightGray"
-                StrokeShape="RoundRectangle 6">
-                <Entry
-                    Margin="20,0,0,0"
-                    IsPassword="True"
-                    Placeholder="Mật khẩu"
-                    VerticalOptions="Center" />
-            </Border>
-        </StackLayout>
-
-        <Button
-            Command="{Binding GoToLoginCommand}"
-            CornerRadius="20"
-            HorizontalOptions="Center"
-            Text="Đăng nhập"
-            WidthRequest="100" />
-
-        <StackLayout
-            HorizontalOptions="Center"
-            Orientation="Horizontal"
-            Spacing="5">
-            <Label Text="Bạn chưa có tài khoản?" TextColor="Gray" />
-            <Label Text="Đăng ký tại đây" TextColor="#50b3f2" />
-        </StackLayout>
-    </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

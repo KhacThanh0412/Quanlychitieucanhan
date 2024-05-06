@@ -1,8 +1,10 @@
-﻿using Quanlychitieu.Models;
+﻿using Quanlychitieu.DataAccess.IRepositories;
+using Quanlychitieu.Models;
 using Quanlychitieu.Platforms.Android.NavigationsMethods;
+using Quanlychitieu.PopUpPages;
 using Quanlychitieu.Utilities;
 
-namespace Quanlychiteu.ViewModels.Incomes;
+namespace Quanlychitieu.ViewModels.Incomes;
 
 public partial class UpSertIncomeViewModel : ObservableObject
 {

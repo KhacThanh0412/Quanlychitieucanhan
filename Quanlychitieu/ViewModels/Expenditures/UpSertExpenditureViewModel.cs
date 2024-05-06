@@ -1,7 +1,9 @@
-﻿using Quanlychitieu.Models;
+﻿using Quanlychitieu.DataAccess.IRepositories;
+using Quanlychitieu.Models;
+using Quanlychitieu.PopUpPages;
 using Quanlychitieu.Utilities;
 
-namespace Quanlychiteu.ViewModels.Expenditures;
+namespace Quanlychitieu.ViewModels.Expenditures;
 
 public partial class UpSertExpenditureViewModel : ObservableObject
 {

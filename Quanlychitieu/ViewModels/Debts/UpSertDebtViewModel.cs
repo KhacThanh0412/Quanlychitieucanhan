@@ -1,8 +1,11 @@
 ﻿
 using Plugin.Maui.CalendarStore;
+using Quanlychitieu.DataAccess.IRepositories;
 using Quanlychitieu.Models;
+using Quanlychitieu.PopUpPages;
+using Quanlychitieu.Utilities;
 
-namespace Quanlychiteu.ViewModels.Debts;
+namespace Quanlychitieu.ViewModels.Debts;
 
 [QueryProperty(nameof(SingleDebtDetails), "SingleDebtDetails")]
 public partial class UpSertDebtViewModel(IDebtRepository debtRepository, IUsersRepository usersRepository, ICalendarStore calendarStore) : ObservableObject

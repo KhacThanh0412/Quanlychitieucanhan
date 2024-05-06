@@ -1,6 +1,9 @@
-﻿using Quanlychitieu.Models;
+﻿using Quanlychitieu.DataAccess.IRepositories;
+using Quanlychitieu.Models;
+using Quanlychitieu.PopUpPages;
+using Quanlychitieu.Views;
 
-namespace Quanlychiteu.ViewModels.Incomes;
+namespace Quanlychitieu.ViewModels.Incomes;
 
 public partial class ManageIncomesViewModel : ObservableObject
 {

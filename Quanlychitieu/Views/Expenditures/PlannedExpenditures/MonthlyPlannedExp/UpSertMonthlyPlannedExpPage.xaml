@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp.UpSertMonthlyPlannedExpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
+    Title="{Binding PageTitle}"
+    x:DataType="viewModel:UpSertMonthlyPlannedExpViewModel">
+    <VerticalStackLayout Margin="15">
+        <input:FormView
+            x:Name="UpSertForm"
+            Spacing="25"
+            SubmitCommand="{Binding UpSertMonthlyPlannedCommand}">
+
+            <material:TextField Title="Description" Text="{Binding SingleExpenditureDetails.Reason}">
+                <validation:RequiredValidation />
+            </material:TextField>
+
+            <material:TextField
+                Title="Amount"
+                Keyboard="Numeric"
+                Text="{Binding SingleExpenditureDetails.AmountSpent}">
+                <validation:RequiredValidation />
+                <validation:DigitsOnlyValidation />
+                <validation:MinValueValidation MinValue="1" />
+            </material:TextField>
+
+            <material:CheckBox
+                Margin="5,0"
+                IsChecked="{Binding SingleExpenditureDetails.IncludeInReport}"
+                Text="Include in Report" />
+            <!--  My CheckBox Control To Show/Hide Comments on Check  -->
+            <material:CheckBox
+                x:Name="CommentCheck"
+                Margin="5,0"
+                CheckChanged="CommentCheck_CheckChanged"
+                Text="Add Comment ?" />
+
+            <!--  TextField Control that is Shown or Hidden depending on my CheckBox Control  -->
+            <material:TextField
+                x:Name="Comments"
+                Title="Comments"
+                IsVisible="{Binding IsChecked, Source={x:Reference CommentCheck}}"
+                Text="{Binding SingleExpenditureDetails.Comment}" />
+
+            <material:CheckBox
+                Margin="5,0"
+                IsChecked="{Binding AddAnotherExp}"
+                IsVisible="{Binding IsAdd}"
+                Text="Save and Add another" />
+
+            <ImageButton input:FormView.IsSubmitButton="True" Source="{AppThemeBinding Dark=save_icon_d, Light=save_icon_l}" />
+
+
+        </input:FormView>
+
+    </VerticalStackLayout>
+</ContentPage>

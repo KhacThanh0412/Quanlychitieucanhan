@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.Settings.EditUserSettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Settings"
+    x:Name="settingsPage"
+    Title="Edit Profile"
+    x:DataType="viewModel:UserSettingsViewModel">
+    <toolkit:DockLayout>
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Top">
+            <Image HeightRequest="90" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" />
+        </VerticalStackLayout>
+
+        <input:FormView
+            Margin="10,10,10,0"
+            toolkit:DockLayout.DockPosition="Top"
+            Spacing="10"
+            SubmitCommand="{Binding UpdateUserInformationCommand}">
+            <material:TextField Title="User name" Text="{Binding ActiveUser.Username}">
+                <validation:RequiredValidation Message="Please enter your Username" />
+            </material:TextField>
+            <material:TextField Title="Email" Text="{Binding ActiveUser.Email}">
+                <validation:RequiredValidation Message="Please enter your Email" />
+            </material:TextField>
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5">
+                <material:PickerField
+                    x:Name="CountryPicker"
+                    Title="Country"
+                    Grid.Column="0"
+                    toolkit:DockLayout.DockPosition="Top"
+                    ItemsSource="{Binding CountryNamesList}"
+                    SelectedValueChanged="CountryPicker_SelectedValueChanged"
+                    TextColor="{AppThemeBinding Light=black}"
+                    TitleColor="{AppThemeBinding Light=black}">
+                    <validation:RequiredValidation Message="Please Select a Country" />
+                </material:PickerField>
+                <Label
+                    Grid.Column="1"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    Text="{Binding SelectCountryCurrency}"
+                    VerticalOptions="Center" />
+            </Grid>
+
+            <ListView
+                Header="Taxes"
+                IsVisible="false"
+                ItemsSource="{Binding Taxes}"
+                SeparatorVisibility="None"
+                VerticalScrollBarVisibility="Never">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:TaxModel">
+                        <ViewCell>
+                            <Label FontAttributes="Bold" FontSize="15">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference settingsPage}, Path=BindingContext.ViewEditDeleteTaxCommand}" CommandParameter="{Binding .}" />
+                                </Label.GestureRecognizers>
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} : {1} %">
+                                        <Binding Path="Name" />
+                                        <Binding Path="Rate" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <ImageButton input:FormView.IsSubmitButton="True" Source="save_icon_l" />
+        </input:FormView>
+
+    </toolkit:DockLayout>
+</ContentPage>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.Incomes.UpSertIncomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:model="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Incomes"
+    Title="{Binding PageTitle}"
+    x:DataType="viewModel:UpSertIncomeViewModel">
+
+
+    <VerticalStackLayout Margin="15">
+        <input:FormView Spacing="25" SubmitCommand="{Binding UpSertIncomeCommand}">
+            <VerticalStackLayout Margin="0,30,0,0">
+                <material:DatePickerField
+                    Title="Date Spent"
+                    Date="{Binding SingleIncomeDetails.DateReceived}"
+                    MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                    MinimumDate="01/01/2022">
+                    <material:DatePickerField.Validations>
+                        <validation:RequiredValidation />
+                    </material:DatePickerField.Validations>
+                </material:DatePickerField>
+
+            </VerticalStackLayout>
+
+            <material:TextField
+                Title="Amount Received"
+                Keyboard="Numeric"
+                Text="{Binding SingleIncomeDetails.AmountReceived}">
+                <material:TextField.Validations>
+                    <validation:RequiredValidation />
+                    <validation:MinValueValidation Message="The Amount Received cannot be less than 1" MinValue="1" />
+                    <validation:NumericValidation />
+                </material:TextField.Validations>
+            </material:TextField>
+
+            <material:TextField Title="Reason" Text="{Binding SingleIncomeDetails.Reason}">
+                <material:TextField.Validations>
+                    <validation:RequiredValidation />
+                </material:TextField.Validations>
+            </material:TextField>
+
+
+            <HorizontalStackLayout
+                Margin="0,0,0,0"
+                HorizontalOptions="Center"
+                Spacing="15">
+                <ImageButton
+                    x:Name="SaveIncBtn"
+                    Clicked="SaveIncBtn_Clicked"
+                    Source="{AppThemeBinding Dark=save_icon_d.png,
+                                             Light=save_icon_l.png}" />
+                <ImageButton Command="{Binding CancelBtnCommand}" Source="{AppThemeBinding Dark=cancel_icon_d.png, Light=cancel_icon_l.png}" />
+
+            </HorizontalStackLayout>
+        </input:FormView>
+    </VerticalStackLayout>
+</ContentPage>

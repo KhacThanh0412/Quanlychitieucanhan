@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<uranium:UraniumContentPage
+    x:Class="Quanlychitieu.Views.Expenditures.ManageExpenditures"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels.Expenditures"
+    x:Name="Page"
+    x:DataType="viewModels:ManageExpendituresViewModel"
+    BackgroundColor="{AppThemeBinding Light=#F0F0F0,
+                                      Dark={StaticResource BackGroundDark}}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ThemeTogglerCommand}" Text="Switch Mode" />
+
+    </ContentPage.ToolbarItems>
+    <AbsoluteLayout>
+
+        <toolkit:DockLayout
+            Margin="5,0"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+            <Label
+                x:Name="CurrBalance"
+                toolkit:DockLayout.DockPosition="Top"
+                FontAttributes="Bold"
+                FontSize="21"
+                HorizontalOptions="Center">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                        <Binding Path="UserPocketMoney" />
+                        <Binding Path="UserCurrency" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+
+            <Grid toolkit:DockLayout.DockPosition="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <VerticalStackLayout
+                    Grid.Column="0"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Start">
+                    <ImageButton
+                        BackgroundColor="Transparent"
+                        Clicked="ExportToPDFImageButton_Clicked"
+                        Source="{AppThemeBinding Dark=save_to_pdf_d.png,
+                                                 Light=save_to_pdf_l.png}" />
+                    <ProgressBar
+                        x:Name="PrintProgressBarIndic"
+                        IsVisible="false"
+                        ProgressColor="DarkSlateBlue"
+                        WidthRequest="50" />
+                </VerticalStackLayout>
+
+                <ImageButton
+                    x:Name="pie_chart"
+                    Grid.Column="1"
+                    Command="{Binding GoToSpecificStatsPageCommand}"
+                    HorizontalOptions="End"
+                    IsVisible="False"
+                    Source="{AppThemeBinding Dark=pie_chart,
+                                             Light=pie_chart_l}"
+                    VerticalOptions="Center" />
+                <!--  IsVisible="{Binding ShowStatisticBtn}"  -->
+            </Grid>
+
+            <HorizontalStackLayout
+                x:Name="SyncIndicator"
+                toolkit:DockLayout.DockPosition="Top"
+                HorizontalOptions="Center">
+                <Label
+                    Margin="0,0,0,0"
+                    FontSize="13"
+                    IsVisible="{Binding IsBusy}"
+                    Text="Syncing..." />
+                <ActivityIndicator
+                    HeightRequest="20"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}" />
+            </HorizontalStackLayout>
+
+            <Label
+                Margin="5"
+                toolkit:DockLayout.DockPosition="Top"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="{Binding ExpTitle}" />
+
+            <Label
+                Margin="3"
+                toolkit:DockLayout.DockPosition="Bottom"
+                FontAttributes="Bold"
+                FontSize="17"
+                HorizontalOptions="Center"
+                VerticalOptions="End">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
+                        <Binding Path="TotalAmount" />
+                        <Binding Path="UserCurrency" />
+                        <Binding Path="TotalExpenditures" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+
+            <CollectionView
+                x:Name="ColView"
+                EmptyView="No Flow Outs Available..."
+                IsGrouped="True"
+                IsVisible="true"
+                ItemsSource="{Binding GroupedExpenditures}">
+
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="viewModels:DateGroup">
+                        <Label
+                            Padding="10,3"
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource BorderDark},
+                                                              Light={StaticResource Secondary}}"
+                            FontAttributes="Bold,Italic"
+                            FontSize="12"
+                            Text="{Binding Date, StringFormat='{0:ddd, MMMM dd, yyyy}'}"
+                            TextColor="{AppThemeBinding Dark={StaticResource Secondary},
+                                                        Light=black}" />
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.GroupFooterTemplate>
+                    <DataTemplate x:DataType="viewModels:DateGroup">
+                        <Label
+                            Margin="10,5"
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            HorizontalOptions="End"
+                            Opacity="0.5">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} Flows, Total : {1:n2} {2}">
+                                    <Binding Path="TotalCount" />
+                                    <Binding Path="TotalAmount" />
+                                    <Binding Path="Currency" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.GroupFooterTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ExpendituresModel">
+                        <!--
+                            I JUST HAVE TO MAKE SURE NO VIEW ABOVE IS CENTERED OR SOMETHING
+                            also, set dock to top or center to see
+                            NOPE -> set to fill and expand for it to take the whole width of the screen
+                        -->
+                        <SwipeView Margin="0,2" BackgroundColor="Transparent">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                          Light=#D8D8D8}"
+                                        Clicked="EditExpIcon_Clicked"
+                                        IconImageSource="{AppThemeBinding Dark=edit_d,
+                                                                          Light=edit_l}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItem
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                          Light=#D8D8D8}"
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteExpenditureBtnCommand}"
+                                        CommandParameter="{Binding .}"
+                                        IconImageSource="{AppThemeBinding Dark=delete_d,
+                                                                          Light=delete_l}" />
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <Border Padding="0" StrokeThickness="0">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.CopyToClipboardCommand}"
+                                        CommandParameter="{Binding .}"
+                                        NumberOfTapsRequired="2" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout>
+                                    <FlexLayout
+                                        Margin="6,2"
+                                        Direction="Row"
+                                        JustifyContent="SpaceBetween">
+                                        <VerticalStackLayout>
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="15"
+                                                Text="{Binding Reason}"
+                                                TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder},
+                                                                            Light=Darkslateblue}" />
+
+                                            <Label
+                                                FontAttributes="Italic"
+                                                Opacity="{AppThemeBinding Light=0.5}"
+                                                Text="{Binding Category}"
+                                                TextColor="{AppThemeBinding Dark={StaticResource Secondary},
+                                                                            Light=black}" />
+                                        </VerticalStackLayout>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="15"
+                                            VerticalTextAlignment="Center">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{}{0:n2} {1}">
+                                                    <Binding Path="AmountSpent" />
+                                                    <Binding Path="Currency" />
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                    </FlexLayout>
+                                    <Rectangle Fill="#404040" HeightRequest="0.8" />
+                                </VerticalStackLayout>
+
+                            </Border>
+                        </SwipeView>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+        </toolkit:DockLayout>
+        <!--  Command="{Binding ShowAddExpenditurePopUpCommand}"  -->
+        <Button
+            x:Name="AddExpBtn"
+            Margin="0,0,15,30"
+            Padding="0"
+            AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            BackgroundColor="DarkSlateBlue"
+            BorderColor="DarkSlateBlue"
+            Clicked="AddExpBtn_Clicked"
+            CornerRadius="26"
+            FontSize="40"
+            HeightRequest="55"
+            Text="+"
+            TextColor="White"
+            ToolTipProperties.Text="Add New Flow Out"
+            WidthRequest="55">
+            <Button.Shadow>
+                <Shadow Opacity="0.6" Offset="5,15" />
+            </Button.Shadow>
+        </Button>
+    </AbsoluteLayout>
+
+    <uranium:UraniumContentPage.Attachments>
+        <materialAttach:BackdropView Title="Filter" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark={StaticResource BackGroundDark}}">
+            <VerticalStackLayout
+                Padding="5"
+                BackgroundColor="{AppThemeBinding Light=#F0F0F0,
+                                                  Dark={StaticResource BackGroundDark}}"
+                Spacing="5">
+                <material:CheckBox
+                    Text="Include Disabled Items"
+                    TextColor="White"
+                    Type="Filled" />
+                <material:CheckBox
+                    Text="Include Deleted Items"
+                    TextColor="White"
+                    Type="Filled" />
+                <material:CheckBox
+                    Text="Show all categories"
+                    TextColor="White"
+                    Type="Filled" />
+            </VerticalStackLayout>
+        </materialAttach:BackdropView>
+    </uranium:UraniumContentPage.Attachments>
+</uranium:UraniumContentPage>

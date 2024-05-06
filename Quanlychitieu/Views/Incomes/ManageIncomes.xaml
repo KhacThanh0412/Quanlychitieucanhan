@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.Incomes.ManageIncomes"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Incomes"
+    x:Name="page"
+    x:DataType="viewModel:ManageIncomesViewModel">
+
+    <ContentPage.ToolbarItems>
+        <!--<ToolbarItem IconImageSource="filter_d" Command="{Binding ShowFilterPopUpPageCommand}"/>-->
+    </ContentPage.ToolbarItems>
+
+    <AbsoluteLayout>
+        <toolkit:DockLayout
+            Margin="5,0"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+            <Label
+                toolkit:DockLayout.DockPosition="Top"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped" />
+                </Label.GestureRecognizers>
+                <Label.Text>
+                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                        <Binding Path="UserPocketMoney" />
+                        <Binding Path="UserCurrency" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <Grid
+                Margin="10,3"
+                toolkit:DockLayout.DockPosition="Top"
+                HeightRequest="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start">
+                    <ImageButton Clicked="ExportToPDFImageButton_Clicked" Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" />
+                    <ProgressBar
+                        x:Name="PrintProgressBarIndic"
+                        IsVisible="false"
+                        ProgressColor="DarkSlateBlue"
+                        WidthRequest="50" />
+                </VerticalStackLayout>
+
+                <ImageButton
+                    x:Name="pie_chart"
+                    Grid.Column="1"
+                    HorizontalOptions="End"
+                    IsVisible="false"
+                    Source="{AppThemeBinding Dark=pie_chart,
+                                             Light=pie_chart_l}"
+                    VerticalOptions="Center"
+                    WidthRequest="35" />
+            </Grid>
+
+            <Label
+                Margin="5"
+                toolkit:DockLayout.DockPosition="Top"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="{Binding IncTitle}" />
+
+            <Label
+                Margin="3"
+                toolkit:DockLayout.DockPosition="Bottom"
+                FontAttributes="Bold"
+                FontSize="17"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                VerticalOptions="End">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n2} {1}">
+                        <Binding Path="TotalAmount" />
+                        <Binding Path="UserCurrency" />
+                        <Binding Path="TotalIncomes" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+
+            <CollectionView
+                EmptyView="No Flow Ins Available..."
+                IsVisible="true"
+                ItemsSource="{Binding IncomesList}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:IncomeModel">
+
+                        <SwipeView>
+                            <SwipeView.LeftItems>
+                                <SwipeItem
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                      Light={StaticResource BackGroundLight}}"
+                                    Command="{Binding Source={x:Reference page}, Path=BindingContext.ShowEditIncomePopUpCommand}"
+                                    CommandParameter="{Binding .}"
+                                    IconImageSource="{AppThemeBinding Dark=edit_d.png,
+                                                                      Light=edit_l.png}" />
+                            </SwipeView.LeftItems>
+
+                            <SwipeView.RightItems>
+                                <SwipeItem
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                      Light={StaticResource BackGroundLight}}"
+                                    Command="{Binding Source={x:Reference page}, Path=BindingContext.DeleteIncomeBtnCommand}"
+                                    CommandParameter="{Binding .}"
+                                    IconImageSource="{AppThemeBinding Dark=delete_d.png,
+                                                                      Light=delete_l.png}" />
+                            </SwipeView.RightItems>
+
+                            <Border
+                                Margin="6,2"
+                                Padding="5"
+                                HorizontalOptions="FillAndExpand">
+
+                                <VerticalStackLayout>
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding DateReceived, StringFormat='{0:MMMM dd, yyyy}'}" />
+
+                                    <FlexLayout
+                                        Margin="10,0"
+                                        Direction="Row"
+                                        JustifyContent="SpaceBetween">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="16"
+                                            Text="{Binding Reason, StringFormat='{0}'}" />
+
+                                        <Label FontAttributes="Bold" FontSize="16">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{} {0:n2} {1}">
+                                                    <Binding Path="AmountReceived" />
+                                                    <Binding Path="Currency" />
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+
+                                    </FlexLayout>
+                                </VerticalStackLayout>
+                            </Border>
+
+                        </SwipeView>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+        </toolkit:DockLayout>
+
+        <Button
+            Margin="0,0,15,30"
+            Padding="0"
+            AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            BackgroundColor="DarkSlateBlue"
+            BorderColor="DarkSlateBlue"
+            Command="{Binding ShowAddIncomePopUpCommand}"
+            CornerRadius="26"
+            FontSize="40"
+            HeightRequest="55"
+            Text="+"
+            TextColor="White"
+            ToolTipProperties.Text="Add New Flow Out"
+            WidthRequest="55">
+            <Button.Shadow>
+                <Shadow Opacity="0.6" Offset="5,15" />
+            </Button.Shadow>
+        </Button>
+    </AbsoluteLayout>
+
+</ContentPage>

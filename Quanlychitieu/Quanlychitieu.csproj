@@ -30,24 +30,18 @@
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-
+		<MauiIcon Include="Resources\AppIcon\appicon1.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -58,26 +52,90 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\cocogoose.otf" />
-	  <None Remove="Resources\Images\arrow_down_icon.png" />
-	  <None Remove="Resources\Images\arrow_up_icon.png" />
-	  <None Remove="Resources\Images\back_icon.png" />
-	  <None Remove="Resources\Images\bell_icon.png" />
-	  <None Remove="Resources\Images\credit_card_icon.png" />
-	  <None Remove="Resources\Images\dollar_icon.png" />
-	  <None Remove="Resources\Images\email_icon.png" />
-	  <None Remove="Resources\Images\face01.png" />
-	  <None Remove="Resources\Images\face02.png" />
-	  <None Remove="Resources\Images\face03.png" />
-	  <None Remove="Resources\Images\face04.png" />
-	  <None Remove="Resources\Images\face05.png" />
-	  <None Remove="Resources\Images\home_icon.png" />
-	  <None Remove="Resources\Images\lock.png" />
-	  <None Remove="Resources\Images\main_face.png" />
-	  <None Remove="Resources\Images\menu_icon.png" />
-	  <None Remove="Resources\Images\money_icon.png" />
-	  <None Remove="Resources\Images\plus_icon.png" />
-	  <None Remove="Resources\Images\profile_icon.png" />
-	  <None Remove="Resources\Images\user.png" />
+	  <None Remove="Resources\Images\add_btn_d.svg" />
+	  <None Remove="Resources\Images\add_btn_l.svg" />
+	  <None Remove="Resources\Images\appicon.svg" />
+	  <None Remove="Resources\Images\calendar_d.svg" />
+	  <None Remove="Resources\Images\calendar_l.svg" />
+	  <None Remove="Resources\Images\cancel_icon_d.svg" />
+	  <None Remove="Resources\Images\cancel_icon_l.svg" />
+	  <None Remove="Resources\Images\darkmoon.svg" />
+	  <None Remove="Resources\Images\delete_d.svg" />
+	  <None Remove="Resources\Images\delete_l.svg" />
+	  <None Remove="Resources\Images\descending_sorting.svg" />
+	  <None Remove="Resources\Images\done_undone_d.svg" />
+	  <None Remove="Resources\Images\done_undone_l.svg" />
+	  <None Remove="Resources\Images\down.svg" />
+	  <None Remove="Resources\Images\edit_d.svg" />
+	  <None Remove="Resources\Images\edit_dsb.svg" />
+	  <None Remove="Resources\Images\edit_l.svg" />
+	  <None Remove="Resources\Images\email_dsb.svg" />
+	  <None Remove="Resources\Images\email_icon_d.svg" />
+	  <None Remove="Resources\Images\email_icon_l.svg" />
+	  <None Remove="Resources\Images\expand_flowhold_d.svg" />
+	  <None Remove="Resources\Images\expand_flowhold_l.svg" />
+	  <None Remove="Resources\Images\filter_btn_l.svg" />
+	  <None Remove="Resources\Images\filter_d.svg" />
+	  <None Remove="Resources\Images\filter_l.svg" />
+	  <None Remove="Resources\Images\github.svg" />
+	  <None Remove="Resources\Images\globe.svg" />
+	  <None Remove="Resources\Images\globe_l.svg" />
+	  <None Remove="Resources\Images\graph_d.svg" />
+	  <None Remove="Resources\Images\graph_l.svg" />
+	  <None Remove="Resources\Images\home_d.svg" />
+	  <None Remove="Resources\Images\home_l.svg" />
+	  <None Remove="Resources\Images\hourglass.svg" />
+	  <None Remove="Resources\Images\hourglass_cropped.svg" />
+	  <None Remove="Resources\Images\information.svg" />
+	  <None Remove="Resources\Images\initiate_money_transfer_d.svg" />
+	  <None Remove="Resources\Images\initiate_money_transfer_l.svg" />
+	  <None Remove="Resources\Images\lightsun.svg" />
+	  <None Remove="Resources\Images\login_d.svg" />
+	  <None Remove="Resources\Images\login_l.svg" />
+	  <None Remove="Resources\Images\login_online_d.svg" />
+	  <None Remove="Resources\Images\login_online_l.svg" />
+	  <None Remove="Resources\Images\logout_icon_d.svg" />
+	  <None Remove="Resources\Images\logout_icon_l.svg" />
+	  <None Remove="Resources\Images\monthly_planned_icon_d.svg" />
+	  <None Remove="Resources\Images\monthly_planned_icon_l.svg" />
+	  <None Remove="Resources\Images\nothing_found.svg" />
+	  <None Remove="Resources\Images\password_d.svg" />
+	  <None Remove="Resources\Images\password_l.svg" />
+	  <None Remove="Resources\Images\phone_d.svg" />
+	  <None Remove="Resources\Images\phone_dsb.svg" />
+	  <None Remove="Resources\Images\phone_l.svg" />
+	  <None Remove="Resources\Images\pie_chart.svg" />
+	  <None Remove="Resources\Images\pie_chart_l.svg" />
+	  <None Remove="Resources\Images\pocket_money_icon_d.svg" />
+	  <None Remove="Resources\Images\pocket_money_icon_l.svg" />
+	  <None Remove="Resources\Images\register_account_d.svg" />
+	  <None Remove="Resources\Images\register_account_l.svg" />
+	  <None Remove="Resources\Images\request_money_d.svg" />
+	  <None Remove="Resources\Images\request_money_l.svg" />
+	  <None Remove="Resources\Images\save_icon_d.svg" />
+	  <None Remove="Resources\Images\save_icon_l.svg" />
+	  <None Remove="Resources\Images\save_to_pdf_d.svg" />
+	  <None Remove="Resources\Images\save_to_pdf_l.svg" />
+	  <None Remove="Resources\Images\search_d.svg" />
+	  <None Remove="Resources\Images\search_l.svg" />
+	  <None Remove="Resources\Images\settings_d.svg" />
+	  <None Remove="Resources\Images\settings_l.svg" />
+	  <None Remove="Resources\Images\share_d.svg" />
+	  <None Remove="Resources\Images\share_l.svg" />
+	  <None Remove="Resources\Images\sort_d.svg" />
+	  <None Remove="Resources\Images\sort_l.svg" />
+	  <None Remove="Resources\Images\sync_icon_d.svg" />
+	  <None Remove="Resources\Images\sync_icon_l.svg" />
+	  <None Remove="Resources\Images\unavailable2_d.svg" />
+	  <None Remove="Resources\Images\unavailable2_l.svg" />
+	  <None Remove="Resources\Images\unavailable_d.svg" />
+	  <None Remove="Resources\Images\unavailable_l.svg" />
+	  <None Remove="Resources\Images\up.svg" />
+	  <None Remove="Resources\Images\user_icon_d.svg" />
+	  <None Remove="Resources\Images\user_icon_l.svg" />
+	  <None Remove="Resources\Images\view_d.svg" />
+	  <None Remove="Resources\Images\view_l.svg" />
+	  <None Remove="Resources\Images\wallet_app_icon_b.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -95,7 +153,7 @@
 		<PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.8.0" />
 		<PackageReference Include="UraniumUI.Material" Version="2.8.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.7" />
 		<PackageReference Include="AWSSDK.CognitoIdentity" Version="3.7.300.74" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
@@ -112,7 +170,59 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Quanlychitieu.DataAccess\Quanlychitieu.DataAccess.csproj" />
 	  <ProjectReference Include="..\Quanlychitieu.Models\Quanlychitieu.Models.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\Debts\DebtsOverviewPage.xaml.cs">
+	    <DependentUpon>DebtsOverviewPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Debts\ManageBorrowingsPage.xaml.cs">
+	    <DependentUpon>ManageBorrowingsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Debts\ManageLendingsPage.xaml.cs">
+	    <DependentUpon>ManageLendingsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Debts\SingleDebtDetailsPage.xaml.cs">
+	    <DependentUpon>SingleDebtDetailsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Expenditures\ManageExpenditures.xaml.cs">
+	    <DependentUpon>ManageExpenditures.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\DetailsOfMonthlyPlannedExpPage.xaml.cs">
+	    <DependentUpon>DetailsOfMonthlyPlannedExpPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\ManageMonthlyPlannedExpendituresPage.xaml.cs">
+	    <DependentUpon>ManageMonthlyPlannedExpendituresPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\UpSertMonthlyPlannedExpPage.xaml.cs">
+	    <DependentUpon>UpSertMonthlyPlannedExpPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Expenditures\UpSertExpenditurePage.xaml.cs">
+	    <DependentUpon>UpSertExpenditurePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Incomes\ManageIncomes.xaml.cs">
+	    <DependentUpon>ManageIncomes.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Incomes\UpSertIncomePage.xaml.cs">
+	    <DependentUpon>UpSertIncomePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Settings\ApplicationSettingsPage.xaml.cs">
+	    <DependentUpon>ApplicationSettingsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Settings\EditUserSettingsPage.xaml.cs">
+	    <DependentUpon>EditUserSettingsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Settings\UserSettingsPage.xaml.cs">
+	    <DependentUpon>UserSettingsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Statistics\SingleMonthStatsPage.xaml.cs">
+	    <DependentUpon>SingleMonthStatsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Statistics\StatisticsPage.xaml.cs">
+	    <DependentUpon>StatisticsPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -122,7 +232,73 @@
 	  <MauiXaml Update="Controls\TranscationView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\AcceptCancelPopUpAlert.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\ErrorPopUpAlert.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\FilterOptionsPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\InputCurrencyForPrintPopUpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\InputMonthAndYearPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\InputPopUpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\LoadingActivityIndicatorPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUpPages\UpSertInstallmentPayment.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Debts\DebtsOverviewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Debts\ManageBorrowingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Debts\ManageLendingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Debts\SingleDebtDetailsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Debts\UpSertDebtBottomSheet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Debts\UpSertInstallmentBSheet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Expenditures\ManageExpenditures.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\DetailsOfMonthlyPlannedExpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\ManageMonthlyPlannedExpendituresPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\UpSertMonthlyPlannedExpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Expenditures\UpSertExpenditureBottomSheet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Expenditures\UpSertExpenditurePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Incomes\ManageIncomes.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Incomes\UpSertIncomePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginPage.xaml">
@@ -131,10 +307,38 @@
 	  <MauiXaml Update="Views\RecentTransactionsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Settings\ApplicationSettingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Settings\EditUserSettingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Settings\UserSettingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Statistics\SingleMonthStatsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Statistics\StatisticsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\UpSertExpendituresPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\UpSertIncomePopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="Resources\AppIcon\appicon1.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 	  <None Update="Views\LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </None>
+	  <None Update="Views\UpSertExpendituresPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </None>
+	  <None Update="Views\UpSertIncomePopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </None>
 	</ItemGroup>

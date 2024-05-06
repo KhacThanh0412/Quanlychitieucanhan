@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<uranium:UraniumContentPage
+    x:Class="Quanlychitieu.Views.Debts.ManageBorrowingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Quanlychitieu.Views.Debts"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:utilities="clr-namespace:Quanlychitieu.Utilities"
+    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels.Debts"
+    x:Name="Page"
+    Title="Borrowings"
+    x:DataType="viewModels:ManageDebtsViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},
+                                      Dark={StaticResource BackGroundDark}}">
+    <AbsoluteLayout>
+
+        <toolkit:DockLayout
+            Margin="8,3"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+
+            <CollectionView
+                x:Name="ColView"
+                toolkit:DockLayout.DockPosition="Top"
+                EmptyView="No Pending Flow Holds Available..."
+                HorizontalOptions="Center"
+                IsVisible="True"
+                ItemsSource="{Binding BorrowedPendingList}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:DebtModel">
+
+                        <SwipeView
+                            Margin="0,2"
+                            HorizontalOptions="Center"
+                            Threshold="200">
+                            <SwipeView.LeftItems>
+                                <SwipeItem
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                      Light={StaticResource BackGroundLight}}"
+                                    Command="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
+                                    CommandParameter="{Binding .}"
+                                    IconImageSource="{AppThemeBinding Dark=done_undone_d,
+                                                                      Light=done_undone_l}" />
+                            </SwipeView.LeftItems>
+
+                            <SwipeView.RightItems>
+                                <SwipeItem
+                                    x:Name="EditDebtBtn"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                      Light={StaticResource BackGroundLight}}"
+                                    Clicked="EditDebtBtn_Clicked"
+                                    IconImageSource="{AppThemeBinding Dark=edit_d,
+                                                                      Light=edit_l}" />
+                            </SwipeView.RightItems>
+                            <Border
+                                Margin="6,2"
+                                Padding="5"
+                                HorizontalOptions="Center">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowDebtDetailsCommand}"
+                                        CommandParameter="{Binding .}"
+                                        NumberOfTapsRequired="2" />
+                                </Border.GestureRecognizers>
+
+                                <VerticalStackLayout Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        HorizontalOptions="Center"
+                                        TextColor="{AppThemeBinding Dark=White,
+                                                                    Light=Black}">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}You Owe {0} {1} {2}">
+                                                <Binding Path="PersonOrOrganization.Name" />
+                                                <Binding Path="Amount" />
+                                                <Binding Path="Currency" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                    <FlexLayout Margin="5,0" JustifyContent="SpaceBetween">
+
+                                        <Label
+                                            FontSize="12"
+                                            Opacity="{AppThemeBinding Light=0.6}"
+                                            Text="{Binding PersonOrOrganization.PhoneNumber}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Cyan200Accent},
+                                                                        Light=black}" />
+                                        <Label
+                                            FontSize="12"
+                                            Text="{Binding DisplayText}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder},
+                                                                        Light={StaticResource Primary}}" />
+                                    </FlexLayout>
+                                </VerticalStackLayout>
+
+                            </Border>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+            <CollectionView
+                x:Name="ColComplView"
+                EmptyView="No Flow Holds Available..."
+                HorizontalOptions="Center"
+                IsVisible="True"
+                ItemsSource="{Binding BorrowedCompletedList}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:DebtModel">
+
+                        <SwipeView
+                            Margin="0,2"
+                            HorizontalOptions="Center"
+                            Threshold="200">
+                            <SwipeView.LeftItems>
+                                <SwipeItem
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                      Light={StaticResource BackGroundLight}}"
+                                    Command="{Binding Source={x:Reference Page}, Path=BindingContext.ToggleDebtCompletionStatusCommand}"
+                                    CommandParameter="{Binding .}"
+                                    IconImageSource="{AppThemeBinding Dark=done_undone_d,
+                                                                      Light=done_undone_l}" />
+                            </SwipeView.LeftItems>
+
+                            <SwipeView.RightItems>
+                                <SwipeItem
+                                    x:Name="EditDebtBtn"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                      Light={StaticResource BackGroundLight}}"
+                                    Clicked="EditDebtBtn_Clicked"
+                                    IconImageSource="{AppThemeBinding Dark=edit_d,
+                                                                      Light=edit_l}" />
+                            </SwipeView.RightItems>
+                            <Border
+                                Margin="6,2"
+                                Padding="5"
+                                HorizontalOptions="Center">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowDebtDetailsCommand}"
+                                        CommandParameter="{Binding .}"
+                                        NumberOfTapsRequired="2" />
+                                </Border.GestureRecognizers>
+
+                                <VerticalStackLayout Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        HorizontalOptions="Center"
+                                        TextColor="{AppThemeBinding Dark=White,
+                                                                    Light=Black}">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}You Owe {0} {1} {2}">
+                                                <Binding Path="PersonOrOrganization.Name" />
+                                                <Binding Path="Amount" />
+                                                <Binding Path="Currency" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                    <FlexLayout Margin="5,0" JustifyContent="SpaceBetween">
+
+                                        <Label
+                                            FontSize="12"
+                                            Opacity="{AppThemeBinding Light=0.6}"
+                                            Text="{Binding PersonOrOrganization.PhoneNumber}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Cyan200Accent},
+                                                                        Light=black}" />
+                                        <Label
+                                            FontSize="12"
+                                            Text="{Binding DisplayText}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder},
+                                                                        Light={StaticResource Primary}}" />
+                                    </FlexLayout>
+                                </VerticalStackLayout>
+
+                            </Border>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+
+        </toolkit:DockLayout>
+
+        <Button
+            Margin="0,0,15,30"
+            Padding="0"
+            AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            BackgroundColor="DarkSlateBlue"
+            BorderColor="DarkSlateBlue"
+            Clicked="AddNewFlowHoldBtn_Clicked"
+            CornerRadius="26"
+            FontSize="40"
+            HeightRequest="55"
+            Text="+"
+            TextColor="White"
+            WidthRequest="55">
+            <Button.Shadow>
+                <Shadow Opacity="0.6" Offset="5,15" />
+            </Button.Shadow>
+        </Button>
+
+    </AbsoluteLayout>
+</uranium:UraniumContentPage>

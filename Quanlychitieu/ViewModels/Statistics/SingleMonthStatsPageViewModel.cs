@@ -1,10 +1,11 @@
 ﻿using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
+using Quanlychitieu.DataAccess.IRepositories;
 using Quanlychitieu.Models;
 using SkiaSharp;
 
-namespace Quanlychiteu.ViewModels.Statistics;
+namespace Quanlychitieu.ViewModels.Statistics;
 
 [QueryProperty(nameof(SpecificMonthNumber), "MonthNumber")]
 [QueryProperty(nameof(SpecificYearNumber), "YearNumber")]

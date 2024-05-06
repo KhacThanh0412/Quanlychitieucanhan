@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Quanlychitieu.AdditionalResourcefulAPIClasses;
+using Quanlychitieu.DataAccess.IRepositories;
 using Quanlychitieu.Models;
 using Quanlychitieu.Platforms.Android.NavigationsMethods;
+using Quanlychitieu.PopUpPages;
 using Quanlychitieu.Utilities;
 using Quanlychitieu.Views;
 using System;
@@ -20,8 +23,7 @@ namespace Quanlychitieu.ViewModels
         readonly LoginNavs NavFunctions = new();
         public LoginViewModel(ISettingsServiceRepository sessionServiceRepository, IUsersRepository userRepository)
         {
-            settingsRepo = sessionServiceRepository;
-            userRepo = userRepository;
+            
         }
 
         [ObservableProperty]

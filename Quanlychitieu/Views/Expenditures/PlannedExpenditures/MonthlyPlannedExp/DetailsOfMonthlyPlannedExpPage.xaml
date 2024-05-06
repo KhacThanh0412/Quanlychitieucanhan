@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp.DetailsOfMonthlyPlannedExpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
+    x:Name="page"
+    Title="{Binding PageTitle}"
+    x:DataType="viewModel:DetailsOfMonthlyPlannedExpViewModel">
+    <toolkit:DockLayout>
+        <Grid
+            Margin="10,15"
+            toolkit:DockLayout.DockPosition="Top"
+            HeightRequest="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="100*" />
+                <ColumnDefinition Width="50*" />
+            </Grid.ColumnDefinitions>
+            <VerticalStackLayout Grid.Column="0">
+                <ImageButton
+                    x:Name="ExportToPDFImageButton"
+                    Clicked="ExportToPDFImageButton_Clicked"
+                    Source="{AppThemeBinding Dark=save_to_pdf_d.png,
+                                             Light=save_to_pdf_l.png}" />
+                <ProgressBar
+                    x:Name="PrintProgressBarIndic"
+                    IsVisible="false"
+                    ProgressColor="DarkSlateBlue"
+                    WidthRequest="50" />
+            </VerticalStackLayout>
+
+            <HorizontalStackLayout
+                Grid.Column="2"
+                BackgroundColor="Transparent"
+                HorizontalOptions="End">
+                <ImageButton Command="{Binding AddNewPlannedExpToMonthlyPCommand}" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" />
+            </HorizontalStackLayout>
+        </Grid>
+        <VerticalStackLayout
+            toolkit:DockLayout.DockPosition="Bottom"
+            HeightRequest="30"
+            HorizontalOptions="CenterAndExpand">
+            <Label Margin="5,1" FontSize="17">
+                <Label.Text>
+                    <MultiBinding StringFormat="{} {1} Planned Flow Out(s) worth {0:n2} {2}">
+                        <Binding Path="TotalAmount" />
+                        <Binding Path="TotalExpenditures" />
+                        <Binding Path="UserCurrency" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+        </VerticalStackLayout>
+
+        <CollectionView x:Name="ExpList" EmptyView="No Flow Outs Available For This Month...">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ExpendituresModel">
+                    <ScrollView>
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <SwipeView Margin="10,0">
+                                <SwipeView.LeftItems>
+                                    <SwipeItem
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                          Light={StaticResource BackGroundLight}}"
+                                        Clicked="LeftSwipeEdit_Clicked"
+                                        IconImageSource="{AppThemeBinding Dark=edit_d.png,
+                                                                          Light=edit_l.png}" />
+                                </SwipeView.LeftItems>
+                                <SwipeView.RightItems>
+                                    <SwipeItem
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                                                          Light={StaticResource BackGroundLight}}"
+                                        Clicked="RightSwipeDelete_Clicked"
+                                        IconImageSource="{AppThemeBinding Dark=delete_d.png,
+                                                                          Light=delete_l.png}" />
+                                </SwipeView.RightItems>
+
+                                <Border
+                                    Padding="10"
+                                    HeightRequest="117"
+                                    HorizontalOptions="Center"
+                                    MaximumWidthRequest="400"
+                                    MinimumWidthRequest="350">
+                                    <VerticalStackLayout>
+                                        <VerticalStackLayout.Resources>
+                                            <ResourceDictionary>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="FontSize" Value="16.5" />
+                                                </Style>
+                                            </ResourceDictionary>
+                                        </VerticalStackLayout.Resources>
+                                        <Label Text="{Binding Reason, StringFormat='Description : {0}'}" />
+                                        <Label>
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{}Amount {0:n2} {1}">
+                                                    <Binding Path="AmountSpent" />
+                                                    <Binding Path="Currency" />
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                        <Label Text="{Binding Comment, StringFormat='Comments : {0}'}" />
+                                        <Label Text="{Binding IncludeInReport, StringFormat='Included in report : {0}'}" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </SwipeView>
+
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+
+    </toolkit:DockLayout>
+</ContentPage>

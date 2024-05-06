@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup
+    x:Class="Quanlychitieu.PopUpPages.InputPopUpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    CanBeDismissedByTappingOutsideOfPopup="False"
+    Size="300,180"
+    Color="Transparent">
+    <Border
+        Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                 Light=White}"
+        StrokeShape="RoundRectangle 8"
+        StrokeThickness="0">
+
+        <VerticalStackLayout
+            Padding="15"
+            BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                              Light=White}"
+            Spacing="20">
+            <VerticalStackLayout.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="TextColor" Value="{AppThemeBinding Dark=white, Light=black}" />
+                    </Style>
+                    <Style TargetType="Button">
+                        <Setter Property="BackgroundColor" Value="Transparent" />
+                    </Style>
+                </ResourceDictionary>
+            </VerticalStackLayout.Resources>
+
+            <Label
+                x:Name="PopUpTitle"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Value Edit"
+                TextColor="{AppThemeBinding Dark=white,
+                                            Light=black}"
+                VerticalOptions="Start" />
+
+            <material:TextField
+                x:Name="InputText"
+                Title="Enter New Text"
+                IsVisible="False">
+                <material:TextField.Validations>
+                    <validation:RequiredValidation />
+                </material:TextField.Validations>
+            </material:TextField>
+
+            <material:TextField
+                x:Name="InputAmount"
+                Title="Enter New Amount"
+                IsVisible="false"
+                Keyboard="Numeric">
+                <material:TextField.Validations>
+                    <validation:MinValueValidation Message="The Amount Received cannot be less than 1" MinValue="1" />
+                    <validation:NumericValidation />
+                </material:TextField.Validations>
+            </material:TextField>
+
+            <HorizontalStackLayout HorizontalOptions="EndAndExpand" Spacing="5">
+                <Button
+                    BackgroundColor="DarkSlateBlue"
+                    Clicked="OnOKButtonClicked"
+                    Text="OK" />
+                <Button
+                    BackgroundColor="Red"
+                    Clicked="OnCancelButtonClicked"
+                    Text="Cancel" />
+                <Button
+                    x:Name="DeleteButton"
+                    Clicked="OnDeleteButton_Clicked"
+                    IsVisible="false"
+                    Text="Delete" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</mct:Popup>

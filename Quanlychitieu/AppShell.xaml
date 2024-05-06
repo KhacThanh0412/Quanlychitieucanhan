@@ -3,14 +3,73 @@
     x:Class="Quanlychitieu.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Quanlychitieu"
-    xmlns:mainpage="clr-namespace:Quanlychitieu.Views"
-    Title="Quanlychitieu"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:mct="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+    xmlns:views="clr-namespace:Quanlychitieu.Views"
+    xmlns:viewsDebts="clr-namespace:Quanlychitieu.Views.Debts"
+    xmlns:viewsExp="clr-namespace:Quanlychitieu.Views.Expenditures"
+    xmlns:viewsInc="clr-namespace:Quanlychitieu.Views.Incomes"
+    xmlns:viewsPlannedExp="clr-namespace:Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
+    xmlns:viewsSettings="clr-namespace:Quanlychitieu.Views.Settings"
+    xmlns:viewsStats="clr-namespace:Quanlychitieu.Views.Statistics"
+    CurrentItem="{x:Reference login}">
+    <Shell.Behaviors>
+        <mct:StatusBarBehavior StatusBarColor="DarkSlateBlue" />
+    </Shell.Behaviors>
+    <TabBar>
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate views:HomePage}"
+            Icon="{AppThemeBinding Dark=home_d,
+                                   Light=home_l}"
+            Route="HomePage" />
+
+        <ShellContent
+            Title="Flow Outs"
+            ContentTemplate="{DataTemplate viewsExp:ManageExpenditures}"
+            Icon="{AppThemeBinding Dark=initiate_money_transfer_d,
+                                   Light=initiate_money_transfer_d}"
+            Route="ManageExpenditures" />
+
+        <ShellContent
+            Title="Flow Ins"
+            ContentTemplate="{DataTemplate viewsInc:ManageIncomes}"
+            Icon="{AppThemeBinding Dark=request_money_d.png,
+                                   Light=request_money_l.png}"
+            Route="ManageIncomes" />
+
+        <ShellContent
+            Title="Flow Insights"
+            ContentTemplate="{DataTemplate viewsStats:StatisticsPage}"
+            Icon="graph_d.png"
+            IsVisible="False" />
+
+        <ShellContent
+            Title="Flow Forecast"
+            ContentTemplate="{DataTemplate viewsPlannedExp:ManageMonthlyPlannedExpendituresPage}"
+            Icon="{AppThemeBinding Dark=monthly_planned_icon_d.png,
+                                   Light=monthly_planned_icon_l.png}"
+            IsVisible="False" />
+
+        <ShellContent
+            Title="Flow Hold"
+            ContentTemplate="{DataTemplate viewsDebts:DebtsOverviewPage}"
+            Icon="{AppThemeBinding Dark=time_to_pay_d,
+                                   Light=time_to_pay_l}" />
+
+        <Tab Title="Settings" Icon="{AppThemeBinding Dark=settings_d.png, Light=settings_l.png}">
+
+            <ShellContent Title="User Settings" ContentTemplate="{DataTemplate viewsSettings:UserSettingsPage}" />
+
+            <ShellContent Title="App Settings" ContentTemplate="{DataTemplate viewsSettings:ApplicationSettingsPage}" />
+
+        </Tab>
+    </TabBar>
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate mainpage:LoginPage}"
-        Route="MainPage" />
+        x:Name="login"
+        Title="Login Page"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="Login" />
+
 
 </Shell>

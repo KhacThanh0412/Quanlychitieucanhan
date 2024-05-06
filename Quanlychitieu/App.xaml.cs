@@ -1,5 +1,6 @@
 ﻿using Quanlychitieu.Navigation;
 using Quanlychitieu.Platforms.Android.NavigationsMethods;
+using Quanlychitieu.Utilities;
 
 namespace Quanlychitieu
 {
@@ -11,7 +12,7 @@ namespace Quanlychitieu
 
             MainPage = new AppShell();
 
-            NavGraph.RegisterRoute();
+            AppThemesSettings.ThemeSettings.SetTheme();
         }
 
         public static void HandleAppActions(AppAction action)
@@ -29,6 +30,16 @@ namespace Quanlychitieu
                 }
 
             });
+        }
+
+        protected override Window CreateWindow(IActivationState activationState)
+        {
+            var window = base.CreateWindow(activationState);
+
+            window.MinimumHeight = 600;
+            window.MinimumWidth = 800;
+            window.Title = "Quanlychitieu";
+            return window;
         }
     }
 }

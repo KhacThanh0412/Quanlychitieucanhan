@@ -10,19 +10,16 @@ namespace Quanlychitieu.Platforms.Android.NavigationsMethods
     {
         public static async Task FromManageExpToUpsertExpenditures(Dictionary<string, object> navParams)
         {
-            await Task.Delay(1);
-            // await Shell.Current.GoToAsync(nameof(UpSertExpenditurePageM), true, navParams);
+            await Shell.Current.GoToAsync(nameof(UpSertExpenditurePage), true, navParams);
         }
         public static async Task FromUpsertExpToManageExpenditures(Dictionary<string, object> navParams)
         {
-            await Task.Delay(1);
-            // await Shell.Current.GoToAsync(nameof(ManageExpendituresM), true, navParams);
+           await Shell.Current.GoToAsync(nameof(ManageExpenditures), true, navParams);
         }
 
         public static async Task FromManageExpToSingleMonthStats(Dictionary<string, object> navParams)
         {
-            await Task.Delay(1);
-            // await Shell.Current.GoToAsync(nameof(StatisticsPageM), true, navParams);
+            await Shell.Current.GoToAsync(nameof(StatisticsPage), true, navParams);
         }
         public static async Task ReturnOnce()
         {

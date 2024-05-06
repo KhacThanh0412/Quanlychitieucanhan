@@ -1,14 +1,17 @@
-﻿using Quanlychitieu.AdditionalResourcefulAPIClasses;
+﻿using Microsoft.Maui.Controls;
+using Quanlychitieu.AdditionalResourcefulAPIClasses;
+using Quanlychitieu.DataAccess.IRepositories;
 using Quanlychitieu.Models;
 using Quanlychitieu.Platforms.Android.NavigationsMethods;
+using Quanlychitieu.PopUpPages;
 using Quanlychitieu.Utilities;
 using Quanlychitieu.ViewModels;
 
-namespace Quanlychiteu.ViewModels.Settings;
+namespace Quanlychitieu.ViewModels.Settings;
 
 public partial class UserSettingsViewModel(IUsersRepository usersRepository, IExpendituresRepository expendituresRepository,
     IIncomeRepository incomeRepository, IDebtRepository debtRepository,
-    HomePageViewModel homePageVM) : ObservableObject
+    HomeViewModel homePageVM) : ObservableObject
 {
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
@@ -140,8 +143,7 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository, IEx
     [RelayCommand]
     public async Task GoToEditUserSettingsPage()
     {
-        await Task.Delay(1);
-        // await Shell.Current.GoToAsync(nameof(EditUserSettingsPage), true);
+        await Shell.Current.GoToAsync(nameof(EditUserSettingsPage), true);
     }
 
     [RelayCommand]

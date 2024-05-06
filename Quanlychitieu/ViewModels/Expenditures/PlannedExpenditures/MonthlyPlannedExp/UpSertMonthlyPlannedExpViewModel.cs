@@ -1,7 +1,9 @@
-﻿using Quanlychitieu.Models;
+﻿using Quanlychitieu.DataAccess.IRepositories;
+using Quanlychitieu.Models;
 using Quanlychitieu.Platforms.Android.NavigationsMethods;
+using Quanlychitieu.PopUpPages;
 
-namespace Quanlychiteu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
+namespace Quanlychitieu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 
 [QueryProperty(nameof(PageTitle), nameof(PageTitle))]
 [QueryProperty(nameof(Mode), "Mode")]

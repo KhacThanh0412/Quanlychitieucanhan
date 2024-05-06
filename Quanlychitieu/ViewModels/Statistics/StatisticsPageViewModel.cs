@@ -5,17 +5,18 @@ using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.VisualElements;
-using Quanlychiteu.ViewModels.Expenditures;
+using Quanlychitieu.ViewModels.Expenditures;
+using Quanlychitieu.DataAccess.IRepositories;
 using Quanlychitieu.Models;
 using SkiaSharp;
 
-namespace Quanlychiteu.ViewModels.Statistics;
+namespace Quanlychitieu.ViewModels.Statistics;
 
 [QueryProperty(nameof(GroupedExpenditures), "GroupedExpList")]
-public partial class StatisticsPageVM : ObservableObject
+public partial class StatisticsPageViewModel : ObservableObject
 {
     private readonly IExpendituresRepository expendituresService;
-    public StatisticsPageVM(IExpendituresRepository expRepo)
+    public StatisticsPageViewModel(IExpendituresRepository expRepo)
     {
         expendituresService = expRepo;
     }

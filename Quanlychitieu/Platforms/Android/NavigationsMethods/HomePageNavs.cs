@@ -11,7 +11,7 @@ namespace Quanlychitieu.Platforms.Android.NavigationsMethods
         public async Task FromHomePageToUpsertExpenditure(Dictionary<string, object> navParams)
         {
             await Task.Delay(1);
-            // await Shell.Current.GoToAsync(nameof(UpSertExpenditurePageM), navParams);
+            await Shell.Current.GoToAsync(nameof(UpSertExpenditurePage), navParams);
         }
     }
 }

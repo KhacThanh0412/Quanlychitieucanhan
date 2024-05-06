@@ -1,39 +1,30 @@
-﻿//global using Quanlychitieu.DataAccess;
-//global using Quanlychitieu.DataAccess.IRepositories;
-//global using Quanlychitieu.DataAccess.Repositories;
+﻿global using Quanlychitieu.DataAccess;
+global using Quanlychitieu.DataAccess.IRepositories;
+global using Quanlychitieu.DataAccess.Repositories;
 
-//global using Quanlychitieu.ViewModels;
-//global using Quanlychitieu.ViewModels.Expenditures;
-//global using Quanlychitieu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
-//global using Quanlychitieu.ViewModels.Incomes;
-//global using Quanlychitieu.ViewModels.Settings;
-//global using Quanlychitieu.ViewModels.Statistics;
-//global using Quanlychitieu.ViewModels.Debts;
+global using Quanlychitieu.ViewModels;
+global using Quanlychitieu.ViewModels.Expenditures;
+global using Quanlychitieu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
+global using Quanlychitieu.ViewModels.Incomes;
+global using Quanlychitieu.ViewModels.Settings;
+global using Quanlychitieu.ViewModels.Statistics;
+global using Quanlychitieu.ViewModels.Debts;
 
-//global using Quanlychitieu.Views.Desktop;
-//global using Quanlychitieu.Views.Desktop.Expenditures;
-//global using Quanlychitieu.Views.Desktop.Incomes;
-//global using Quanlychitieu.Views.Desktop.Settings;
-//global using Quanlychitieu.Views.Desktop.Statistics;
-//global using Quanlychitieu.Views.Desktop.Debts;
+global using Quanlychitieu.Views;
+global using Quanlychitieu.Views.Expenditures;
+global using Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
+global using Quanlychitieu.Views.Incomes;
+global using Quanlychitieu.Views.Settings;
+global using Quanlychitieu.Views.Statistics;
+global using Quanlychitieu.Views.Debts;
 
-//global using Quanlychitieu.Views.Mobile;
-//global using Quanlychitieu.Views.Mobile.Expenditures;
-//global using Quanlychitieu.Views.Mobile.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
-//global using Quanlychitieu.Views.Mobile.Incomes;
-//global using Quanlychitieu.Views.Mobile.Settings;
-//global using Quanlychitieu.Views.Mobile.Statistics;
-//global using Quanlychitieu.Views.Mobile.Debts;
+global using Quanlychitieu.PopUpPages;
+global using Quanlychitieu.Utilities;
+global using Quanlychitieu.Platforms.Android.NavigationsMethods;
+global using Quanlychitieu.AdditionalResourcefulAPIClasses;
+global using Quanlychitieu.Platforms.Android.PDFClasses;
 
-//global using Quanlychitieu.PopUpPages;
-//global using Quanlychitieu.Utilities;
-//global using Quanlychitieu.Views;
-//global using Quanlychitieu.Platforms.NavigationMethods;
-//global using Quanlychitieu.AdditionalResourcefulAPIClasses;
-//global using Quanlychitieu.PDF_Classes;
-//global using Quanlychitieu.Platforms.NavigationsMethods;
-
-//global using Quanlychitieu.Models;
+global using Quanlychitieu.Models;
 
 global using CommunityToolkit.Mvvm.ComponentModel;
 global using CommunityToolkit.Mvvm.Input;

@@ -1,8 +1,12 @@
 ﻿
 using Plugin.Maui.CalendarStore;
+using Quanlychitieu.DataAccess.IRepositories;
 using Quanlychitieu.Models;
+using Quanlychitieu.PopUpPages;
+using Quanlychitieu.Utilities;
+using Quanlychitieu.Views.Debts;
 
-namespace Quanlychiteu.ViewModels.Debts;
+namespace Quanlychitieu.ViewModels.Debts;
 
 public partial class ManageDebtsViewModel : ObservableObject
 {
@@ -111,16 +115,8 @@ public partial class ManageDebtsViewModel : ObservableObject
     [RelayCommand]
     public async Task ShowDebtDetails(DebtModel debt)
     {
-#if ANDROID
         SingleDebtDetails = debt;
-
-        await Shell.Current.GoToAsync(nameof(SingleDebtDetailsPageM), true);
-#elif WINDOWS
-        ShowSingleSebt = true;
-        SingleDebtDetails = debt;
-        RefreshTitleText();
-#endif
-
+        await Shell.Current.GoToAsync(nameof(SingleDebtDetailsPage), true);
     }
 
     public void RefreshTitleText()
@@ -232,12 +228,12 @@ public partial class ManageDebtsViewModel : ObservableObject
     }
     private async Task AddEditDebt()
     {
-        
-        var result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertDebtPopUp(upSertDebtVM));
-        if (result.Result == PopupResult.OK)
-        {
-            Debug.WriteLine("Popup Closed OK");
-        }
+        await Task.Delay(1);
+        //var result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertDebtPopUp(upSertDebtVM));
+        //if (result.Result == PopupResult.OK)
+        //{
+        //    Debug.WriteLine("Popup Closed OK");
+        //}
     }
 
     [RelayCommand]

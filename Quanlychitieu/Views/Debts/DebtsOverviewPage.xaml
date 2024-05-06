@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<uranium:UraniumContentPage
+    x:Class="Quanlychitieu.Views.Debts.DebtsOverviewPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:utilities="clr-namespace:Quanlychitieu.Utilities"
+    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels.Debts"
+    x:Name="Page"
+    Title="Flow Holds"
+    x:DataType="viewModels:ManageDebtsViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},
+                                      Dark={StaticResource BackGroundDark}}">
+
+
+    <AbsoluteLayout>
+        <VerticalStackLayout
+            Margin="8,3"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+            <Label
+                toolkit:DockLayout.DockPosition="Top"
+                FontAttributes="Bold"
+                FontSize="21"
+                HorizontalTextAlignment="Center"
+                Text="Lendings" />
+            <Border x:Name="LentBrdr">
+                <!--
+                    StrokeThickness="1.0" Margin="0,0,0,10"
+                    Stroke="{AppThemeBinding Dark=#3C4043}">
+                -->
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="LentBrdr_Tapped" />
+                </Border.GestureRecognizers>
+
+                <Grid Margin="10,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        Text="Total Amount Lent"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="TotalLentPendingAmount" />
+                                <Binding Path="UserCurrency" />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        Text="Total Number"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding TotalLentCount}" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        Text="Total Pending" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding TotalPendingLentCount}" />
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        Text="Total Amount Pending" />
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding TotalPendingLentCount}" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        Text="Total Completed" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding TotalCompletedLentCount}" />
+
+                </Grid>
+
+            </Border>
+
+            <Label
+                toolkit:DockLayout.DockPosition="Top"
+                FontAttributes="Bold"
+                FontSize="21"
+                HorizontalTextAlignment="Center"
+                Text="Borrowings" />
+            <Border x:Name="BorrowBrdr">
+                <!--  StrokeThickness="1.0" Stroke="{AppThemeBinding Dark=#303030}">  -->
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="BorrowBrdr_Tapped" />
+                </Border.GestureRecognizers>
+                <Grid Margin="10,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        Text="Total Amount Borrowed" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0:n2} {1}">
+                                <Binding Path="TotalBorrowedPendingAmount" />
+                                <Binding Path="UserCurrency" />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        Text="Total Number of Borrows" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding TotalBorrowedCount}" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        Text="Total Pending Borrows" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding TotalPendingBorrowCount}" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        Text="Total Completed Borrows" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding TotalCompletedBorrowCount}" />
+                </Grid>
+            </Border>
+
+        </VerticalStackLayout>
+
+        <!--  Your FAB  -->
+        <Button
+            Margin="0,0,15,30"
+            Padding="0"
+            AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            BackgroundColor="DarkSlateBlue"
+            BorderColor="DarkSlateBlue"
+            Clicked="AddNewFlowHoldBtn_Clicked"
+            CornerRadius="26"
+            FontSize="40"
+            HeightRequest="55"
+            Text="+"
+            TextColor="White"
+            WidthRequest="55">
+            <Button.Shadow>
+                <Shadow Opacity="0.6" Offset="5,15" />
+            </Button.Shadow>
+        </Button>
+
+    </AbsoluteLayout>
+
+</uranium:UraniumContentPage>
