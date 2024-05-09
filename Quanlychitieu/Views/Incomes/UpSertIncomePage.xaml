@@ -10,7 +10,7 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
     xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Incomes"
-    Title="{Binding PageTitle}"
+    Title="Thêm mới"
     x:DataType="viewModel:UpSertIncomeViewModel">
 
 
@@ -18,7 +18,7 @@
         <input:FormView Spacing="25" SubmitCommand="{Binding UpSertIncomeCommand}">
             <VerticalStackLayout Margin="0,30,0,0">
                 <material:DatePickerField
-                    Title="Date Spent"
+                    Title="Ngày"
                     Date="{Binding SingleIncomeDetails.DateReceived}"
                     MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
                     MinimumDate="01/01/2022">
@@ -30,17 +30,17 @@
             </VerticalStackLayout>
 
             <material:TextField
-                Title="Amount Received"
+                Title="Số tiền nhận được"
                 Keyboard="Numeric"
                 Text="{Binding SingleIncomeDetails.AmountReceived}">
                 <material:TextField.Validations>
                     <validation:RequiredValidation />
-                    <validation:MinValueValidation Message="The Amount Received cannot be less than 1" MinValue="1" />
+                    <validation:MinValueValidation Message="Số tiền nhận được không thể nhỏ hơn 1" MinValue="1" />
                     <validation:NumericValidation />
                 </material:TextField.Validations>
             </material:TextField>
 
-            <material:TextField Title="Reason" Text="{Binding SingleIncomeDetails.Reason}">
+            <material:TextField Title="Mô tả" Text="{Binding SingleIncomeDetails.Reason}">
                 <material:TextField.Validations>
                     <validation:RequiredValidation />
                 </material:TextField.Validations>

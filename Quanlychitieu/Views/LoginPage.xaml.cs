@@ -29,11 +29,11 @@ public partial class LoginPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await viewModel.PageLoaded();
+        // await viewModel.PageLoaded();
         bool HasLoginRemembered = viewModel.HasLoginRemembered;
         bool isLoginFormVisible = viewModel.IsLoginFormVisible;
 
-        ToggleFormAndValidation(HasLoginRemembered, isLoginFormVisible);
+        // ToggleFormAndValidation(HasLoginRemembered, isLoginFormVisible);
     }
 
     private async Task ShowRegisterForm()
@@ -74,7 +74,7 @@ public partial class LoginPage : ContentPage
     {
         if (HasLoginRemembered && !isLoginVisible)
         {
-            QuickLogin.IsVisible = true;
+            // QuickLogin.IsVisible = true;
             LoginForm.IsVisible = false;
             RegisterForm.IsVisible = false;
             LoginSignUpTab.IsVisible = false;
@@ -82,7 +82,7 @@ public partial class LoginPage : ContentPage
         else
         if (!HasLoginRemembered)
         {
-            QuickLogin.IsVisible = false;
+            // QuickLogin.IsVisible = false;
             RegisterForm.IsVisible = false;
             LoginForm.IsVisible = true;
             LoginSignUpTab.IsVisible = true;
@@ -94,13 +94,14 @@ public partial class LoginPage : ContentPage
         LoginSignUpTab.IsVisible = true;
         LoginForm.IsVisible = true;
         RegisterForm.IsVisible = false;
-        QuickLogin.IsVisible = false;
+        // QuickLogin.IsVisible = false;
     }
 
     private async void QuickLoginBtn_Clicked(object sender, EventArgs e)
     {
-        QuickLoginBtn.IsEnabled = false;
-        await viewModel.QuickLogin();
+        Console.WriteLine("===> Login");
+        // QuickLoginBtn.IsEnabled = false;
+        // await viewModel.QuickLogin();
     }
 
     private async void LoginUnFocused_Tapped(object sender, TappedEventArgs e)

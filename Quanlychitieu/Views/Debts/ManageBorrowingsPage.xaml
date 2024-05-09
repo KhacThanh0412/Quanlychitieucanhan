@@ -12,7 +12,7 @@
     xmlns:utilities="clr-namespace:Quanlychitieu.Utilities"
     xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels.Debts"
     x:Name="Page"
-    Title="Borrowings"
+    Title="Khoản vay"
     x:DataType="viewModels:ManageDebtsViewModel"
     BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},
                                       Dark={StaticResource BackGroundDark}}">
@@ -26,7 +26,7 @@
             <CollectionView
                 x:Name="ColView"
                 toolkit:DockLayout.DockPosition="Top"
-                EmptyView="No Pending Flow Holds Available..."
+                EmptyView="Không cho dữ liệu..."
                 HorizontalOptions="Center"
                 IsVisible="True"
                 ItemsSource="{Binding BorrowedPendingList}">
@@ -108,7 +108,7 @@
 
             <CollectionView
                 x:Name="ColComplView"
-                EmptyView="No Flow Holds Available..."
+                EmptyView="Không có dữ liệu nào có sẵn..."
                 HorizontalOptions="Center"
                 IsVisible="True"
                 ItemsSource="{Binding BorrowedCompletedList}">

@@ -9,14 +9,17 @@ public partial class UpSertExpenditureViewModel : ObservableObject
 {
     readonly IExpendituresRepository expenditureRepo;
     readonly IUsersRepository userRepo;
-
-    public UpSertExpenditureViewModel(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
+    public UpSertExpenditureViewModel()
     {
-        expenditureRepo = expendituresRepository;
-        userRepo = usersRepository;
-        ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
-        userRepo.OfflineUserDataChanged += UserRepo_OfflineUserDataChanged;
+        ExpenditureCategory = ExpenditureCategoryDescriptions.Descriptions;
     }
+    //public UpSertExpenditureViewModel(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
+    //{
+    //    expenditureRepo = expendituresRepository;
+    //    userRepo = usersRepository;
+    //    ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
+    //    userRepo.OfflineUserDataChanged += UserRepo_OfflineUserDataChanged;
+    //}
 
 
     [ObservableProperty]
@@ -44,24 +47,24 @@ public partial class UpSertExpenditureViewModel : ObservableObject
     bool closePopUp;
 
     [ObservableProperty]
-    List<ExpenditureCategory> expenditureCategory;
+    List<string> expenditureCategory;
 
     double _initialUserPocketMoney;
     double _initialExpenditureAmount;
     double _initialTotalExpAmount;
     public void PageLoaded()
     {
-        ActiveUser = userRepo.OfflineUser;
-        _initialUserPocketMoney = ActiveUser.PocketMoney;
-        _initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
-        _initialTotalExpAmount = ActiveUser.TotalExpendituresAmount;
-        if (SingleExpenditureDetails.Taxes is not null)
-        {
-            IsAddTaxesChecked = true;
-        }
+        //ActiveUser = userRepo.OfflineUser;
+        //_initialUserPocketMoney = ActiveUser.PocketMoney;
+        //_initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
+        //_initialTotalExpAmount = ActiveUser.TotalExpendituresAmount;
+        //if (SingleExpenditureDetails.Taxes is not null)
+        //{
+        //    IsAddTaxesChecked = true;
+        //}
 
-        ResultingBalance = ActiveUser.PocketMoney;
-        TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
+        //ResultingBalance = ActiveUser.PocketMoney;
+        //TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
     }
     private void UserRepo_OfflineUserDataChanged()
     {

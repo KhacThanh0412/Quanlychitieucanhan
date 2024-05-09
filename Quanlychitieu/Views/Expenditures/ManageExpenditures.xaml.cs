@@ -23,13 +23,13 @@ public partial class ManageExpenditures : UraniumContentPage
 
     protected override async void OnAppearing()
     {
-        if (UpSertExpbSheet.IsPresented)
-        {
-            UpSertExpbSheet.IsPresented = false;
-        }
+        //if (UpSertExpbSheet.IsPresented)
+        //{
+        //    UpSertExpbSheet.IsPresented = false;
+        //}
         base.OnAppearing();
         
-        await viewModel.PageloadedAsync();
+        // await viewModel.PageloadedAsync();
         
     }
 
@@ -37,25 +37,25 @@ public partial class ManageExpenditures : UraniumContentPage
     {
         if (viewModel.ExpendituresList?.Count < 1)
         {
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot Save an Empty List to PDF"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Không thể lưu danh sách trống sang PDF"));
         }
-        else
-        {
-            PrintProgressBarIndic.IsVisible = true;
-            PrintProgressBarIndic.Progress = 0;
-            await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
+        //else
+        //{
+        //    PrintProgressBarIndic.IsVisible = true;
+        //    PrintProgressBarIndic.Progress = 0;
+        //    await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
 
-            await viewModel.PrintExpendituresBtn();
-            PrintProgressBarIndic.IsVisible = false;
-        }
+        //    await viewModel.PrintExpendituresBtn();
+        //    PrintProgressBarIndic.IsVisible = false;
+        //}
     }
 
     private void AddExpBtn_Clicked(object sender, EventArgs e)
     {
-        upSertExpVM.SingleExpenditureDetails = new()
-        {
-            DateSpent = DateTime.Now,
-        };
+        //upSertExpVM.SingleExpenditureDetails = new()
+        //{
+        //    DateSpent = DateTime.Now,
+        //};
         upSertExpVM.PageLoaded();
         UpSertExpbSheet.IsPresented = true;
     }

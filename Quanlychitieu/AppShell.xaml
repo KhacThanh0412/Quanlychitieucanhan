@@ -17,57 +17,57 @@
     </Shell.Behaviors>
     <TabBar>
         <ShellContent
-            Title="Home"
+            Title="Trang chủ"
             ContentTemplate="{DataTemplate views:HomePage}"
             Icon="{AppThemeBinding Dark=home_d,
                                    Light=home_l}"
             Route="HomePage" />
 
         <ShellContent
-            Title="Flow Outs"
+            Title="Thu chi"
             ContentTemplate="{DataTemplate viewsExp:ManageExpenditures}"
             Icon="{AppThemeBinding Dark=initiate_money_transfer_d,
                                    Light=initiate_money_transfer_d}"
             Route="ManageExpenditures" />
 
         <ShellContent
-            Title="Flow Ins"
+            Title="Thu nhập"
             ContentTemplate="{DataTemplate viewsInc:ManageIncomes}"
             Icon="{AppThemeBinding Dark=request_money_d.png,
                                    Light=request_money_l.png}"
             Route="ManageIncomes" />
 
         <ShellContent
-            Title="Flow Insights"
+            Title="Thông tin chi tiết"
             ContentTemplate="{DataTemplate viewsStats:StatisticsPage}"
             Icon="graph_d.png"
             IsVisible="False" />
 
         <ShellContent
-            Title="Flow Forecast"
+            Title="Dự báo dòng tiền"
             ContentTemplate="{DataTemplate viewsPlannedExp:ManageMonthlyPlannedExpendituresPage}"
             Icon="{AppThemeBinding Dark=monthly_planned_icon_d.png,
                                    Light=monthly_planned_icon_l.png}"
             IsVisible="False" />
 
         <ShellContent
-            Title="Flow Hold"
+            Title="Chi tiết"
             ContentTemplate="{DataTemplate viewsDebts:DebtsOverviewPage}"
             Icon="{AppThemeBinding Dark=time_to_pay_d,
                                    Light=time_to_pay_l}" />
 
-        <Tab Title="Settings" Icon="{AppThemeBinding Dark=settings_d.png, Light=settings_l.png}">
+        <Tab Title="Cài đặt" Icon="{AppThemeBinding Dark=settings_d.png, Light=settings_l.png}">
 
-            <ShellContent Title="User Settings" ContentTemplate="{DataTemplate viewsSettings:UserSettingsPage}" />
+            <ShellContent Title="Thông tin cá nhân" ContentTemplate="{DataTemplate viewsSettings:UserSettingsPage}" />
 
-            <ShellContent Title="App Settings" ContentTemplate="{DataTemplate viewsSettings:ApplicationSettingsPage}" />
+            <ShellContent Title="Ứng dụng" ContentTemplate="{DataTemplate viewsSettings:ApplicationSettingsPage}" />
 
         </Tab>
     </TabBar>
 
     <ShellContent
         x:Name="login"
-        Title="Login Page"
+        Title="Đăng nhập"
         ContentTemplate="{DataTemplate views:LoginPage}"
         Route="Login" />
 

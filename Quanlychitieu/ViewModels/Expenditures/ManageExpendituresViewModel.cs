@@ -18,16 +18,11 @@ public partial class ManageExpendituresViewModel : ObservableObject
     private readonly UpSertExpenditureViewModel upSertExpenditureVM;
     private readonly IFolderPicker folderPickerService;
 
-    public ManageExpendituresViewModel(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository,
+    public ManageExpendituresViewModel(
         UpSertExpenditureViewModel upSertExpenditureVM, IFolderPicker folderPickerService)
     {
-        expendituresService = expendituresRepository;
-        userRepo = usersRepository;
-        this.upSertExpenditureVM = upSertExpenditureVM;
         this.folderPickerService = folderPickerService;
         ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
-        expendituresService.OfflineExpendituresListChanged += HandleExpendituresListUpdated;
-        userRepo.OfflineUserDataChanged += HandleUserDataChanged;
     }
 
     private void HandleUserDataChanged()
@@ -96,7 +91,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
         {
             if (!IsLoaded)
             {
-                ExpTitle = "All Flow Outs";
+                ExpTitle = "Tất cả hóa đơn";
                 ApplyChanges();
 
                 IsBusy = false;

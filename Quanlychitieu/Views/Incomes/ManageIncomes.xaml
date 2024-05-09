@@ -28,13 +28,13 @@
                     <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped" />
                 </Label.GestureRecognizers>
                 <Label.Text>
-                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                    <MultiBinding StringFormat="{} Số dư hiện tại là : {0:n2} {1}">
                         <Binding Path="UserPocketMoney" />
                         <Binding Path="UserCurrency" />
                     </MultiBinding>
                 </Label.Text>
             </Label>
-            <Grid
+            <!--<Grid
                 Margin="10,3"
                 toolkit:DockLayout.DockPosition="Top"
                 HeightRequest="30">
@@ -61,7 +61,7 @@
                                              Light=pie_chart_l}"
                     VerticalOptions="Center"
                     WidthRequest="35" />
-            </Grid>
+            </Grid>-->
 
             <Label
                 Margin="5"
@@ -80,7 +80,7 @@
                 HorizontalTextAlignment="Center"
                 VerticalOptions="End">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} {2} Flow In(s) worth {0:n2} {1}">
+                    <MultiBinding StringFormat="{} {2} Thu nhập. Tổng số tiền: {0:n2} {1}">
                         <Binding Path="TotalAmount" />
                         <Binding Path="UserCurrency" />
                         <Binding Path="TotalIncomes" />
@@ -89,7 +89,7 @@
             </Label>
 
             <CollectionView
-                EmptyView="No Flow Ins Available..."
+                EmptyView="Không có..."
                 IsVisible="true"
                 ItemsSource="{Binding IncomesList}">
                 <CollectionView.ItemTemplate>
@@ -172,7 +172,7 @@
             HeightRequest="55"
             Text="+"
             TextColor="White"
-            ToolTipProperties.Text="Add New Flow Out"
+            ToolTipProperties.Text="Thêm mới thu nhập"
             WidthRequest="55">
             <Button.Shadow>
                 <Shadow Opacity="0.6" Offset="5,15" />

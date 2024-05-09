@@ -21,22 +21,25 @@ namespace Quanlychitieu.ViewModels
         private readonly IUsersRepository userRepo;
         private readonly IIncomeRepository incomeRepo;
         private readonly IDebtRepository debtRepo;
-
-        public HomeViewModel(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
-                        IUsersRepository usersRepository, IIncomeRepository incomeRepository,
-                        IDebtRepository debtRepository)
+        public HomeViewModel()
         {
-            expenditureRepo = expendituresRepository;
-            settingsService = settingsServiceRepo;
-            userRepo = usersRepository;
-            incomeRepo = incomeRepository;
-            debtRepo = debtRepository;
-            expenditureRepo.OfflineExpendituresListChanged += OnExpendituresChanged;
-            incomeRepo.OfflineIncomesListChanged += OnIncomesChanged;
-            userRepo.OfflineUserDataChanged += OnUserDataChanged;
 
-            UpdateIsSyncing();
         }
+        //public HomeViewModel(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
+        //                IUsersRepository usersRepository, IIncomeRepository incomeRepository,
+        //                IDebtRepository debtRepository)
+        //{
+        //    expenditureRepo = expendituresRepository;
+        //    settingsService = settingsServiceRepo;
+        //    userRepo = usersRepository;
+        //    incomeRepo = incomeRepository;
+        //    debtRepo = debtRepository;
+        //    expenditureRepo.OfflineExpendituresListChanged += OnExpendituresChanged;
+        //    incomeRepo.OfflineIncomesListChanged += OnIncomesChanged;
+        //    userRepo.OfflineUserDataChanged += OnUserDataChanged;
+
+        //    UpdateIsSyncing();
+        //}
 
         [ObservableProperty]
         ObservableCollection<ExpendituresModel> latestExpenditures = new();
@@ -148,8 +151,8 @@ namespace Quanlychitieu.ViewModels
         public async Task GoToAddExpenditurePage()
         {
             var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
-
-            var NewUpSertVM = new UpSertExpenditureViewModel(expenditureRepo, userRepo);
+            var NewUpSertVM = new UpSertExpenditureViewModel();
+            //var NewUpSertVM = new UpSertExpenditureViewModel(expenditureRepo, userRepo);
             var newUpSertExpPopUp = new UpSertExpendituresPopUp(NewUpSertVM);
             try
             {

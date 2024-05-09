@@ -65,7 +65,7 @@
                         FontSize="10"
                         HorizontalOptions="End">
                         <Label.Text>
-                            <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
+                            <MultiBinding StringFormat="{} Số dư : {0:n2} {1}">
                                 <Binding Path="ResultingBalance" />
                                 <Binding Path="ActiveUser.UserCurrency" />
                             </MultiBinding>
@@ -74,7 +74,7 @@
                 </VerticalStackLayout>
 
                 <material:DatePickerField
-                    Title="Date Spent"
+                    Title="Ngày"
                     Date="{Binding SingleIncomeDetails.DateReceived}"
                     MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
                     MinimumDate="01/01/2022"
@@ -87,13 +87,13 @@
 
                 <material:TextField
                     x:Name="AmountReceived"
-                    Title="Amount Received"
+                    Title="Số tiền nhận"
                     Focused="AmountReceived_Focused"
                     Keyboard="Numeric"
                     Text="{Binding SingleIncomeDetails.AmountReceived}"
                     TextChanged="AmountReceived_TextChanged" />
 
-                <material:TextField Title="Reason" Text="{Binding SingleIncomeDetails.Reason}">
+                <material:TextField Title="Mô tả" Text="{Binding SingleIncomeDetails.Reason}">
                     <material:TextField.Validations>
                         <validation:RequiredValidation />
                     </material:TextField.Validations>
@@ -108,14 +108,14 @@
                         BackgroundColor="{StaticResource SaveBtnColor}"
                         FontAttributes="Bold"
                         FontSize="12"
-                        Text="Save Flow In"
+                        Text="Lưu"
                         TextColor="White" />
 
                     <Button
                         BackgroundColor="{StaticResource NegativeActionBtnDark}"
                         Command="{Binding CancelBtnCommand}"
                         FontSize="10"
-                        Text="Cancel"
+                        Text="Thoát"
                         TextColor="White" />
 
                 </HorizontalStackLayout>

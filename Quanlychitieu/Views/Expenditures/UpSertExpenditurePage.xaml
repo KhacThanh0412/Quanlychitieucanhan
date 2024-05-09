@@ -20,9 +20,9 @@
                 Margin="5,0"
                 FontAttributes="Italic"
                 HorizontalOptions="End"
-                TextColor="AliceBlue">
+                TextColor="Black">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
+                    <MultiBinding StringFormat="{} Số dư : {0:n2} {1}">
                         <Binding Path="ResultingBalance" />
                         <Binding Path="ActiveUser.UserCurrency" />
                     </MultiBinding>
@@ -33,9 +33,9 @@
                 FontAttributes="Italic"
                 FontSize="13"
                 HorizontalOptions="End"
-                TextColor="AliceBlue">
+                TextColor="Black">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
+                    <MultiBinding StringFormat="{} Số tiền đã chi : {0:n2} {1}">
                         <Binding Path="TotalAmountSpent" />
                         <Binding Path="ActiveUser.UserCurrency" />
                     </MultiBinding>
@@ -60,7 +60,7 @@
             SubmitCommand="{Binding UpSertExpenditureCommand}">
             <VerticalStackLayout Spacing="5">
                 <material:DatePickerField
-                    Title="Date Spent"
+                    Title="Ngày chi tiêu"
                     Date="{Binding SingleExpenditureDetails.DateSpent}"
                     MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
                     MinimumDate="01/01/2022"
@@ -77,7 +77,7 @@
 
                 <material:TextField
                     x:Name="UnitPrice"
-                    Title="Unit Price"
+                    Title="Đơn giá"
                     Grid.Column="0"
                     Focused="UnitPrice_Focused"
                     Keyboard="Numeric"
@@ -85,21 +85,21 @@
                     TextChanged="UnitPriceOrQty_TextChanged">
                     <material:TextField.Validations>
                         <validation:RequiredValidation />
-                        <validation:MinValueValidation Message="The Unit Price cannot be 0 or Less" MinValue="0.1" />
+                        <validation:MinValueValidation Message="Đơn giá không được bằng 0 hoặc nhỏ hơn" MinValue="0.1" />
                         <validation:NumericValidation />
                     </material:TextField.Validations>
                 </material:TextField>
 
                 <material:TextField
                     x:Name="Qty"
-                    Title="Quantity"
+                    Title="Tổng"
                     Grid.Column="1"
                     Keyboard="Numeric"
                     Text="{Binding SingleExpenditureDetails.Quantity}"
                     TextChanged="UnitPriceOrQty_TextChanged">
                     <material:TextField.Validations>
                         <validation:RequiredValidation />
-                        <validation:MinValueValidation Message="The Quantity cannot be 0 or Less" MinValue="1" />
+                        <validation:MinValueValidation Message="Tổng không thể bằng 0 hoặc ít hơn" MinValue="1" />
                         <validation:NumericValidation />
                     </material:TextField.Validations>
                 </material:TextField>
@@ -116,7 +116,7 @@
                 BorderColor="Gray"
                 CheckChanged="AddTax_CheckChanged"
                 IsChecked="{Binding IsAddTaxesChecked}"
-                Text="Taxes" />
+                Text="Thuế" />
 
             <ListView
                 x:Name="TaxesList"

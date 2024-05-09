@@ -43,43 +43,20 @@ public class ExpendituresModel : INotifyPropertyChanged
 
 public enum ExpenditureCategory
 {
-    [Description("Education")]
+    [Description("Học tập")]
     Education = 0,
 
-    [Description("Entertainment")]
+    [Description("Giải trí")]
     Entertainment = 1,
 
-    [Description("Food")]
+    [Description("Ăn uống")]
     Food = 2,
 
-    [Description("Health")]
+    [Description("Sức khỏe")]
     Health = 3,
 
-    [Description("None")]
+    [Description("Không có")]
     None = 4,
-
-    [Description("Other")]
-    Other = 5,
-
-    [Description("Rent")]
-    Rent = 6,
-
-    [Description("Shopping")]
-    Shopping = 7,
-
-    [Description("Transfers")]
-    Transfers = 8,
-
-    [Description("Transportation")]
-    Transportation = 9,
-
-    [Description("Travel")]
-    Travel = 10,
-
-    [Description("Utilities")]
-    Utilities = 11,
-    [Description("Flow Hold Payment")]
-    FlowHoldPayment = 12,
 }
 
 public static class ExpenditureCategoryDescriptions

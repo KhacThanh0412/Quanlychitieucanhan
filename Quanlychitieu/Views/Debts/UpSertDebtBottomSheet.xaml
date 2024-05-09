@@ -30,7 +30,7 @@
                     CircleColor="{AppThemeBinding Light=darkslateblue,
                                                   Dark=darkslateblue}"
                     IsChecked="{Binding IsLent}"
-                    Text="Lend"
+                    Text="Cho vay"
                     TextColor="{AppThemeBinding Light=black,
                                                 Dark=gray}"
                     Color="DarkSlateBlue" />
@@ -40,7 +40,7 @@
                     CircleColor="{AppThemeBinding Light=darkslateblue,
                                                   Dark=darkslateblue}"
                     IsChecked="{Binding IsBorrow}"
-                    Text="Borrow"
+                    Text="Vay"
                     TextColor="{AppThemeBinding Light=Black,
                                                 Dark=gray}"
                     Color="DarkSlateBlue" />
@@ -54,7 +54,7 @@
 
                 <material:TextField
                     x:Name="AmountTextField"
-                    Title="Amount"
+                    Title="Số tiền"
                     Grid.Column="0"
                     BackgroundColor="Transparent"
                     Focused="AmountTextField_Focused"
@@ -78,7 +78,7 @@
 
                 <material:TextField
                     x:Name="PersonName"
-                    Title="Person's Name"
+                    Title="Tên"
                     Text="{Binding SingleDebtDetails.PersonOrOrganization.Name}" />
 
                 <ImageButton
@@ -89,7 +89,7 @@
             </Grid>
 
             <Editor
-                Placeholder="Notes (required)"
+                Placeholder="Ghi chú"
                 PlaceholderColor="{AppThemeBinding Light=black}"
                 Text="{Binding SingleDebtDetails.Notes}"
                 TextColor="{AppThemeBinding Light=black,
@@ -97,7 +97,7 @@
 
             <material:TextField
                 x:Name="PersonNumber"
-                Title="Contact"
+                Title="Liên hệ"
                 Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}" />
             <!--<Entry Placeholder="Contact"
                 Text="{Binding SingleDebtDetails.PersonOrOrganization.PhoneNumber}"
@@ -110,7 +110,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <HorizontalStackLayout Grid.Column="0" Margin="6,0">
-                    <Label Text="Deadline" VerticalTextAlignment="Center" />
+                    <Label Text="Hạn" VerticalTextAlignment="Center" />
                     <Switch
                         x:Name="DeadlineSwitch"
                         IsToggled="{Binding HasDeadLine}"
@@ -124,7 +124,7 @@
 
                 <material:DatePickerField
                     x:Name="FlowHoldDeadline"
-                    Title="Deadline"
+                    Title="Ngày hạn"
                     Grid.Column="1"
                     Date="{Binding SingleDebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
                     IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
@@ -140,7 +140,7 @@
             <Button
                 input:FormView.IsSubmitButton="True"
                 HorizontalOptions="Center"
-                Text="Save"
+                Text="Lưu"
                 WidthRequest="80" />
         </input:FormView>
     </VerticalStackLayout>

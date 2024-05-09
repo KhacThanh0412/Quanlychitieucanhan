@@ -10,12 +10,8 @@ public partial class ManageIncomesViewModel : ObservableObject
     private readonly IIncomeRepository incomeService;
     private readonly IUsersRepository userService;
 
-    public ManageIncomesViewModel(IIncomeRepository incomeRepository, IUsersRepository usersRepository)
+    public ManageIncomesViewModel()
     {
-        incomeService = incomeRepository;
-        userService = usersRepository;
-        incomeRepository.OfflineIncomesListChanged += HandleIncomesListUpdated;
-        usersRepository.OfflineUserDataChanged += HandleUserUpdated;
     }
 
     private void HandleUserUpdated()
@@ -109,13 +105,13 @@ public partial class ManageIncomesViewModel : ObservableObject
     {
         if (ActiveUser is null)
         {
-            Debug.WriteLine("Can't Open because Active User is Null");
-            await Shell.Current.DisplayAlert("Wait", "Please Wait", "OK");
+            Debug.WriteLine("Null");
+            await Shell.Current.DisplayAlert("Đợi", "Vui lòng đợi", "OK");
         }
         else
         {
             var newIncome = new IncomeModel() { DateReceived = DateTime.Now };
-            const string PageTitle = "Add New Income";
+            const string PageTitle = "Thêm mới";
             const bool isAdd = true;
 
             await AddEditIncome(newIncome, PageTitle, isAdd);

@@ -14,10 +14,10 @@
     x:DataType="viewModels:ManageExpendituresViewModel"
     BackgroundColor="{AppThemeBinding Light=#F0F0F0,
                                       Dark={StaticResource BackGroundDark}}">
-    <ContentPage.ToolbarItems>
+    <!--<ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding ThemeTogglerCommand}" Text="Switch Mode" />
 
-    </ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>-->
     <AbsoluteLayout>
 
         <toolkit:DockLayout
@@ -31,7 +31,7 @@
                 FontSize="21"
                 HorizontalOptions="Center">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
+                    <MultiBinding StringFormat="{} Số dư hiện tại là: {0:n2} {1}">
                         <Binding Path="UserPocketMoney" />
                         <Binding Path="UserCurrency" />
                     </MultiBinding>
@@ -44,7 +44,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <VerticalStackLayout
+                <!--<VerticalStackLayout
                     Grid.Column="0"
                     BackgroundColor="Transparent"
                     HorizontalOptions="Start">
@@ -58,7 +58,7 @@
                         IsVisible="false"
                         ProgressColor="DarkSlateBlue"
                         WidthRequest="50" />
-                </VerticalStackLayout>
+                </VerticalStackLayout>-->
 
                 <ImageButton
                     x:Name="pie_chart"
@@ -72,7 +72,7 @@
                 <!--  IsVisible="{Binding ShowStatisticBtn}"  -->
             </Grid>
 
-            <HorizontalStackLayout
+            <!--<HorizontalStackLayout
                 x:Name="SyncIndicator"
                 toolkit:DockLayout.DockPosition="Top"
                 HorizontalOptions="Center">
@@ -80,20 +80,20 @@
                     Margin="0,0,0,0"
                     FontSize="13"
                     IsVisible="{Binding IsBusy}"
-                    Text="Syncing..." />
+                    Text="Đang đồng bộ..." />
                 <ActivityIndicator
                     HeightRequest="20"
                     IsRunning="{Binding IsBusy}"
                     IsVisible="{Binding IsBusy}" />
-            </HorizontalStackLayout>
-
-            <Label
+            </HorizontalStackLayout>-->
+            <!--  Text="{Binding ExpTitle}"  -->
+            <!--<Label
                 Margin="5"
                 toolkit:DockLayout.DockPosition="Top"
                 FontAttributes="Bold"
                 FontSize="20"
                 HorizontalOptions="Center"
-                Text="{Binding ExpTitle}" />
+                Text="12345" />-->
 
             <Label
                 Margin="3"
@@ -103,7 +103,7 @@
                 HorizontalOptions="Center"
                 VerticalOptions="End">
                 <Label.Text>
-                    <MultiBinding StringFormat="{} {2} Flow Out(s) worth {0:n2} {1}">
+                    <MultiBinding StringFormat="{} {2} Hóa đơn. Tổng số tiền: {0:n2} {1}">
                         <Binding Path="TotalAmount" />
                         <Binding Path="UserCurrency" />
                         <Binding Path="TotalExpenditures" />
@@ -113,12 +113,11 @@
 
             <CollectionView
                 x:Name="ColView"
-                EmptyView="No Flow Outs Available..."
+                EmptyView="Không có hóa đơn nào..."
                 IsGrouped="True"
-                IsVisible="true"
-                ItemsSource="{Binding GroupedExpenditures}">
+                IsVisible="true">
 
-                <CollectionView.GroupHeaderTemplate>
+                <!--<CollectionView.GroupHeaderTemplate>
                     <DataTemplate x:DataType="viewModels:DateGroup">
                         <Label
                             Padding="10,3"
@@ -151,11 +150,13 @@
                 </CollectionView.GroupFooterTemplate>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:ExpendituresModel">
-                        <!--
-                            I JUST HAVE TO MAKE SURE NO VIEW ABOVE IS CENTERED OR SOMETHING
-                            also, set dock to top or center to see
-                            NOPE -> set to fill and expand for it to take the whole width of the screen
-                        -->
+                -->
+                <!--
+                    I JUST HAVE TO MAKE SURE NO VIEW ABOVE IS CENTERED OR SOMETHING
+                    also, set dock to top or center to see
+                    NOPE -> set to fill and expand for it to take the whole width of the screen
+                -->
+                <!--
                         <SwipeView Margin="0,2" BackgroundColor="Transparent">
                             <SwipeView.RightItems>
                                 <SwipeItems>
@@ -225,7 +226,7 @@
                         </SwipeView>
 
                     </DataTemplate>
-                </CollectionView.ItemTemplate>
+                </CollectionView.ItemTemplate>-->
             </CollectionView>
 
 
@@ -245,7 +246,7 @@
             HeightRequest="55"
             Text="+"
             TextColor="White"
-            ToolTipProperties.Text="Add New Flow Out"
+            ToolTipProperties.Text="Thêm hóa đơn mới"
             WidthRequest="55">
             <Button.Shadow>
                 <Shadow Opacity="0.6" Offset="5,15" />
@@ -253,7 +254,7 @@
         </Button>
     </AbsoluteLayout>
 
-    <uranium:UraniumContentPage.Attachments>
+    <!--<uranium:UraniumContentPage.Attachments>
         <materialAttach:BackdropView Title="Filter" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark={StaticResource BackGroundDark}}">
             <VerticalStackLayout
                 Padding="5"
@@ -261,7 +262,7 @@
                                                   Dark={StaticResource BackGroundDark}}"
                 Spacing="5">
                 <material:CheckBox
-                    Text="Include Disabled Items"
+                    Text="Bao gồm các mục bị vô hiệu hóa"
                     TextColor="White"
                     Type="Filled" />
                 <material:CheckBox
@@ -274,5 +275,5 @@
                     Type="Filled" />
             </VerticalStackLayout>
         </materialAttach:BackdropView>
-    </uranium:UraniumContentPage.Attachments>
+    </uranium:UraniumContentPage.Attachments>-->
 </uranium:UraniumContentPage>

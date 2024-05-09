@@ -21,7 +21,7 @@ namespace Quanlychitieu.ViewModels
         private readonly CountryAndCurrencyCodes countryAndCurrency = new();
 
         readonly LoginNavs NavFunctions = new();
-        public LoginViewModel(ISettingsServiceRepository sessionServiceRepository, IUsersRepository userRepository)
+        public LoginViewModel()
         {
             
         }
@@ -178,38 +178,40 @@ namespace Quanlychitieu.ViewModels
             IsBusy = true;
             UsersModel User = new();
             IsLoginOnlineButtonClicked = true;
-            if (IsLoginOnlineButtonClicked)
-            {
-                User = await userRepo.GetUserOnlineAsync(CurrentUser);
-            }
-            else
-            {
-                User = await userRepo.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
-            }
+            //if (IsLoginOnlineButtonClicked)
+            //{
+            //    User = await userRepo.GetUserOnlineAsync(CurrentUser);
+            //}
+            //else
+            //{
+            //    User = await userRepo.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
+            //}
 
             if (User is null)
             {
                 IsBusy = false;
                 ErrorMessageVisible = true;
             }
-            else
-            {
-                if (!File.Exists(LoginDetectFile))
-                {
-                    File.Create(LoginDetectFile).Close();
-                }
-                CurrentUser = User;
-                userRepo.OfflineUser = await userRepo.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app
-                await settingsRepo.SetPreference<string>(nameof(CurrentUser.Id), CurrentUser.Id);
-                await settingsRepo.SetPreference<string>("Username", CurrentUser.Username);
-                await settingsRepo.SetPreference<string>(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
+            //else
+            //{
+            //    if (!File.Exists(LoginDetectFile))
+            //    {
+            //        File.Create(LoginDetectFile).Close();
+            //    }
+            //    CurrentUser = User;
+            //    userRepo.OfflineUser = await userRepo.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app
+            //    await settingsRepo.SetPreference<string>(nameof(CurrentUser.Id), CurrentUser.Id);
+            //    await settingsRepo.SetPreference<string>("Username", CurrentUser.Username);
+            //    await settingsRepo.SetPreference<string>(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
 
-                await SyncAndNotifyAsync();
-                IsBusy = false;
+            //    await SyncAndNotifyAsync();
+            //    IsBusy = false;
 
-                IsQuickLoginVisible = true;
-                await NavFunctions.GoToHomePage();
-            }
+            //    IsQuickLoginVisible = true;
+            //    await NavFunctions.GoToHomePage();
+            //}
+
+            await NavFunctions.GoToHomePage();
         }
 
         public async Task QuickLogin()

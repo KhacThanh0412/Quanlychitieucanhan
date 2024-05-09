@@ -11,7 +11,7 @@ public partial class ApplicationSettingsPage : ContentPage
         InitializeComponent();
         viewModel = vm;
         BindingContext = vm;
-        viewModel.SetThemeConfig();
+        // viewModel.SetThemeConfig();
     }
 
     private async void ImageButton_Clicked(object sender, EventArgs e)

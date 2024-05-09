@@ -7,71 +7,12 @@
     xmlns:utils="clr-namespace:Quanlychitieu.Utilities"
     xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Settings"
     x:Name="Page"
-    Title="Application Settings"
+    Title="Cài đặt ứng dụng"
     x:DataType="viewModel:UserSettingsViewModel">
     <ContentPage.Resources>
         <utils:InverseBoolConverter x:Key="VisibilityToggler" />
     </ContentPage.Resources>
     <toolkit:DockLayout>
-        <VerticalStackLayout toolkit:DockLayout.DockPosition="Bottom">
-
-            <Label
-                Margin="2"
-                FontSize="23"
-                HorizontalOptions="Center"
-                Text="FlowHub - v0.9.7 " />
-
-            <Label
-                Margin="2"
-                FontSize="19"
-                HeightRequest="30"
-                HorizontalTextAlignment="Center"
-                Text="By Yvan Brunel" />
-        </VerticalStackLayout>
-
-        <Button
-            Margin="5"
-            BackgroundColor="{AppThemeBinding Dark=white,
-                                              Light=black}"
-            Command="{Binding ThemeTogglerCommand}"
-            HorizontalOptions="End"
-            Text="Light"
-            TextColor="{AppThemeBinding Dark=black,
-                                        Light=white}"
-            ToolTipProperties.Text="Click to Switch to Light Theme">
-            <Button.Triggers>
-                <DataTrigger
-                    Binding="{Binding IsLightTheme}"
-                    TargetType="Button"
-                    Value="true">
-                    <Setter Property="Text" Value="Dark" />
-                    <Setter Property="ToolTipProperties.Text" Value="Click to Switch to Dark Theme" />
-                </DataTrigger>
-            </Button.Triggers>
-            <Button.Shadow>
-                <Shadow
-                    Brush="{AppThemeBinding Dark=white,
-                                            Light=black}"
-                    Opacity="0.3"
-                    Offset="4,15" />
-            </Button.Shadow>
-        </Button>
-
-        <VerticalStackLayout>
-
-            <Label
-                FontSize="21"
-                HeightRequest="30"
-                HorizontalTextAlignment="Center"
-                Text="Tap Here to view GitHub Repo"
-                VerticalOptions="Start" />
-            <ImageButton
-                Clicked="ImageButton_Clicked"
-                HeightRequest="50"
-                Source="github"
-                WidthRequest="50" />
-
-        </VerticalStackLayout>
-
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Bottom" />
     </toolkit:DockLayout>
 </ContentPage>

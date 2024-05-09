@@ -13,8 +13,7 @@
     x:Name="page"
     x:DataType="viewModels:UpSertExpenditureViewModel"
     BackgroundColor="Transparent"
-    CloseOnTapOutside="True"
-    IsPresented="{Binding IsBottomSheetOpened}">
+    CloseOnTapOutside="True">
     <materialAttach:BottomSheetView.Header>
         <BoxView HeightRequest="0" />
     </materialAttach:BottomSheetView.Header>
@@ -40,7 +39,7 @@
                     FontSize="13"
                     HorizontalOptions="End">
                     <Label.Text>
-                        <MultiBinding StringFormat="{} Resulting Balance : {0:n2} {1}">
+                        <MultiBinding StringFormat="{} Số dư : {0:n2} {1}">
                             <Binding Path="ResultingBalance" />
                             <Binding Path="ActiveUser.UserCurrency" />
                         </MultiBinding>
@@ -51,14 +50,14 @@
                     FontSize="13"
                     HorizontalOptions="End">
                     <Label.Text>
-                        <MultiBinding StringFormat="{} Flow Out's Amount : {0:n2} {1}">
+                        <MultiBinding StringFormat="{} Tổng chi : {0:n2} {1}">
                             <Binding Path="SingleExpenditureDetails.AmountSpent" />
                             <Binding Path="ActiveUser.UserCurrency" />
                         </MultiBinding>
                     </Label.Text>
                 </Label>
                 <material:DatePickerField
-                    Title="Date Spent"
+                    Title="Ngày"
                     Date="{Binding SingleExpenditureDetails.DateSpent}"
                     MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
                     MinimumDate="01/01/2022"
@@ -68,28 +67,28 @@
                         <validation:RequiredValidation />
                     </material:DatePickerField.Validations>
                 </material:DatePickerField>
-
+                <!--  Text="{Binding SingleExpenditureDetails.UnitPrice}"  -->
                 <material:TextField
                     x:Name="UnitPrice"
-                    Title="Price"
+                    Title="Đơn giá"
                     Grid.Column="0"
                     AccentColor="#CBCBCB"
                     Focused="UnitPrice_Focused"
                     Keyboard="Numeric"
-                    Text="{Binding SingleExpenditureDetails.UnitPrice}"
+                    Text="123456"
                     TextChanged="UnitPrice_TextChanged" />
 
                 <material:PickerField
-                    Title="Category"
+                    Title="Danh mục"
                     ItemsSource="{Binding ExpenditureCategory}"
                     SelectedItem="{Binding SingleExpenditureDetails.Category}"
                     TextColor="{AppThemeBinding Light=black,
                                                 Dark=white}" />
-
+                <!--  Text="{Binding SingleExpenditureDetails.Reason}"  -->
                 <material:EditorField
-                    Title="Reason"
+                    Title="Lý do"
                     IsTextPredictionEnabled="True"
-                    Text="{Binding SingleExpenditureDetails.Reason}"
+                    Text="Testing"
                     TextColor="{AppThemeBinding Light=black,
                                                 Dark=white}"
                     TitleColor="{AppThemeBinding Light=black}">
@@ -107,7 +106,7 @@
                         BackgroundColor="{StaticResource SaveBtnColor}"
                         FontAttributes="Bold"
                         FontSize="14"
-                        Text="Save"
+                        Text="Lưu"
                         TextColor="White" />
 
                     <Button
@@ -115,7 +114,7 @@
                         BackgroundColor="{StaticResource NegativeActionBtnDark}"
                         Clicked="CancelBtn_Clicked"
                         FontSize="14"
-                        Text="Cancel"
+                        Text="Thoát"
                         TextColor="White" />
                 </HorizontalStackLayout>
             </input:FormView>

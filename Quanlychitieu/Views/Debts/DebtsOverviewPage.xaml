@@ -10,12 +10,10 @@
     xmlns:utilities="clr-namespace:Quanlychitieu.Utilities"
     xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels.Debts"
     x:Name="Page"
-    Title="Flow Holds"
+    Title="Khoản vay"
     x:DataType="viewModels:ManageDebtsViewModel"
     BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},
                                       Dark={StaticResource BackGroundDark}}">
-
-
     <AbsoluteLayout>
         <VerticalStackLayout
             Margin="8,3"
@@ -26,7 +24,7 @@
                 FontAttributes="Bold"
                 FontSize="21"
                 HorizontalTextAlignment="Center"
-                Text="Lendings" />
+                Text="Cho vay" />
             <Border x:Name="LentBrdr">
                 <!--
                     StrokeThickness="1.0" Margin="0,0,0,10"
@@ -56,7 +54,7 @@
                         Grid.Column="0"
                         FontSize="13"
                         HorizontalTextAlignment="Center"
-                        Text="Total Amount Lent"
+                        Text="Tổng số tiền cho vay"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Row="1"
@@ -76,7 +74,7 @@
                         Grid.Column="1"
                         FontSize="13"
                         HorizontalTextAlignment="Center"
-                        Text="Total Number"
+                        Text="Tổng số"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Row="1"
@@ -91,7 +89,7 @@
                         Grid.Column="0"
                         FontSize="13"
                         HorizontalTextAlignment="Center"
-                        Text="Total Pending" />
+                        Text="Đang chờ xử lý" />
                     <Label
                         Grid.Row="3"
                         Grid.Column="0"
@@ -104,7 +102,7 @@
                         Grid.Column="0"
                         FontSize="13"
                         HorizontalTextAlignment="Center"
-                        Text="Total Amount Pending" />
+                        Text="Tổng số đang chờ" />
                     <Label
                         Grid.Row="5"
                         Grid.Column="0"
@@ -117,7 +115,7 @@
                         Grid.Column="1"
                         FontSize="13"
                         HorizontalTextAlignment="Center"
-                        Text="Total Completed" />
+                        Text="Đã hoàn thành" />
                     <Label
                         Grid.Row="3"
                         Grid.Column="1"
@@ -135,7 +133,7 @@
                 FontAttributes="Bold"
                 FontSize="21"
                 HorizontalTextAlignment="Center"
-                Text="Borrowings" />
+                Text="Khoản vay" />
             <Border x:Name="BorrowBrdr">
                 <!--  StrokeThickness="1.0" Stroke="{AppThemeBinding Dark=#303030}">  -->
                 <Border.GestureRecognizers>
@@ -158,7 +156,7 @@
                         Grid.Column="0"
                         FontSize="13"
                         HorizontalTextAlignment="Center"
-                        Text="Total Amount Borrowed" />
+                        Text="Tổng số tiền đã vay" />
                     <Label
                         Grid.Row="1"
                         Grid.Column="0"
@@ -177,7 +175,7 @@
                         Grid.Column="1"
                         FontSize="13"
                         HorizontalTextAlignment="Center"
-                        Text="Total Number of Borrows" />
+                        Text="Số khoản vay" />
                     <Label
                         Grid.Row="1"
                         Grid.Column="1"
@@ -191,7 +189,7 @@
                         Grid.Column="0"
                         FontSize="13"
                         HorizontalTextAlignment="Center"
-                        Text="Total Pending Borrows" />
+                        Text="Khoản vay đang chờ xử lý" />
                     <Label
                         Grid.Row="3"
                         Grid.Column="0"
@@ -204,7 +202,7 @@
                         Grid.Column="1"
                         FontSize="13"
                         HorizontalTextAlignment="Center"
-                        Text="Total Completed Borrows" />
+                        Text="Khoảng vay đã hoàn thành" />
                     <Label
                         Grid.Row="3"
                         Grid.Column="1"

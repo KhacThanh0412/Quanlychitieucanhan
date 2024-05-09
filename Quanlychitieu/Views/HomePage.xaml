@@ -12,6 +12,12 @@
             Margin="10"
             FontAttributes="Bold"
             FontSize="21"
+            HorizontalTextAlignment="Center"
+            Text="Số dư hiện tại là 1000000 VND" />
+        <!--<Label
+            Margin="10"
+            FontAttributes="Bold"
+            FontSize="21"
             HorizontalTextAlignment="Center">
             <Label.Text>
                 <MultiBinding StringFormat="{} Current Balance is {0:n2} {1}">
@@ -19,7 +25,7 @@
                     <Binding Path="UserCurrency" />
                 </MultiBinding>
             </Label.Text>
-        </Label>
+        </Label>-->
         <!--  Begin Section for Expenditure display  -->
         <Border
             Margin="10"
@@ -34,15 +40,15 @@
                     Padding="10,0,0,0"
                     FontSize="22"
                     HorizontalOptions="Center"
-                    Text="Latest Flow Outs" />
+                    Text="View đang test" />
                 <BoxView
                     HeightRequest="1"
                     HorizontalOptions="Fill"
                     Color="DarkSlateBlue" />
-                <CollectionView x:Name="ColView" ItemsSource="{Binding LatestExpenditures}">
+                <CollectionView x:Name="ColView">
 
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:ExpendituresModel">
+                        <DataTemplate>
                             <Grid Margin="10,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -52,7 +58,7 @@
                                 <StackLayout Grid.Column="0">
                                     <Label
                                         FontAttributes="Bold"
-                                        Text="{Binding Reason}"
+                                        Text="Lý do"
                                         TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder},
                                                                     Light=black}" />
 
@@ -60,27 +66,32 @@
                                         FontAttributes="Italic"
                                         FontSize="10"
                                         Opacity="{AppThemeBinding Light=0.8}"
-                                        Text="{Binding Category}"
+                                        Text="Danh mục"
                                         TextColor="{AppThemeBinding Dark={StaticResource Secondary},
                                                                     Light=blue}" />
                                 </StackLayout>
 
                                 <StackLayout Grid.Column="1" HorizontalOptions="End">
-                                    <Label FontAttributes="Bold">
+                                    <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        HorizontalOptions="End"
+                                        Text="Số tiền đã chi" />
+                                    <!--<Label FontAttributes="Bold">
                                         <Label.Text>
                                             <MultiBinding StringFormat="{}{0:n2} {1}">
                                                 <Binding Path="AmountSpent" />
                                                 <Binding Path="Currency" />
                                             </MultiBinding>
                                         </Label.Text>
-                                    </Label>
+                                    </Label>-->
                                     <Label
                                         FontAttributes="Italic"
                                         FontSize="10"
                                         HorizontalTextAlignment="End"
                                         Opacity="{AppThemeBinding Dark=0.5,
                                                                   Light=0.8}"
-                                        Text="{Binding DateSpent, StringFormat='{0:ddd, MM/dd/yyyy}'}" />
+                                        Text="01/05/2024" />
                                 </StackLayout>
                             </Grid>
 
@@ -96,7 +107,7 @@
                 <Label
                     HorizontalOptions="Center"
                     IsVisible="{Binding IsSyncing}"
-                    Text="Loading..." />
+                    Text="Đang tải..." />
             </VerticalStackLayout>
 
         </Border>

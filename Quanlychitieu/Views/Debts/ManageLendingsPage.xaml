@@ -12,7 +12,7 @@
     xmlns:utilities="clr-namespace:Quanlychitieu.Utilities"
     xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels.Debts"
     x:Name="Page"
-    Title="Lendings"
+    Title="Khoản cho vay"
     x:DataType="viewModels:ManageDebtsViewModel"
     BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},
                                       Dark={StaticResource BackGroundDark}}">
@@ -35,7 +35,7 @@
                 CancelButtonColor="DarkSlateBlue"
                 HorizontalOptions="Center"
                 IsTextPredictionEnabled="True"
-                Placeholder="Search..."
+                Placeholder="Tìm kiếm..."
                 PlaceholderColor="{AppThemeBinding Dark=#B2B2B2}"
                 TextChanged="DebtsSearchBar_TextChanged" />
 
@@ -45,7 +45,7 @@
                 FontSize="15"
                 HorizontalOptions="Center">
                 <Label.Text>
-                    <MultiBinding StringFormat="{}{0} Total Lendings">
+                    <MultiBinding StringFormat="{}{0} Tổng số tiền cho vay">
                         <Binding Path="TotalLentCount" />
 
                     </MultiBinding>
@@ -57,7 +57,7 @@
                 toolkit:DockLayout.DockPosition="Top">
                 <uranium:ExpanderView.Header>
                     <Border Margin="5,0" Padding="15">
-                        <Label FontSize="18" Text="Pending Lendings">
+                        <Label FontSize="18" Text="Khoản vay đang xử lý">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="PendingLentExpHeader_Tapped" />
                             </Label.GestureRecognizers>
@@ -70,7 +70,7 @@
                         <CollectionView.EmptyView>
                             <VerticalStackLayout>
                                 <Image Source="search_d" />
-                                <Label HorizontalOptions="Center" Text="No Results in Pendings List" />
+                                <Label HorizontalOptions="Center" Text="Không có kết quả trong danh sách chờ xử lý" />
                             </VerticalStackLayout>
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
@@ -119,7 +119,7 @@
                                                 TextColor="{AppThemeBinding Dark=White,
                                                                             Light=Black}">
                                                 <Label.Text>
-                                                    <MultiBinding StringFormat="{} {0} Owes You {1} {2}">
+                                                    <MultiBinding StringFormat="{} {0} Nợ {1} {2}">
                                                         <Binding Path="PersonOrOrganization.Name" />
                                                         <Binding Path="Amount" />
                                                         <Binding Path="Currency" />
@@ -154,7 +154,7 @@
                         FontSize="14"
                         HorizontalOptions="Center">
                         <Label.Text>
-                            <MultiBinding StringFormat="{}{0} Lendings, Total : {1:n2} {2}">
+                            <MultiBinding StringFormat="{}{0} Cho vay, Tổng cộng : {1:n2} {2}">
                                 <Binding Path="TotalPendingLentCount" />
                                 <Binding Path="TotalLentPendingAmount" />
                                 <Binding Path="UserCurrency" />
@@ -170,7 +170,7 @@
                 toolkit:DockLayout.DockPosition="Top">
                 <uranium:ExpanderView.Header>
                     <Border Margin="5,0" Padding="15">
-                        <Label FontSize="18" Text="Completed Lendings">
+                        <Label FontSize="18" Text="Khoản vay đã hoàn thành">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="CompletedLentExpHeader_Tapped" />
                             </Label.GestureRecognizers>
@@ -182,7 +182,7 @@
                         <CollectionView.EmptyView>
                             <VerticalStackLayout MinimumHeightRequest="50">
                                 <Image Source="search_d" />
-                                <Label HorizontalOptions="Center" Text="No Results in Completed List" />
+                                <Label HorizontalOptions="Center" Text="Không có kết quả trong danh sách đã hoàn thành" />
                             </VerticalStackLayout>
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
@@ -230,7 +230,7 @@
                                                 TextColor="{AppThemeBinding Dark=White,
                                                                             Light=Black}">
                                                 <Label.Text>
-                                                    <MultiBinding StringFormat="{} {0} Owed You {1} {2}">
+                                                    <MultiBinding StringFormat="{} {0} Nợ {1} {2}">
                                                         <Binding Path="PersonOrOrganization.Name" />
                                                         <Binding Path="Amount" />
                                                         <Binding Path="Currency" />
@@ -264,7 +264,7 @@
                         FontSize="14"
                         HorizontalOptions="Center">
                         <Label.Text>
-                            <MultiBinding StringFormat="{}{0} Lendings, Total : {1:n2} {2}">
+                            <MultiBinding StringFormat="{}{0} Cho vay, Tổng cộng : {1:n2} {2}">
                                 <Binding Path="TotalCompletedLentCount" />
                                 <Binding Path="TotalLentPendingAmount" />
                                 <Binding Path="UserCurrency" />

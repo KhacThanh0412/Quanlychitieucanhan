@@ -1,21 +1,20 @@
+
 namespace Quanlychitieu.DataAccess.Repositories;
 
 public class SettingsServiceRepository : ISettingsServiceRepository
 {
+    public Task ClearPreferences()
+    {
+        throw new NotImplementedException();
+    }
 
     public Task<T> GetPreference<T>(string key, T defaultValue)
     {
-        var result = Preferences.Default.Get<T>(key, defaultValue);
-        return Task.FromResult(result);
+        throw new NotImplementedException();
     }
+
     public Task SetPreference<T>(string key, T value)
     {
-        Preferences.Default.Set<T>(key, value);
-        return Task.CompletedTask;
-    }
-    public Task ClearPreferences()
-    {
-        Preferences.Default.Clear();
-        return Task.CompletedTask;
+        throw new NotImplementedException();
     }
 }

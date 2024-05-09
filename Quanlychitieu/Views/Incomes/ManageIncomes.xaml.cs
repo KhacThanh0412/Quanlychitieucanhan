@@ -18,7 +18,7 @@ public partial class ManageIncomes : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.PageLoaded();
+        // viewModel.PageLoaded();
     }
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {
@@ -26,15 +26,15 @@ public partial class ManageIncomes : ContentPage
         {
             await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot Save an Empty List to PDF"));
         }
-        else
-        {
-            PrintProgressBarIndic.IsVisible = true;
-            PrintProgressBarIndic.Progress = 0;
-            await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
+        //else
+        //{
+        //    PrintProgressBarIndic.IsVisible = true;
+        //    PrintProgressBarIndic.Progress = 0;
+        //    await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
 
-            await viewModel.PrintIncomesBtn();
-            PrintProgressBarIndic.IsVisible = false;
-        }
+        //    await viewModel.PrintIncomesBtn();
+        //    PrintProgressBarIndic.IsVisible = false;
+        //}
     }
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
