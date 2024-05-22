@@ -3,68 +3,73 @@ namespace Quanlychitieu.DataAccess.Repositories;
 
 public class UserRepository : IUsersRepository
 {
-    public UsersModel OfflineUser { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public UsersModel OnlineUser { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    private readonly IMongoCollection<UsersModel> UserCollection;
+    private readonly IDataAccessRepo dataAccessRepo;
+
+    private const string userDataCollectionName = "Users";
 
     public event Action OfflineUserDataChanged;
 
-    public Task<bool> AddUserAsync(UsersModel user)
+    public UsersModel OfflineUser { get; set; }
+
+    public UserRepository(IDataAccessRepo dataAccess)
     {
-        throw new NotImplementedException();
+        dataAccessRepo = dataAccess;
+        var db = dataAccessRepo.GetDb();
+        UserCollection = db.GetCollection<UsersModel>(userDataCollectionName);
     }
 
-    public Task<bool> AddUserOnlineAsync(UsersModel user)
+    public async Task<bool> CheckIfAnyUserExists()
     {
-        throw new NotImplementedException();
+        long numberOfUsers = await UserCollection.EstimatedDocumentCountAsync();
+        return numberOfUsers >= 1;
     }
 
-    public Task<bool> CheckIfAnyUserExists()
+    public async Task<UsersModel> GetUserAsync(string userEmail, string userPassword)
     {
-        throw new NotImplementedException();
+        OfflineUser = await UserCollection.Find(x => x.Email == userEmail && x.Password == userPassword).FirstOrDefaultAsync();
+        OfflineUserDataChanged?.Invoke();
+        return OfflineUser;
     }
 
-    public Task<bool> DeleteUserAsync(UsersModel user)
+    public async Task<UsersModel> GetUserAsync(string userId)
     {
-        throw new NotImplementedException();
+        OfflineUser = await UserCollection.Find(x => x.Id == userId).FirstOrDefaultAsync();
+        OfflineUserDataChanged?.Invoke();
+        return OfflineUser;
     }
 
-    public Task DropCollection()
+    public async Task<bool> AddUserAsync(UsersModel user)
     {
-        throw new NotImplementedException();
+        if (await GetUserAsync(user.Email, user.Password) is null)
+        {
+            await UserCollection.InsertOneAsync(user);
+            OfflineUser = user;
+            return true;
+        }
+        return false; // User already exists
     }
 
-    public Task<UsersModel> GetUserAsync(string UserEmail, string UserPassword)
+    public async Task<bool> UpdateUserAsync(UsersModel user)
     {
-        throw new NotImplementedException();
+        var result = await UserCollection.ReplaceOneAsync(x => x.Id == user.Id, user);
+        if (result.IsAcknowledged && result.ModifiedCount > 0)
+        {
+            OfflineUser = user;
+            OfflineUserDataChanged?.Invoke();
+            return true;
+        }
+        return false;
     }
 
-    public Task<UsersModel> GetUserAsync(string UserId)
+    public async Task<bool> DeleteUserAsync(UsersModel user)
     {
-        throw new NotImplementedException();
+        var result = await UserCollection.DeleteOneAsync(x => x.Id == user.Id);
+        return result.IsAcknowledged && result.DeletedCount > 0;
     }
 
-    public Task<UsersModel> GetUserOnlineAsync(UsersModel user)
+    public async Task DropCollection()
     {
-        throw new NotImplementedException();
-    }
-
-    public Task LogOutUserAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> UpdateUserAsync(UsersModel user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateUserOnlineAsync(UsersModel user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> UpdateUserOnlineGetSetLatestValues(UsersModel user)
-    {
-        throw new NotImplementedException();
+        await UserCollection.Database.DropCollectionAsync(userDataCollectionName);
     }
 }

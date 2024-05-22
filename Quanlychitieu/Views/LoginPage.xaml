@@ -139,37 +139,33 @@
                 <VerticalStackLayout x:Name="LoginForm" Margin="25">
 
                     <input:FormView Spacing="25" SubmitCommand="{Binding GoToHomePageFromLoginCommand}">
-                        <!--  IsVisible="{Binding ErrorMessageVisible}"  -->
-                        <!--<Label
+                        <Label
                             x:Name="NoUserFoundText"
                             FontAttributes="Bold"
                             FontSize="23"
                             HorizontalOptions="Center"
+                            IsVisible="{Binding ErrorMessageVisible}"
                             Text="Nhấn đăng nhập trực tuyến lại"
-                            TextColor="CadetBlue" />-->
-                        <!--  IsVisible="{Binding IsBusy}"  -->
-                        <Label IsVisible="False" Text="Đồng bộ hóa luồng của bạn" />
-                        <!--  IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"  -->
-                        <ActivityIndicator />
-                        <!--  Text = {Binding CurrentUser.Email}  -->
+                            TextColor="CadetBlue" />
+                        <Label IsVisible="{Binding IsBusy}" Text="Đồng bộ hóa luồng của bạn" />
+                        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
                         <material:TextField
                             Title="Email"
                             AllowClear="True"
                             Icon="{AppThemeBinding Dark=email_icon_d.png,
                                                    Light=email_icon_l.png}"
                             IsTextPredictionEnabled="True"
-                            Text="Test">
+                            Text="{Binding CurrentUser.Email}">
                             <material:TextField.Validations>
                                 <validation:RequiredValidation />
                             </material:TextField.Validations>
                         </material:TextField>
-                        <!--  Text="{Binding CurrentUser.Password}"  -->
                         <material:TextField
                             Title="Mật khẩu"
                             Icon="{AppThemeBinding Dark=password_d.png,
                                                    Light=password_l.png}"
                             IsPassword="True"
-                            Text="12345678">
+                            Text="{Binding CurrentUser.Password}">
                             <material:TextField.Attachments>
                                 <material:TextFieldPasswordShowHideAttachment />
                             </material:TextField.Attachments>
@@ -201,42 +197,38 @@
                     Margin="25"
                     Opacity="0">
                     <input:FormView Spacing="20" SubmitCommand="{Binding GoToHomePageFromRegisterCommand}">
-                        <!--  Text = {Binding CurrentUser.Email}  -->
                         <material:TextField
                             Title="Tên tài khoản"
                             Icon="{AppThemeBinding Dark=user_icon_d.png,
                                                    Light=user_icon_l.png}"
-                            Text="Test">
+                            Text="{Binding CurrentUser.Username}">
                             <validation:RequiredValidation />
                         </material:TextField>
-                        <!--  Text="{Binding CurrentUser.Email}"  -->
                         <material:TextField
                             Title="Email"
                             Icon="{AppThemeBinding Dark=email_icon_d.png,
                                                    Light=email_icon_l.png}"
-                            Text="khacthanhkma0412@gmail.com">
+                            Text="{Binding CurrentUser.Email}">
                             <material:TextField.Validations>
                                 <validation:RequiredValidation />
                             </material:TextField.Validations>
                         </material:TextField>
-                        <!--  Text="{Binding CurrentUser.Password}"  -->
                         <material:TextField
                             Title="Mật khẩu"
                             Icon="{AppThemeBinding Dark=password_d.png,
                                                    Light=password_l.png}"
-                            Text="123456789">
+                            Text="{Binding CurrentUser.Password}">
                             <validation:RequiredValidation />
                             <material:TextField.Attachments>
                                 <material:TextFieldPasswordShowHideAttachment />
                             </material:TextField.Attachments>
                         </material:TextField>
-                        <!--  Text="{Binding PocketMoney}"  -->
                         <material:TextField
                             Title="Số dư hiện tại"
                             Icon="{AppThemeBinding Dark=pocket_money_icon_d.png,
                                                    Light=pocket_money_icon_l.png}"
                             Keyboard="Numeric"
-                            Text="10000000">
+                            Text="{Binding PocketMoney}">
                             <material:TextField.Validations>
                                 <validation:MinValueValidation Message="Số dư hiện tại không thể nhỏ hơn 1" MinValue="1" />
                                 <validation:RequiredValidation />

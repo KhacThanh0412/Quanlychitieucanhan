@@ -2,5 +2,6 @@
 
 public interface IDataAccessRepo
 {
+    IMongoDatabase GetDb();
     void DeleteDB();
 }
