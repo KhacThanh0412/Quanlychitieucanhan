@@ -5,10 +5,10 @@ namespace Quanlychitieu.DataAccess.Repositories;
 public class ExpendituresRepository : IExpendituresRepository
 {
     LiteDatabase db;
-    public List<ExpendituresModel> OfflineExpendituresList { get; set; } = new List<ExpendituresModel>();
+    public List<ExpendituresModel> ExpendituresList { get; set; } = new List<ExpendituresModel>();
     bool IsBatchUpdate;
 
-    public event Action OfflineExpendituresListChanged;
+    public event Action ExpendituresListChanged;
     ILiteCollection<ExpendituresModel> AllExpenditures;
 
     private readonly IDataAccessRepo dataAccessRepo;
@@ -30,26 +30,26 @@ public class ExpendituresRepository : IExpendituresRepository
 
     public async Task<List<ExpendituresModel>> GetAllExpendituresAsync()
     {
-        if (OfflineExpendituresList is not null && OfflineExpendituresList.Any())
+        if (ExpendituresList is not null && ExpendituresList.Any())
         {
-            return OfflineExpendituresList;
+            return ExpendituresList;
         }
         try
         {
             OpenDB();
-            string userId = usersRepo.OfflineUser.Id;
-            string userCurrency = usersRepo.OfflineUser.UserCurrency;
-            if (usersRepo.OfflineUser.UserIDOnline != string.Empty)
+            string userId = usersRepo.User.Id;
+            string userCurrency = usersRepo.User.UserCurrency;
+            if (usersRepo.User.UserIDOnline != string.Empty)
             {
-                userId = usersRepo.OfflineUser.UserIDOnline;
+                userId = usersRepo.User.UserIDOnline;
             }
-            OfflineExpendituresList = AllExpenditures.Query()
+            ExpendituresList = AllExpenditures.Query()
                 .Where(x => x.UserId == userId && x.Currency == userCurrency).ToList();
 
             db.Dispose();
-            OfflineExpendituresList ??= new List<ExpendituresModel>();
+            ExpendituresList ??= new List<ExpendituresModel>();
 
-            return OfflineExpendituresList;
+            return ExpendituresList;
         }
         catch (Exception ex)
         {
@@ -67,13 +67,13 @@ public class ExpendituresRepository : IExpendituresRepository
             var result = AllExpenditures.Insert(expenditure);
             if (result != null)
             {
-                if (OfflineExpendituresList == null)
+                if (ExpendituresList == null)
                 {
-                    OfflineExpendituresList = new List<ExpendituresModel>();
+                    ExpendituresList = new List<ExpendituresModel>();
                 }
 
-                OfflineExpendituresList.Add(expenditure);
-                OfflineExpendituresListChanged?.Invoke();
+                ExpendituresList.Add(expenditure);
+                ExpendituresListChanged?.Invoke();
                 return true;
             }
             else
@@ -100,16 +100,16 @@ public class ExpendituresRepository : IExpendituresRepository
             OpenDB();
             if (AllExpenditures.Update(expenditure))
             {
-                int index = OfflineExpendituresList.FindIndex(x => x.Id == expenditure.Id);
+                int index = ExpendituresList.FindIndex(x => x.Id == expenditure.Id);
                 if (index >= 0)
                 {
-                    OfflineExpendituresList[index] = expenditure;
+                    ExpendituresList[index] = expenditure;
                 }
                 else
                 {
-                    OfflineExpendituresList.Add(expenditure);
+                    ExpendituresList.Add(expenditure);
                 }
-                OfflineExpendituresListChanged?.Invoke();
+                ExpendituresListChanged?.Invoke();
                 return true;
             }
             else
@@ -137,8 +137,8 @@ public class ExpendituresRepository : IExpendituresRepository
             OpenDB();
             if (AllExpenditures.Update(expenditure))
             {
-                OfflineExpendituresList.RemoveAll(x => x.Id == expenditure.Id);
-                OfflineExpendituresListChanged?.Invoke();
+                ExpendituresList.RemoveAll(x => x.Id == expenditure.Id);
+                ExpendituresListChanged?.Invoke();
                 return true;
             }
             else
@@ -162,7 +162,7 @@ public class ExpendituresRepository : IExpendituresRepository
     {
         await GetAllExpendituresAsync();
         IsBatchUpdate = false;
-        OfflineExpendituresListChanged?.Invoke();
+        ExpendituresListChanged?.Invoke();
     }
 
     public async Task DropExpendituresCollection()
@@ -175,7 +175,7 @@ public class ExpendituresRepository : IExpendituresRepository
     public async Task LogOutUserAsync()
     {
         await DropExpendituresCollection();
-        OfflineExpendituresList.Clear();
-        OfflineExpendituresListChanged?.Invoke();
+        ExpendituresList.Clear();
+        ExpendituresListChanged?.Invoke();
     }
 }

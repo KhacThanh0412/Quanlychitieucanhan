@@ -13,9 +13,9 @@ namespace Quanlychitieu.DataAccess.Repositories
 
         private const string userDataCollectionName = "Users";
 
-        public event Action OfflineUserDataChanged;
+        public event Action UserDataChanged;
 
-        public UsersModel OfflineUser { get; set; }
+        public UsersModel User { get; set; }
 
         public UserRepository(IDataAccessRepo dataAccess)
         {
@@ -39,18 +39,18 @@ namespace Quanlychitieu.DataAccess.Repositories
         public async Task<UsersModel> GetUserAsync(string userEmail, string userPassword)
         {
             OpenDB();
-            OfflineUser = userCollection.FindOne(x => x.Email == userEmail && x.Password == userPassword);
+            User = userCollection.FindOne(x => x.Email == userEmail && x.Password == userPassword);
             db.Dispose();
-            return OfflineUser;
+            return User;
         }
 
         public async Task<UsersModel> GetUserAsync(string userId)
         {
             OpenDB();
-            OfflineUser = userCollection.FindOne(x => x.Id == userId);
+            User = userCollection.FindOne(x => x.Id == userId);
             db.Dispose();
-            OfflineUserDataChanged?.Invoke();
-            return OfflineUser;
+            UserDataChanged?.Invoke();
+            return User;
         }
 
         public async Task<bool> AddUserAsync(UsersModel user)
@@ -61,7 +61,7 @@ namespace Quanlychitieu.DataAccess.Repositories
                 userCollection.Insert(user);
                 userCollection.EnsureIndex(x => x.Id);
                 db.Dispose();
-                OfflineUser = user;
+                User = user;
                 return true;
             }
             else
@@ -78,8 +78,8 @@ namespace Quanlychitieu.DataAccess.Repositories
                 if (userCollection.Update(user))
                 {
                     db.Dispose();
-                    OfflineUser = user;
-                    OfflineUserDataChanged?.Invoke();
+                    User = user;
+                    UserDataChanged?.Invoke();
                     return true;
                 }
                 else
@@ -129,7 +129,7 @@ namespace Quanlychitieu.DataAccess.Repositories
 
         public async Task LogOutUserAsync()
         {
-            OfflineUser = null;
+            User = null;
             await DropCollection();
         }
     }

@@ -2,9 +2,9 @@
 
 public interface IIncomeRepository
 {
-    event Action OfflineIncomesListChanged;
+    event Action IncomesListChanged;
     Task<List<IncomeModel>> GetAllIncomesAsync();
-    List<IncomeModel> OfflineIncomesList { get; set; }
+    List<IncomeModel> IncomesList { get; set; }
     Task<bool> AddIncomeAsync(IncomeModel income);
     Task<bool> DeleteIncomeAsync(IncomeModel incomeId);
     Task<bool> UpdateIncomeAsync(IncomeModel income);

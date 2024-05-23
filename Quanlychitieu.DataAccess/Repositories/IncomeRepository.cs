@@ -4,9 +4,9 @@ namespace Quanlychitieu.DataAccess.Repositories;
 
 public class IncomeRepository : IIncomeRepository
 {
-    public List<IncomeModel> OfflineIncomesList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public List<IncomeModel> IncomesList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-    public event Action OfflineIncomesListChanged;
+    public event Action IncomesListChanged;
 
     public Task<bool> AddIncomeAsync(IncomeModel income)
     {

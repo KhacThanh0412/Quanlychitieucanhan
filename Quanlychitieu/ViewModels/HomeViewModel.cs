@@ -27,7 +27,7 @@ namespace Quanlychitieu.ViewModels
             expenditureRepo = expendituresRepository;
             settingsService = settingsServiceRepo;
             userRepo = usersRepository;
-            expenditureRepo.OfflineExpendituresListChanged += OnExpendituresChanged;
+            expenditureRepo.ExpendituresListChanged += OnExpendituresChanged;
             UpdateIsSyncing();
         }
 
@@ -65,11 +65,11 @@ namespace Quanlychitieu.ViewModels
         }
         public void GetUserData()
         {
-            if (userRepo.OfflineUser is not null)
+            if (userRepo.User is not null)
             {
-                PocketMoney = userRepo.OfflineUser.PocketMoney;
-                Username = userRepo.OfflineUser.Username;
-                UserCurrency = userRepo.OfflineUser.UserCurrency;
+                PocketMoney = userRepo.User.PocketMoney;
+                Username = userRepo.User.Username;
+                UserCurrency = userRepo.User.UserCurrency;
             }
         }
         private void OnExpendituresChanged()
@@ -82,13 +82,13 @@ namespace Quanlychitieu.ViewModels
         }
         private void OnUserDataChanged()
         {
-            PocketMoney = userRepo.OfflineUser.PocketMoney;
+            PocketMoney = userRepo.User.PocketMoney;
         }
 
         private void InitializeExpenditures()
         {
             //var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
-            var ListOfExp = expenditureRepo.OfflineExpendituresList;
+            var ListOfExp = expenditureRepo.ExpendituresList;
 
             LatestExpenditures = ListOfExp.Count != 0
                 ? ListOfExp
@@ -101,7 +101,7 @@ namespace Quanlychitieu.ViewModels
         }
         private void InitializeIncomes()
         {
-            var ListOfInc = incomeRepo.OfflineIncomesList;
+            var ListOfInc = incomeRepo.IncomesList;
             LatestIncomes = ListOfInc.Count != 0
                 ? ListOfInc
                 .Where(predicate: x => !x.IsDeleted)

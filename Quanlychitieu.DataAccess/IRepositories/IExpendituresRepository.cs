@@ -2,10 +2,10 @@
 
 public interface IExpendituresRepository
 {
-    event Action OfflineExpendituresListChanged;
+    event Action ExpendituresListChanged;
     Task<List<ExpendituresModel>> GetAllExpendituresAsync();
 
-    List<ExpendituresModel> OfflineExpendituresList { get; set; }
+    List<ExpendituresModel> ExpendituresList { get; set; }
     Task<bool> AddExpenditureAsync(ExpendituresModel expenditure);
     Task<bool> UpdateExpenditureAsync(ExpendituresModel expenditure);
     Task<bool> DeleteExpenditureAsync(ExpendituresModel expenditure);
