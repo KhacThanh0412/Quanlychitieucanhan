@@ -15,7 +15,7 @@ public partial class HomePage : UraniumContentPage
         {
             startAction = value;
             OnPropertyChanged(nameof(StartAction));
-            // RunAppStartAction();
+            RunAppStartAction();
         }
     }
 
@@ -40,12 +40,12 @@ public partial class HomePage : UraniumContentPage
             UpSertExpbSheet.IsPresented = false;
         }
         base.OnAppearing();
-        // viewModel.GetUserData();
-        //if (!viewModel._isInitialized)
-        //{
-        //    await viewModel.DisplayInfo();
-        //    viewModel._isInitialized = true;
-        //}
+        viewModel.GetUserData();
+        if (!viewModel._isInitialized)
+        {
+            await viewModel.DisplayInfo();
+            viewModel._isInitialized = true;
+        }
     }
 
     void RunAppStartAction()
