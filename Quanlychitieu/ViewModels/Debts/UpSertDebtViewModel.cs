@@ -8,8 +8,10 @@ using Quanlychitieu.Utilities;
 namespace Quanlychitieu.ViewModels.Debts;
 
 [QueryProperty(nameof(SingleDebtDetails), "SingleDebtDetails")]
-public partial class UpSertDebtViewModel( ICalendarStore calendarStore) : ObservableObject
+public partial class UpSertDebtViewModel(IDebtRepository debtRepository, IUsersRepository usersRepository, ICalendarStore calendarStore) : ObservableObject
 {
+    readonly IDebtRepository debtRepo = debtRepository;
+    readonly IUsersRepository userRepo = usersRepository;
     private readonly ICalendarStore calendarStoreRepo = calendarStore;
     [ObservableProperty]
     DebtModel singleDebtDetails;
@@ -74,30 +76,161 @@ public partial class UpSertDebtViewModel( ICalendarStore calendarStore) : Observ
     public double selectedInstallmentInitialAmount;
     public void PageLoaded()
     {
+        DebtType = SingleDebtDetails.DebtType;
+
+        IsLent = DebtType == DebtType.Lent;
+        HasDeadLine = SingleDebtDetails.Deadline is not null;
+        ListOfPersons = debtRepo.DebtList.Select(x => x.PersonOrOrganization)
+            .Distinct()
+            .ToList();
+        ListOfPersonsNames = ListOfPersons.Select(x => x.Name)
+            .Distinct()
+            .ToList();
     }
 
     [RelayCommand]
     public async Task UpSertDebt()
     {
-        await Task.Delay(1);
+        if (string.IsNullOrEmpty(SingleDebtDetails.Notes) || string.IsNullOrWhiteSpace(SingleDebtDetails.Notes))
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Vui lòng thêm ghi chú!"));
+            return;
+        }
+        CancellationTokenSource cts = new();
+        const ToastDuration duration = ToastDuration.Short;
+
+        SingleDebtDetails.UpdateDateTime = DateTime.UtcNow;
+        SingleDebtDetails.PlatformModel = DeviceInfo.Current.Model;
+        SingleDebtDetails.UserId = userRepo.User.Id;
+        SingleDebtDetails.DebtType = DebtType;
+        if (HasDeadLine is false)
+        {
+            SingleDebtDetails.DisplayText = "Đang chờ xử lý Không có thời hạn";
+        }
+        else
+        {
+            var diff = SingleDebtDetails.Deadline.Value.Date - DateTime.Now.Date;
+            if (diff.TotalDays == 1)
+            {
+                SingleDebtDetails.DisplayText = "Đang chờ xử lý sau 1 ngày";
+            }
+            else if (diff.TotalDays == 0)
+            {
+                SingleDebtDetails.DisplayText = "Đang chờ xử lý hôm nay!";
+            }
+            else if (diff.TotalDays > 1)
+            {
+                SingleDebtDetails.DisplayText = $"Đang chờ đến hạn vào {diff.TotalDays} ngày";
+            }
+            else if (diff.TotalDays < 0)
+            {
+                SingleDebtDetails.DisplayText = $"Đang chờ xử lý {diff.TotalDays} ngày";
+            }
+
+        }
+        if (SingleDebtDetails.Id is not null)
+        {
+            await UpdateDebtAsync(14, cts, duration);
+        }
+        else
+        {
+            await AddDebtAsync(14, cts, duration);
+        }
+
+        ThisPopUpResult = PopupResult.OK;
+        ClosePopUp = true;
     }
 
     [ObservableProperty]
     string selectedCalendarItem;
     private async Task AddDebtAsync(int fontSize, CancellationTokenSource cts, ToastDuration duration)
     {
-        await Task.Delay(1);
+        SingleDebtDetails.Id = Guid.NewGuid().ToString();
+        SingleDebtDetails.AddedDateTime = DateTime.UtcNow;
+        if (HasDeadLine is not true)
+        {
+            SingleDebtDetails.Deadline = null;
+            SingleDebtDetails.DatePaidCompletely = null;
+        }
+        //this saves the debt to db and online
+        if (!await debtRepo.AddDebtAsync(SingleDebtDetails))
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Không thể thêm"));
+            return;
+        }
+
+        if (HasDeadLine is true && SingleDebtDetails.Deadline is not null)
+        {
+            var calendarStatusRead = await CheckAndRequestReadCalendarPermission();
+            if (calendarStatusRead != PermissionStatus.Granted)
+            {
+                return;
+            }
+            var calendarStatusWrite = await CheckAndRequestWriteCalendarPermission();
+            if (calendarStatusWrite != PermissionStatus.Granted)
+            {
+                return;
+            }
+
+            var calendarsAccountsProfiles = await calendarStoreRepo.GetCalendars();
+
+
+            if (calendarsAccountsProfiles is null || calendarsAccountsProfiles.Count() == 0)
+            {
+                await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Không tìm thấy tài khoản trên thiết bị"));
+                const string toastNotifMessageError = "Không được thêm vào";
+                var toasts = Toast.Make(toastNotifMessageError, duration, fontSize);
+                await toasts.Show(cts.Token);
+                IsBottomSheetOpened = false;
+                return;
+
+            }
+
+            var selectedProfile = await Shell.Current.DisplayActionSheet("Chọn lịch", "Cancel", null, calendarsAccountsProfiles.Select(x => x.Name).ToArray());
+            if (selectedProfile == "Cancel")
+            {
+                return;
+            }
+            var calendarProfileID = calendarsAccountsProfiles
+                .Where(x => x.Name == selectedProfile)
+                .Select(x => x.Id)
+                .FirstOrDefault();
+
+            DateTimeOffset deadlineOffsetStart = new DateTimeOffset(SingleDebtDetails.Deadline.Value).AddHours(12);
+            DateTimeOffset deadlineOffsetEnd = deadlineOffsetStart.AddMinutes(30);
+
+            var eventID = await calendarStoreRepo.CreateEventWithReminder(calendarProfileID, "Thời gian chờ !",
+                $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Nợ bạn" : $"Bạn nợ {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency} {Environment.NewLine}{SingleDebtDetails.PhoneAddress}",
+                "Ứng dụng quản lý chi tiêu", deadlineOffsetStart, deadlineOffsetEnd, 30);
+
+            Debug.WriteLine("Event ID " + eventID);
+        }
+
+        const string toastNotifMessage = "Thêm";
+        var toast = Toast.Make(toastNotifMessage, duration, fontSize);
+        await toast.Show(cts.Token);
+        IsBottomSheetOpened = false;
+
     }
 
     private async Task UpdateDebtAsync(int fontSize, CancellationTokenSource cts, ToastDuration duration)
     {
-        await Task.Delay(1);
+        if (!await debtRepo.UpdateDebtAsync(SingleDebtDetails))
+        {
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Không thể cập nhật"));
+            return;
+        }
+
+        //maybe i'll need to update user idk
+        const string toastNotifMessage = "Đã cập nhật thành công";
+        var toast = Toast.Make(toastNotifMessage, duration, fontSize);
+        await toast.Show(cts.Token);
+        IsBottomSheetOpened = false;
     }
 
     [RelayCommand]
     public void CancelBtn()
     {
-        Debug.WriteLine("Action cancelled by user");
         ThisPopUpResult = PopupResult.Cancel;
         ClosePopUp = true;
     }
@@ -105,7 +238,25 @@ public partial class UpSertDebtViewModel( ICalendarStore calendarStore) : Observ
     [RelayCommand]
     public async Task UpSertInstallmentPayment()
     {
-        await Task.Delay(1);
+        bool ProcessInstallmentPayment()
+        {
+            if (SingleInstallmentPayment.Id is null)
+            {
+                return AddInstallmentPayment();
+            }
+            else
+            {
+                return EditInstallmentPayment();
+            }
+        }
+
+        if (ProcessInstallmentPayment())
+        {
+            await debtRepo.UpdateDebtAsync(SingleDebtDetails);
+        }
+        ThisPopUpResult = PopupResult.OK;
+        ClosePopUp = true;
+        IsUpSertInstallmentBSheetPresent = false;
     }
     [RelayCommand]
     void CloseInstallmentsPopup()
@@ -168,13 +319,17 @@ public partial class UpSertDebtViewModel( ICalendarStore calendarStore) : Observ
         }
         else
         {
-            throw new Exception("No Installment found");
+            return false;
         }
     }
     [RelayCommand]
     public async Task DeleteInstallmentPayment(InstallmentPayments installment)
     {
-        await Task.Delay(1);
+        SingleDebtDetails.PaymentAdvances.Remove(installment);
+        SingleDebtDetails.Amount += installment.AmountPaid;
+        await debtRepo.UpdateDebtAsync(SingleDebtDetails);
+
+        IsUpSertInstallmentBSheetPresent = false;
     }
     [RelayCommand]
     async Task ContactDetailsPicker()
@@ -190,7 +345,7 @@ public partial class UpSertDebtViewModel( ICalendarStore calendarStore) : Observ
             var PickedContact = await Contacts.Default.PickContactAsync();
             if (PickedContact is null)
             {
-                Debug.WriteLine("Contact not picked");
+                
             }
             SingleDebtDetails.PersonOrOrganization = new()
             {

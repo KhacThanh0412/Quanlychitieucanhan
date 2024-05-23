@@ -21,13 +21,18 @@ namespace Quanlychitieu.ViewModels
         private readonly IUsersRepository userRepo;
         private readonly IIncomeRepository incomeRepo;
         private readonly IDebtRepository debtRepo;
-        public HomeViewModel(ISettingsServiceRepository settingsServiceRepo,IExpendituresRepository expendituresRepository,
-                        IUsersRepository usersRepository)
+        public HomeViewModel(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
+                    IUsersRepository usersRepository, IIncomeRepository incomeRepository,
+                    IDebtRepository debtRepository)
         {
             expenditureRepo = expendituresRepository;
             settingsService = settingsServiceRepo;
             userRepo = usersRepository;
+            incomeRepo = incomeRepository;
+            debtRepo = debtRepository;
             expenditureRepo.ExpendituresListChanged += OnExpendituresChanged;
+            incomeRepo.IncomesListChanged += OnIncomesChanged;
+            userRepo.UserDataChanged += OnUserDataChanged;
             UpdateIsSyncing();
         }
 
@@ -61,7 +66,7 @@ namespace Quanlychitieu.ViewModels
         }
         public async Task DisplayInfo()
         {
-            // await SyncAndNotifyAsync();
+            await SyncAndNotifyAsync();
         }
         public void GetUserData()
         {
@@ -87,7 +92,6 @@ namespace Quanlychitieu.ViewModels
 
         private void InitializeExpenditures()
         {
-            //var ListOfExp = await expenditureRepo.GetAllExpendituresAsync();
             var ListOfExp = expenditureRepo.ExpendituresList;
 
             LatestExpenditures = ListOfExp.Count != 0

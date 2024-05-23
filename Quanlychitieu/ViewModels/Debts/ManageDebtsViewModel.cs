@@ -10,12 +10,17 @@ namespace Quanlychitieu.ViewModels.Debts;
 
 public partial class ManageDebtsViewModel : ObservableObject
 {
+    private readonly IDebtRepository debtRepo;
+    private readonly IUsersRepository usersRepo;
     private readonly UpSertDebtViewModel upSertDebtVM;
 
-    public ManageDebtsViewModel(
-        UpSertDebtViewModel upSertDebtViewModel )
+    public ManageDebtsViewModel(IDebtRepository debtRepository, IUsersRepository usersRepository,
+        UpSertDebtViewModel upSertDebtViewModel)
     {
+        debtRepo = debtRepository;
+        usersRepo = usersRepository;
         upSertDebtVM = upSertDebtViewModel;
+        debtRepo.DebtListChanged += HandleDebtsListUpdated;
     }
     [ObservableProperty]
     ObservableCollection<DebtModel> debtsList;
@@ -90,6 +95,14 @@ public partial class ManageDebtsViewModel : ObservableObject
             if (!IsLoaded)
             {
                 ApplyChanges();
+                IsLoaded = true;
+                ActiveUser = usersRepo.User;
+                UserCurrency = ActiveUser.UserCurrency;
+                SingleDebtDetails = new DebtModel()
+                {
+                    Amount = 0,
+                    PersonOrOrganization = new()
+                };
             }
         }
         catch (Exception ex)
@@ -109,14 +122,39 @@ public partial class ManageDebtsViewModel : ObservableObject
     public void RefreshTitleText()
     {
         TitleText = SingleDebtDetails.DebtType == DebtType.Lent
-                    ? $"{SingleDebtDetails.PersonOrOrganization.Name} Owes You {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}"
-                    : $"You Owe {SingleDebtDetails.PersonOrOrganization.Name}, {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}";
+                    ? $"{SingleDebtDetails.PersonOrOrganization.Name} nợ bạn {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}"
+                    : $"Bạn nợ {SingleDebtDetails.PersonOrOrganization.Name}, {SingleDebtDetails.Amount} {SingleDebtDetails.Currency}";
     }
 
     [ObservableProperty]
     IEnumerable<string> listOfPeopleNames;
     public void ApplyChanges(string filterOption=null)
     {
+        IEnumerable<DebtModel> filteredDebts = [];
+        if (filterOption == "Completed")
+        {
+            filteredDebts = debtRepo.DebtList
+                .Where(x => !x.IsDeleted && x.IsPaidCompletely);
+        }
+        else if (filterOption == "Pending")
+        {
+            filteredDebts = debtRepo.DebtList
+                .Where(x => !x.IsDeleted && !x.IsPaidCompletely);
+        }
+        else
+        {
+            filteredDebts = debtRepo.DebtList
+                .Where(x => !x.IsDeleted);
+        }
+
+        var sortedDebts = filteredDebts
+            .OrderByDescending(x => x.IsPaidCompletely)
+            .ThenBy(x => x.UpdateDateTime)
+            .ToHashSet()
+            .ToList();
+
+        DebtsList = sortedDebts.ToObservableCollection();
+        RedoCountsAndAmountsCalculation(filteredDebts);
     }
 
     private void RedoCountsAndAmountsCalculation(IEnumerable<DebtModel> filteredDebts)
@@ -163,7 +201,7 @@ public partial class ManageDebtsViewModel : ObservableObject
         if (ActiveUser is null)
         {
             Debug.WriteLine("Can't Open Add Debt PopUp because User is null");
-            await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
+            await Shell.Current.DisplayAlert("Đợi", "Không thể đi", "Ok");
         }
         else
         {
@@ -191,11 +229,6 @@ public partial class ManageDebtsViewModel : ObservableObject
     private async Task AddEditDebt()
     {
         await Task.Delay(1);
-        //var result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertDebtPopUp(upSertDebtVM));
-        //if (result.Result == PopupResult.OK)
-        //{
-        //    Debug.WriteLine("Popup Closed OK");
-        //}
     }
 
     [RelayCommand]
@@ -203,7 +236,14 @@ public partial class ManageDebtsViewModel : ObservableObject
     {        
         try
         {
-            
+            var ListOfDebts = debtRepo.DebtList
+            .Where(d => d.PersonOrOrganization?.Name?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)
+            .Where(d => !d.IsDeleted)
+            .ToList();
+
+            DebtsList.Clear();
+            DebtsList = ListOfDebts.ToObservableCollection();
+            RedoCountsAndAmountsCalculation(ListOfDebts);
         }
         catch (Exception ex)
         {
@@ -222,7 +262,22 @@ public partial class ManageDebtsViewModel : ObservableObject
         string text;
         try
         {
-            //var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Delete Flow Hold ?"));
+            var response = await Shell.Current.DisplayAlert("Xác nhận", "Xóa ?", "Có", "Không");
+            if (response)
+            {
+                debt.PlatformModel = DeviceInfo.Current.Model;
+                if (await debtRepo.DeleteDebtAsync(debt))
+                {
+                    text = "Xóa thành công";
+                }
+                else
+                {
+                    text = "Xóa thất bại";
+                }
+                var toast = Toast.Make(text, duration, fontSize);
+                await toast.Show(cancellationTokenSource.Token);
+                ApplyChanges();
+            }
         }
         catch (Exception ex)
         {
@@ -246,7 +301,7 @@ public partial class ManageDebtsViewModel : ObservableObject
     [RelayCommand]
     async Task DeleteInstallment(InstallmentPayments selectedInstallment)
     {
-        var deletedResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Confirm Delete?"));
+        var deletedResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Xác nhận xóa?"));
         if (deletedResult)
         {
             upSertDebtVM.SingleDebtDetails = SingleDebtDetails;
@@ -262,101 +317,97 @@ public partial class ManageDebtsViewModel : ObservableObject
     async Task ToggleDebtCompletionStatus(object s)
     {
         await Task.Delay(1);
-//        if (s.GetType() == typeof(DebtModel))
-//        {
-//            var debt = (DebtModel)s;
-//            CancellationTokenSource cancellationTokenSource = new();
-//            const ToastDuration duration = ToastDuration.Short;
-//            const double fontSize = 14;
-//            string text;
-//            try
-//            {
-//                string message = debt.IsPaidCompletely ? "Mark as Completed" : "Mark as Pending" ;
-//                var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert(message));
-//                if (response)
-//                {
-//                    bool completedSwapper = !debt.IsPaidCompletely;
+        if (s.GetType() == typeof(DebtModel))
+        {
+            var debt = (DebtModel)s;
+            CancellationTokenSource cancellationTokenSource = new();
+            const ToastDuration duration = ToastDuration.Short;
+            const double fontSize = 14;
+            string text;
+            try
+            {
+                string message = debt.IsPaidCompletely ? "Đánh dấu đã hoàn thành" : "Đánh dấu là đang chờ xử lý";
+                var response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert(message));
+                if (response)
+                {
+                    bool completedSwapper = !debt.IsPaidCompletely;
 
-//                    if (!debt.IsPaidCompletely) // to mark as pending
-//                    {
-//#if ANDROID
-//                        debt.IsPaidCompletely = completedSwapper; // to unpaid completely  
-//#endif
-//                        debt.DatePaidCompletely = null;
-//                        if (debt.Deadline.HasValue)
-//                        {
-//                            var diff = DateTime.Now.Date - debt.Deadline.Value.Date;
-//                            if (diff.TotalDays == 1)
-//                            {
-//                                debt.DisplayText = $"Due in {-diff.TotalDays} day";
-//                            }
-//                            if (diff.TotalDays > 1)
-//                            {
-//                                debt.DisplayText = $"Due past {diff.TotalDays} days!";
-//                            }
-//                            else if (diff.TotalDays < 0)
-//                            {
-//                                debt.DisplayText = $"Due in {-diff.TotalDays} days";
-//                            }
-//                            else
-//                            {
-//                                debt.DisplayText = "Due today";
-//                            }
+                    if (!debt.IsPaidCompletely) // to mark as pending
+                    {
+                        debt.IsPaidCompletely = completedSwapper; // to unpaid completely  
+                        debt.DatePaidCompletely = null;
+                        if (debt.Deadline.HasValue)
+                        {
+                            var diff = DateTime.Now.Date - debt.Deadline.Value.Date;
+                            if (diff.TotalDays == 1)
+                            {
+                                debt.DisplayText = $"Đến hạn {-diff.TotalDays} ngày";
+                            }
+                            if (diff.TotalDays > 1)
+                            {
+                                debt.DisplayText = $"Quá hạn {diff.TotalDays} ngày!";
+                            }
+                            else if (diff.TotalDays < 0)
+                            {
+                                debt.DisplayText = $"Đến hạn {-diff.TotalDays} ngày";
+                            }
+                            else
+                            {
+                                debt.DisplayText = "Hạn hôm nay";
+                            }
 
-//                        }
-//                        else
-//                        {
-//                            debt.DisplayText = "Pending No Deadline Set";
-//                        }
-//                        text = "Flow Hold Marked as Pending";
-//                    }
-//                    else
-//                    {
-//#if ANDROID
-//                        debt.IsPaidCompletely = completedSwapper; 
-//#endif
-//                        debt.DatePaidCompletely = DateTime.Now;
+                        }
+                        else
+                        {
+                            debt.DisplayText = "Đang chờ xử lý Không có thời hạn";
+                        }
+                        text = "Được đánh dấu đang chờ xử lý";
+                    }
+                    else
+                    {
+                        debt.IsPaidCompletely = completedSwapper;
+                        debt.DatePaidCompletely = DateTime.Now;
 
-//                        if (debt.Deadline.HasValue)
-//                        {
-//                            var DatePaidDiff = DateTime.Now.Date - debt.DatePaidCompletely?.Date;
-//                            if (DatePaidDiff.Value.TotalDays == 1)
-//                            {
-//                                debt.DisplayText = "Paid 1 day ago";
-//                            }
-//                            else if (DatePaidDiff.Value.TotalDays == 0)
-//                            {
-//                                debt.DisplayText = "Paid today";
-//                            }
-//                            else
-//                            {
-//                                debt.DisplayText = $"Paid {DatePaidDiff.Value.TotalDays} days ago";
-//                            }
-//                        }
-//                        else
-//                        {
-//                            debt.DisplayText = "Paid Today";
-//                        }
-//                        text = "Flow Hold Marked as Completed";
-//                    }
-//                    await debtRepo.UpdateDebtAsync(debt);
+                        if (debt.Deadline.HasValue)
+                        {
+                            var DatePaidDiff = DateTime.Now.Date - debt.DatePaidCompletely?.Date;
+                            if (DatePaidDiff.Value.TotalDays == 1)
+                            {
+                                debt.DisplayText = "Đã thanh toán 1 ngày trước";
+                            }
+                            else if (DatePaidDiff.Value.TotalDays == 0)
+                            {
+                                debt.DisplayText = "Đã thanh toán hôm nay";
+                            }
+                            else
+                            {
+                                debt.DisplayText = $"Trả {DatePaidDiff.Value.TotalDays} ngày trước";
+                            }
+                        }
+                        else
+                        {
+                            debt.DisplayText = "Được thanh toán hôm nay";
+                        }
+                        text = "Đánh dấu đã hoàn thành";
+                    }
+                    await debtRepo.UpdateDebtAsync(debt);
 
-//                    var toast = Toast.Make(text, duration, fontSize);
-//                    await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
-//                    ApplyChanges();
-//                }
-//                else
-//                {
-//                    debt.IsPaidCompletely = !debt.IsPaidCompletely;
-                    
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                Debug.WriteLine($"Exception when Marking as completed debt MESSAGE : {ex.Message}");
-//            }
-//        }
-        
+                    var toast = Toast.Make(text, duration, fontSize);
+                    await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
+                    ApplyChanges();
+                }
+                else
+                {
+                    debt.IsPaidCompletely = !debt.IsPaidCompletely;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception when Marking as completed debt MESSAGE : {ex.Message}");
+            }
+        }
+
     }
 
     [RelayCommand]
@@ -390,7 +441,6 @@ public partial class ManageDebtsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            //await Shell.Current.DisplayAlert("Error debts", ex.Message, "OK");
             Debug.WriteLine("Error when added debts "+ ex.Message);
         }
     }
