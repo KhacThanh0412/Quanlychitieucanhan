@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using LiteDB;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -12,7 +11,6 @@ public partial class DebtModel : ObservableObject
     private string? displayText;
   
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
     [ObservableProperty]
     public double amount ;

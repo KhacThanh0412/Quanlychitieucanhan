@@ -5,11 +5,14 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quanlychitieu", "Quanlychitieu\Quanlychitieu.csproj", "{AD729B3D-7F70-4278-83DE-E9724843DAAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quanlychitieu.Models", "Quanlychitieu.Models\Quanlychitieu.Models.csproj", "{203116CC-0259-4CB2-B9B8-1EC8C8A55CC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quanlychitieu.Models", "Quanlychitieu.Models\Quanlychitieu.Models.csproj", "{203116CC-0259-4CB2-B9B8-1EC8C8A55CC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quanlychitieu.DataAccess", "Quanlychitieu.DataAccess\Quanlychitieu.DataAccess.csproj", "{EC41B932-1FB1-48C8-8084-AF643AFE437C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quanlychitieu.DataAccess", "Quanlychitieu.DataAccess\Quanlychitieu.DataAccess.csproj", "{EC41B932-1FB1-48C8-8084-AF643AFE437C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6B5E4754-76FF-4FC2-B01B-EDB0BAB591D7}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

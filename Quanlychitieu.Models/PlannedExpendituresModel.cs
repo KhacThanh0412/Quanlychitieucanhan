@@ -1,13 +1,10 @@
-﻿
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using LiteDB;
 
 namespace Quanlychitieu.Models;
 
 public class PlannedExpendituresModel
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
     public string Title { get; set; }
     public double TotalAmount { get; set; }

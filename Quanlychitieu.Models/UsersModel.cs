@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using LiteDB;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -16,7 +15,6 @@ public class UsersModel : INotifyPropertyChanged
     private double pocketMoney;
     public List<UsersModel> documents { get; set; }
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
     public string? UserIDOnline { get; set; }
     public string Username

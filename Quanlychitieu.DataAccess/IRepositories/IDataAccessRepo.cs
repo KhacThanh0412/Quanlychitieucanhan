@@ -1,7 +1,9 @@
-﻿namespace Quanlychitieu.DataAccess.IRepositories;
+﻿using LiteDB;
+
+namespace Quanlychitieu.DataAccess.IRepositories;
 
 public interface IDataAccessRepo
 {
-    IMongoDatabase GetDb();
+    LiteDatabase GetDb();
     void DeleteDB();
 }

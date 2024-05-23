@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using LiteDB;
 using System.ComponentModel;
 
 namespace Quanlychitieu.Models;
@@ -8,7 +7,6 @@ public class ExpendituresModel : INotifyPropertyChanged
 {
     double amountSpent;
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
     public DateTime DateSpent { get; set; }
     public double UnitPrice { get; set; }

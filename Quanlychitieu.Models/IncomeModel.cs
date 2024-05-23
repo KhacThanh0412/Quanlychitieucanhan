@@ -1,13 +1,10 @@
-﻿
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using LiteDB;
 
 namespace Quanlychitieu.Models;
 
 public class IncomeModel
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
     public DateTime DateReceived { get; set; }
     public double AmountReceived { get; set; }
