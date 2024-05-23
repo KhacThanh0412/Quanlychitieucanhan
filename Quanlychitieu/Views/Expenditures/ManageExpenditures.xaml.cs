@@ -39,15 +39,6 @@ public partial class ManageExpenditures : UraniumContentPage
         {
             await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Không thể lưu danh sách trống sang PDF"));
         }
-        //else
-        //{
-        //    PrintProgressBarIndic.IsVisible = true;
-        //    PrintProgressBarIndic.Progress = 0;
-        //    await PrintProgressBarIndic.ProgressTo(1, 1000, easing: Easing.Linear);
-
-        //    await viewModel.PrintExpendituresBtn();
-        //    PrintProgressBarIndic.IsVisible = false;
-        //}
     }
 
     private void AddExpBtn_Clicked(object sender, EventArgs e)

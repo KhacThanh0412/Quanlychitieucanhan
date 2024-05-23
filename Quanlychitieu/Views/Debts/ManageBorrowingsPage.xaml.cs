@@ -17,10 +17,6 @@ public partial class ManageBorrowingsPage : UraniumContentPage
     }
     protected override void OnAppearing()
     {
-        //if (UpSertDebtbSheet.IsPresented)
-        //{
-        //    UpSertDebtbSheet.IsPresented = false;
-        //}
         base.OnAppearing();
         viewModel.PageLoaded();
     }
@@ -29,7 +25,6 @@ public partial class ManageBorrowingsPage : UraniumContentPage
     {
 
         SearchBar searchBar = (SearchBar)sender;
-        //DebtsSearchBar.ItemsSource = DataService.GetSearchResults(searchBar.Text);
         viewModel.SearchBarCommand.Execute(searchBar.Text);
     }
     protected override void OnNavigatedTo(NavigatedToEventArgs args)

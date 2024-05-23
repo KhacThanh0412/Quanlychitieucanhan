@@ -122,7 +122,7 @@ public partial class UpSertIncomeViewModel : ObservableObject
 
                 await userService.UpdateUserAsync(ActiveUser);
 
-                const string toastNotifMessage = "Flow In Added";
+                const string toastNotifMessage = "Đã thêm";
                 var toast = Toast.Make(toastNotifMessage, duration, fontSize);
                 await toast.Show(tokenSource.Token);
 
@@ -138,7 +138,6 @@ public partial class UpSertIncomeViewModel : ObservableObject
     [RelayCommand]
     public void CancelBtn()
     {
-        Debug.WriteLine("Action cancelled by user");
         ThisPopUpResult = PopupResult.Cancel;
         ClosePopUp = true;
     }

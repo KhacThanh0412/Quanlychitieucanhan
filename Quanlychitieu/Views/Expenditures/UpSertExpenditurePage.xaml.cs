@@ -16,17 +16,17 @@ public partial class UpSertExpenditurePage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        //viewModel.PageLoaded();
-        //if (viewModel.IsAddTaxesChecked)
-        //{
-        //    AddTaxCheckBox.IsChecked = true;
-        //}
+        viewModel.PageLoaded();
+        if (viewModel.IsAddTaxesChecked)
+        {
+            AddTaxCheckBox.IsChecked = true;
+        }
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        // AddTaxCheckBox.IsChecked = false;
+        AddTaxCheckBox.IsChecked = false;
     }
 
     private void UnitPriceOrQty_TextChanged(object sender, TextChangedEventArgs e)
@@ -63,17 +63,17 @@ public partial class UpSertExpenditurePage : ContentPage
     {
         if (AddTaxCheckBox.IsChecked)
         {
-            //foreach (TaxModel tax in TaxesList.ItemsSource)
-            //{
-            //    viewModel.AddTax(tax);
-            //}
+            foreach (TaxModel tax in TaxesList.ItemsSource)
+            {
+                viewModel.AddTax(tax);
+            }
         }
         else
         {
-            //foreach (TaxModel tax in TaxesList.ItemsSource)
-            //{
-            //    viewModel.RemoveTax(tax);
-            //}
+            foreach (TaxModel tax in TaxesList.ItemsSource)
+            {
+                viewModel.RemoveTax(tax);
+            }
         }
     }
 }

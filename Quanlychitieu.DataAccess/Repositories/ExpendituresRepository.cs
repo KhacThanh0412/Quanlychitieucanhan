@@ -39,10 +39,6 @@ public class ExpendituresRepository : IExpendituresRepository
             OpenDB();
             string userId = usersRepo.User.Id;
             string userCurrency = usersRepo.User.UserCurrency;
-            if (usersRepo.User.UserIDOnline != string.Empty)
-            {
-                userId = usersRepo.User.UserIDOnline;
-            }
             ExpendituresList = AllExpenditures.Query()
                 .Where(x => x.UserId == userId && x.Currency == userCurrency).ToList();
 

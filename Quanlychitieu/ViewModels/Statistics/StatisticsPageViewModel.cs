@@ -95,7 +95,7 @@ public partial class StatisticsPageViewModel : ObservableObject
                 if (GroupedExpenditures is null)
                 {
                     // Update expList
-                    var expList = expendituresService.OfflineExpendituresList
+                    var expList = expendituresService.ExpendituresList
                         .Where(x => !x.IsDeleted)
                         .OrderByDescending(x => x.DateSpent).ToList();
 

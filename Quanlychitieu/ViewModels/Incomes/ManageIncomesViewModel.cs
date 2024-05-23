@@ -10,13 +10,17 @@ public partial class ManageIncomesViewModel : ObservableObject
     private readonly IIncomeRepository incomeService;
     private readonly IUsersRepository userService;
 
-    public ManageIncomesViewModel()
+    public ManageIncomesViewModel(IIncomeRepository incomeRepository, IUsersRepository usersRepository)
     {
+        incomeService = incomeRepository;
+        userService = usersRepository;
+        incomeRepository.IncomesListChanged += HandleIncomesListUpdated;
+        usersRepository.UserDataChanged += HandleUserUpdated;
     }
 
     private void HandleUserUpdated()
     {
-        //ActiveUser = userService.OfflineUser;
+        ActiveUser = userService.User;
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
     }
@@ -47,13 +51,11 @@ public partial class ManageIncomesViewModel : ObservableObject
     [RelayCommand]
     public void PageLoaded()
     {
-        //var user = userService.OfflineUser;
-        //ActiveUser = user;
+        var user = userService.User;
+        ActiveUser = user;
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
         FilterGetAllIncomes();
-        //FilterGetIncOfCurrentMonth();
-        //await FilterGetAllIncomes();
     }
     bool IsLoaded;
     public void FilterGetAllIncomes()
@@ -63,7 +65,7 @@ public partial class ManageIncomesViewModel : ObservableObject
             if (!IsLoaded)
             {
                 IsBusy = true;
-                IncTitle = "All Flow Ins";
+                IncTitle = "Tất cả thu nhập";
                 ApplyChanges();
 
                 IsLoaded = true;
@@ -83,13 +85,13 @@ public partial class ManageIncomesViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-           await Shell.Current.DisplayAlert("Error incomes", ex.Message, "OK");
+           await Shell.Current.DisplayAlert("Lỗi", ex.Message, "OK");
         }
     }
 
     private void ApplyChanges()
     {
-        var IncList = incomeService.OfflineIncomesList
+        var IncList = incomeService.IncomesList
                     .Where(x => !x.IsDeleted)
                     .OrderByDescending(x => x.DateReceived)
                     .ToList();
@@ -105,7 +107,6 @@ public partial class ManageIncomesViewModel : ObservableObject
     {
         if (ActiveUser is null)
         {
-            Debug.WriteLine("Null");
             await Shell.Current.DisplayAlert("Đợi", "Vui lòng đợi", "OK");
         }
         else
@@ -127,7 +128,7 @@ public partial class ManageIncomesViewModel : ObservableObject
     [RelayCommand]
     public async Task ShowEditIncomePopUp(IncomeModel income)
     {
-        await AddEditIncome(income, "Edit Flow In", false);
+        await AddEditIncome(income, "Sửa đơn", false);
     }
 
     [RelayCommand]
@@ -136,10 +137,10 @@ public partial class ManageIncomesViewModel : ObservableObject
         CancellationTokenSource cancellationTokenSource = new();
         const ToastDuration duration = ToastDuration.Short;
         const double fontSize = 14;
-        const string text = "Income Deleted";
+        const string text = "Xóa đơn";
         var toast = Toast.Make(text, duration, fontSize);
 
-        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Confirm Deletion?"));
+        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Xác nhận xóa?"));
         if (response)
         {
             var updateDateTime = DateTime.UtcNow;
@@ -180,13 +181,13 @@ public partial class ManageIncomesViewModel : ObservableObject
         {
             ActiveUser.PocketMoney = amount;
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-            // userService.OfflineUser = ActiveUser;
+            userService.User = ActiveUser;
             await userService.UpdateUserAsync(ActiveUser);
 
             CancellationTokenSource cancellationTokenSource = new();
             const ToastDuration duration = ToastDuration.Short;
             const double fontSize = 16;
-            const string text = "User Balance Updated!";
+            const string text = "Đã cập nhật số dư!";
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
 
@@ -197,23 +198,5 @@ public partial class ManageIncomesViewModel : ObservableObject
     [RelayCommand]
     public void ShowFilterPopUpPage()
     {
-        //var filterOption = (string)await Shell.Current.ShowPopupAsync(new FilterOptionsPopUp("test"));
-        //if (filterOption.Equals("Filter_All"))
-        //{
-        //    FilterGetAllIncomes();
-        //}
-        //else if (filterOption.Equals("Filter_Today"))
-        //{
-        //    FilterGetIncOfToday();
-        //}
-        //else if (filterOption.Equals("Filter_CurrMonth"))
-        //{
-        //    FilterGetIncOfCurrentMonth();
-        //}
-        //else
-        //{
-        //    //nothing was chosen
-        //}
-
     }
 }

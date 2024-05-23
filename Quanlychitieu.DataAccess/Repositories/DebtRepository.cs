@@ -10,10 +10,9 @@ public class DebtRepository : IDebtRepository
     private readonly IDataAccessRepo dataAccess;
     private readonly IUsersRepository usersRepo;
 
-    public List<DebtModel> OfflineDebtList { get; set; }
-    public List<DebtModel> OnlineDebtList { get; set; }
+    public List<DebtModel> DebtList { get; set; }
 
-    public event Action OfflineDebtListChanged;
+    public event Action DebtListChanged;
     bool IsSyncing;
     private bool IsBatchUpdate;
     public DebtRepository(IDataAccessRepo dataAccess, IUsersRepository userRepo)
@@ -22,18 +21,76 @@ public class DebtRepository : IDebtRepository
         usersRepo = userRepo;
     }
 
-    async Task<LiteDatabase> OpenDB()
+    void OpenDB()
     {
-        await Task.Delay(1);
         db = dataAccess.GetDb();
         AllDebts = db.GetCollection<DebtModel>(DebtsCollectionName);
         AllDebts.EnsureIndex(x => x.Id);
-        return db;
     }
 
-    public Task<bool> AddDebtAsync(DebtModel debt)
+    public async Task<List<DebtModel>> GetAllDebtAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            OpenDB();
+
+            string userId = usersRepo.User.Id;
+            string userCurrency = usersRepo.User.UserCurrency;
+            if (usersRepo.User.UserIDOnline != string.Empty)
+            {
+                userId = usersRepo.User.UserIDOnline;
+            }
+            // await AllDebts.DeleteAllAsync();
+
+            //await db.DropCollectionAsync(DebtsCollectionName);
+            DebtList = AllDebts.Query().ToList();
+            var ss = DebtList
+                .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.UpdateDateTime);
+
+            //OfflineDebtList ??= Enumerable.Empty<DebtModel>().ToList();
+            return DebtList;
+
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.InnerException.Message);
+            Debug.WriteLine("Get all Debts fxn Exception: " + ex.Message);
+            return Enumerable.Empty<DebtModel>().ToList();
+        }
+        finally
+        {
+            db.Dispose();
+        }
+    }
+
+    public async Task<bool> AddDebtAsync(DebtModel debt)
+    {
+        debt.UpdateDateTime = DateTime.UtcNow;
+        try
+        {
+            OpenDB();
+
+            if (AllDebts.Insert(debt) is not null)
+            {
+                DebtList.Add(debt);
+                DebtListChanged?.Invoke();
+                db.Dispose();
+                return true;
+            }
+            else
+            {
+                Debug.WriteLine("Failed to add local debt");
+                return false;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Failed to add local debt: " + ex.InnerException.Message);
+            db.Dispose();
+            return false;
+        }
     }
 
     public async Task<bool> DeleteDebtAsync(DebtModel debt)
@@ -42,11 +99,11 @@ public class DebtRepository : IDebtRepository
         debt.IsDeleted = true;
         try
         {
-            await OpenDB();
-            OfflineDebtList.Remove(debt);
+            OpenDB();
+            DebtList.Remove(debt);
             if (!IsBatchUpdate)
             {
-                OfflineDebtListChanged?.Invoke();
+                DebtListChanged?.Invoke();
             }
             if (AllDebts.Delete(debt.Id))
             {
@@ -71,14 +128,11 @@ public class DebtRepository : IDebtRepository
         }
     }
 
-    public Task<List<DebtModel>> GetAllDebtAsync()
+    public async Task SynchronizeDebtsAsync()
     {
-        throw new NotImplementedException();
-    }
-
-    public Task SynchronizeDebtsAsync()
-    {
-        throw new NotImplementedException();
+        await GetAllDebtAsync();
+        IsBatchUpdate = false;
+        DebtListChanged?.Invoke();
     }
 
     public async Task<bool> UpdateDebtAsync(DebtModel debt)
@@ -87,16 +141,16 @@ public class DebtRepository : IDebtRepository
 
         try
         {
-            await OpenDB();
+            OpenDB();
             if (AllDebts.Update(debt))
             {
                 Debug.WriteLine("Debt updated locally");
 
-                int index = OfflineDebtList.FindIndex(x => x.Id == debt.Id);
-                OfflineDebtList[index] = debt;
+                int index = DebtList.FindIndex(x => x.Id == debt.Id);
+                DebtList[index] = debt;
                 if (!IsBatchUpdate)
                 {
-                    OfflineDebtListChanged?.Invoke();
+                    DebtListChanged?.Invoke();
                 }
                 
                 db.Dispose();
@@ -118,7 +172,7 @@ public class DebtRepository : IDebtRepository
 
     public async Task DropDebtCollection()
     {
-        await OpenDB();
+        OpenDB();
         db.DropCollection(DebtsCollectionName);
         db.Dispose();
         Debug.WriteLine("debts Collection dropped!");
@@ -126,9 +180,8 @@ public class DebtRepository : IDebtRepository
 
     public async Task LogOutUserAsync()
     {
-        OnlineDebtList.Clear();
-        OfflineDebtList.Clear();
-        OfflineDebtListChanged?.Invoke();
+        DebtList.Clear();
+        DebtListChanged?.Invoke();
 
         await DropDebtCollection();
     }

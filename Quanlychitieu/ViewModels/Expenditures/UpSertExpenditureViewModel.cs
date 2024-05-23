@@ -14,7 +14,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
         expenditureRepo = expendituresRepository;
         userRepo = usersRepository;
         ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
-        userRepo.OfflineUserDataChanged += UserRepo_OfflineUserDataChanged;
+        userRepo.UserDataChanged += UserRepo_OfflineUserDataChanged;
     }
 
 
@@ -50,7 +50,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
     double _initialTotalExpAmount;
     public void PageLoaded()
     {
-        ActiveUser = userRepo.OfflineUser;
+        ActiveUser = userRepo.User;
         _initialUserPocketMoney = ActiveUser.PocketMoney;
         _initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
         _initialTotalExpAmount = ActiveUser.TotalExpendituresAmount;
@@ -64,10 +64,10 @@ public partial class UpSertExpenditureViewModel : ObservableObject
     }
     private void UserRepo_OfflineUserDataChanged()
     {
-        ResultingBalance = userRepo.OfflineUser.PocketMoney;
-        _initialUserPocketMoney = userRepo.OfflineUser.PocketMoney;
-        _initialTotalExpAmount = userRepo.OfflineUser.TotalExpendituresAmount;
-        ActiveUser = userRepo.OfflineUser;
+        ResultingBalance = userRepo.User.PocketMoney;
+        _initialUserPocketMoney = userRepo.User.PocketMoney;
+        _initialTotalExpAmount = userRepo.User.TotalExpendituresAmount;
+        ActiveUser = userRepo.User;
     }
 
     [RelayCommand]
@@ -124,7 +124,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
         SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
         
         SingleExpenditureDetails.AddedDateTime = DateTime.UtcNow;
-        SingleExpenditureDetails.UserId = userRepo.OfflineUser.UserIDOnline;
+        SingleExpenditureDetails.UserId = userRepo.User.UserIDOnline;
 
         if (!await expenditureRepo.AddExpenditureAsync(SingleExpenditureDetails))
         {
@@ -133,7 +133,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
 
         await UpdateUserAsync(TotalAmountSpent);
 
-        const string toastNotifMessage = "Flow Out Added";
+        const string toastNotifMessage = "Đã thêm hóa đơn";
         var toast = Toast.Make(toastNotifMessage, toastDuration, fontSize);
         await toast.Show(tokenSource.Token);
         return true;
@@ -183,7 +183,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
             {
                 ActiveUser.PocketMoney = amount;
                 ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-                userRepo.OfflineUser = ActiveUser;
+                userRepo.User = ActiveUser;
                 await userRepo.UpdateUserAsync(ActiveUser);
 
                 CancellationTokenSource cancellationTokenSource = new();

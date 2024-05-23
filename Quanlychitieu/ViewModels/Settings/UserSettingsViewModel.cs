@@ -6,10 +6,12 @@ using Quanlychitieu.Platforms.Android.NavigationsMethods;
 using Quanlychitieu.PopUpPages;
 using Quanlychitieu.Utilities;
 using Quanlychitieu.ViewModels;
+using Quanlychitieu.Views;
 
 namespace Quanlychitieu.ViewModels.Settings;
 
-public partial class UserSettingsViewModel(IUsersRepository usersRepository,
+public partial class UserSettingsViewModel(IUsersRepository usersRepository, IExpendituresRepository expendituresRepository,
+    IIncomeRepository incomeRepository, IDebtRepository debtRepository,
     HomeViewModel homePageVM) : ObservableObject
 {
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
@@ -55,7 +57,7 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository,
     [RelayCommand]
     public void PageLoaded()
     {
-        ActiveUser = usersRepository.OfflineUser;
+        ActiveUser = usersRepository.User;
         PocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
         UserCountry = ActiveUser.UserCountry;
@@ -70,35 +72,35 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository,
 
     private void GetTotals()
     {
-        //TotalExpendituresAmount = expendituresRepository.OfflineExpendituresList.Select(x => x.AmountSpent).Sum();
-        //TotalIncomeAmount = ActiveUser.TotalIncomeAmount;
+        TotalExpendituresAmount = expendituresRepository.ExpendituresList.Select(x => x.AmountSpent).Sum();
+        TotalIncomeAmount = ActiveUser.TotalIncomeAmount;
 
-        //var filteredAndSortedDebts = debtRepository.OfflineDebtList
-        //                .Where(x => !x.IsDeleted)
-        //                .Distinct()
-        //                .ToList();
-        //var BorrowedCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-        //    .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely)
-        //    .OrderBy(x => x.AddedDateTime)); //total of all debts that were paid back to user completely
+        var filteredAndSortedDebts = debtRepository.DebtList
+                        .Where(x => !x.IsDeleted)
+                        .Distinct()
+                        .ToList();
+        var BorrowedCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime)); //tổng nợ đã được trả lại
 
-        //var LentCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-        //    .Where(x => x.DebtType == DebtType.Lent && x.IsPaidCompletely)
-        //    .OrderBy(x => x.AddedDateTime));//total of all debts that were paid back FROM user completely
+        var LentCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Lent && x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));//Tổng nợ đã được trả hoàn toàn từ người dùng
 
-        //var BorrowedPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-        //    .Where(x => x.DebtType == DebtType.Borrowed && !x.IsPaidCompletely)
-        //    .OrderBy(x => x.AddedDateTime));//total of all debts that are still waiting to be paid back to user 
+        var BorrowedPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Borrowed && !x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime));//tổng nợ vẫn đang chờ trả
 
-        //var LentPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-        //    .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely)
-        //    .OrderBy(x => x.AddedDateTime)); //total of all debts that are still waiting to be paid back BY user 
+        var LentPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
+            .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely)
+            .OrderBy(x => x.AddedDateTime)); //tổng nợ vẫn đang chờ người dùng trả
 
 
-        
-        //TotalBorrowedCompletedAmount = BorrowedCompletedList.Sum(x => x.Amount);
-        //TotalBorrowedPendingAmount = BorrowedPendingList.Sum(x => x.Amount);
-        //TotalLentCompletedAmount = LentCompletedList.Sum(x => x.Amount);
-        //TotalLentPendingAmount = LentPendingList.Sum(x => x.Amount);
+
+        TotalBorrowedCompletedAmount = BorrowedCompletedList.Sum(x => x.Amount);
+        TotalBorrowedPendingAmount = BorrowedPendingList.Sum(x => x.Amount);
+        TotalLentCompletedAmount = LentCompletedList.Sum(x => x.Amount);
+        TotalLentPendingAmount = LentPendingList.Sum(x => x.Amount);
 
     }
 
@@ -117,9 +119,9 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository,
             File.Delete(LoginDetectFile);
 
             await usersRepository.LogOutUserAsync();
-            //await expendituresRepository.LogOutUserAsync();
-            //await incomeRepository.LogOutUserAsync();
-            //await debtRepository.LogOutUserAsync();
+            await expendituresRepository.LogOutUserAsync();
+            await incomeRepository.LogOutUserAsync();
+            await debtRepository.LogOutUserAsync();
             homePageVM._isInitialized = false;
 
             await NavFunctions.GoToLoginInPage();
@@ -158,17 +160,17 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository,
                 ActiveUser.Taxes = Taxes.ToList();
             }
 
-            // await expendituresRepository.GetAllExpendituresAsync();
+            await expendituresRepository.GetAllExpendituresAsync();
             if (await usersRepository.UpdateUserAsync(ActiveUser))
             {
-                usersRepository.OfflineUser = ActiveUser;
+                usersRepository.User = ActiveUser;
 
                 CancellationTokenSource cancellationTokenSource = new();
                 const ToastDuration duration = ToastDuration.Short;
                 const double fontSize = 16;
                 const string text = "Hồ sơ cá nhân đã cập nhật!";
                 var toast = Toast.Make(text, duration, fontSize);
-                await toast.Show(cancellationTokenSource.Token); //toast a notification about user profile updated
+                await toast.Show(cancellationTokenSource.Token);
                 await Shell.Current.GoToAsync("..", true);
             }
         }
@@ -183,8 +185,8 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository,
     [RelayCommand]
     public async Task AddTax()
     {
-        List<string> fieldTitles = new() { "Tax Name", "Tax Percentage" };
-        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Add Tax info", IsDeleteBtnVisible: false));
+        List<string> fieldTitles = new() { "Tên thuế", "Phần trăm thuế" };
+        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Thêm thông tin thuế", IsDeleteBtnVisible: false));
         if (result.Result == PopupResult.OK)
         {
             Dictionary<string, double> dict = (Dictionary<string, double>)result.Data;
@@ -198,8 +200,8 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository,
     [RelayCommand]
     public async Task ViewEditDeleteTax(TaxModel Selectedtax)
     {
-        List<string> fieldTitles = new() { "Tax Name", "Tax Percentage" };
-        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Tax Info", Selectedtax, true));
+        List<string> fieldTitles = new() { "Tên thuế", "Phần trăm thuế" };
+        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Thông tin thuế", Selectedtax, true));
         if (result.Result == PopupResult.OK)
         {
             int indexOfTax = Taxes.IndexOf(Selectedtax);
@@ -216,7 +218,6 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository,
         }
     }
 
-    //section for themes in windows version. i'll revise this later
     [ObservableProperty]
     int selectedTheme;
     [ObservableProperty]

@@ -18,7 +18,7 @@ public partial class ManageIncomes : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        // viewModel.PageLoaded();
+        viewModel.PageLoaded();
     }
     private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
     {

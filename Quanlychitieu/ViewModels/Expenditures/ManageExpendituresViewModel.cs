@@ -26,13 +26,13 @@ public partial class ManageExpendituresViewModel : ObservableObject
         this.upSertExpenditureVM = upSertExpenditureVM;
         this.folderPickerService = folderPickerService;
         ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
-        expendituresService.OfflineExpendituresListChanged += HandleExpendituresListUpdated;
-        userRepo.OfflineUserDataChanged += HandleUserDataChanged;
+        expendituresService.ExpendituresListChanged += HandleExpendituresListUpdated;
+        userRepo.UserDataChanged += HandleUserDataChanged;
     }
 
     private void HandleUserDataChanged()
     {
-        UserPocketMoney = userRepo.OfflineUser.PocketMoney;
+        UserPocketMoney = userRepo.User.PocketMoney;
     }
 
     [ObservableProperty]
@@ -74,7 +74,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
 
     public async Task PageloadedAsync()
     {
-        UsersModel user = userRepo.OfflineUser;
+        UsersModel user = userRepo.User;
         ActiveUser = user;
 
         UserPocketMoney = ActiveUser.PocketMoney;
@@ -117,14 +117,14 @@ public partial class ManageExpendituresViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-           await Shell.Current.DisplayAlert("Error Exp", ex.Message, "OK");
+           await Shell.Current.DisplayAlert("Lỗi Exp", ex.Message, "OK");
         }
     }
 
     private void ApplyChanges()
     {
         // Update expList
-        var expList = expendituresService.OfflineExpendituresList
+        var expList = expendituresService.ExpendituresList
             .Where(x => !x.IsDeleted)
             .OrderByDescending(x => x.DateSpent).ToList();
 
@@ -153,7 +153,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
         if (ActiveUser is null)
         {
             Debug.WriteLine("Can't Open Add Exp PopUp user is null");
-            await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
+            await Shell.Current.DisplayAlert("Đợi", "Không thể đi", "Ok");
         }
         else
         {
@@ -187,7 +187,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
     {
         if (GroupedExpenditures is null)
         {
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Data to visualize"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Không có dữ liệu"));
             return;
         }
 
@@ -206,7 +206,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
         const ToastDuration duration = ToastDuration.Short;
         const double fontSize = 14;
         string text;
-        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Confirm Delete ?")))!;
+        bool response = (bool)(await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Xác nhận xóa ?")))!;
         if (response)
         {
             IsBusy = true;
@@ -216,7 +216,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
 
             if (deleteResponse)
             {
-                text = "Flow Out Deleted Successfully";
+                text = "Đã xóa hóa đơn thành công";
                 ActiveUser.TotalExpendituresAmount -= expenditure.AmountSpent;
                 ActiveUser.PocketMoney += expenditure.AmountSpent;
                 UserPocketMoney += expenditure.AmountSpent;
@@ -224,7 +224,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
             }
             else
             {
-                text = "Flow Out Not Deleted";
+                text = "Hóa đơn không bị xóa";
             }
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
@@ -235,35 +235,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
 
     public async Task PrintExpendituresBtn()
     {
-        //CancellationToken cts = new();
-        //var result = await folderPickerService.PickAsync(cts);
-        //result.EnsureSuccess();
-
-        //Debug.WriteLine(result.Folder.Path);
-
-        Activ = true;
-#if ANDROID
-        ExpendituresList = GroupedExpenditures.SelectMany(x => x).ToObservableCollection();
-#endif
-
-        if (ExpendituresList?.Count < 1 || ExpendituresList is null)
-        {
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot save an Empty list to PDF"));
-            return;
-        }
-        string dialogueResponse = (string)await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Please Select Currency", UserCurrency));
-        if (dialogueResponse is "Cancel")
-        {
-            return;
-        }
-
-        if (dialogueResponse != UserCurrency && !Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
-        {
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Internet !\nPlease Connect to the Internet in order to save in other currencies"));
-            return;
-        }
-        await PrintExpenditures.SaveExpenditureToPDF(ExpendituresList, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username);
-
+        await Task.Delay(1);
     }
 
     [RelayCommand]
@@ -273,7 +245,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
         CancellationTokenSource cancellationTokenSource = new();
         const ToastDuration duration = ToastDuration.Short;
         const double fontSize = 14;
-        const string text = "Flow Out Details Copied to Clipboard";
+        const string text = "Chi tiết hóa đơn được sao chép";
         var toast = Toast.Make(text, duration, fontSize);
         await toast.Show(cancellationTokenSource.Token); //toast a notification about exp being copied to clipboard
     }

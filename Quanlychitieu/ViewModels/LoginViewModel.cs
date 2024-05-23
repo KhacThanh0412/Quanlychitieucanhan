@@ -90,8 +90,7 @@ namespace Quanlychitieu.ViewModels
                 }
                 IsQuickLoginVisible = true;
                 userId = await settingsRepo.GetPreference<string>(nameof(CurrentUser.Id), null);
-                userRepo.OfflineUser = await userRepo.GetUserAsync(userId); //initialized user to be used by the entire app  
-                                                                            //await Task.WhenAll(expenditureRepo.SynchronizeExpendituresAsync(), debtRepo.SynchronizeDebtsAsync(), incomeRepo.SynchronizeIncomesAsync());
+                userRepo.User = await userRepo.GetUserAsync(userId); 
             }
             else
             {
@@ -168,15 +167,7 @@ namespace Quanlychitieu.ViewModels
             ErrorMessageVisible = false;
             IsBusy = true;
             UsersModel User = new();
-            IsLoginOnlineButtonClicked = true;
-            if (IsLoginOnlineButtonClicked)
-            {
-               // User = await userRepo.GetUserOnlineAsync(CurrentUser);
-            }
-            else
-            {
-                User = await userRepo.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
-            }
+            User = await userRepo.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
 
             if (User is null)
             {
@@ -190,7 +181,7 @@ namespace Quanlychitieu.ViewModels
                     File.Create(LoginDetectFile).Close();
                 }
                 CurrentUser = User;
-                userRepo.OfflineUser = await userRepo.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app
+                userRepo.User = await userRepo.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app
                 await settingsRepo.SetPreference<string>(nameof(CurrentUser.Id), CurrentUser.Id);
                 await settingsRepo.SetPreference<string>("Username", CurrentUser.Username);
                 await settingsRepo.SetPreference<string>(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
@@ -209,7 +200,7 @@ namespace Quanlychitieu.ViewModels
             if (File.Exists(LoginDetectFile))
             {
                 IsQuickLoginVisible = false;
-                userRepo.OfflineUser = await userRepo.GetUserAsync(userId); //initialized user to be used by the entire app                                
+                userRepo.User = await userRepo.GetUserAsync(userId); //initialized user to be used by the entire app                                
                 await NavFunctions.GoToHomePage();
             }
             else
@@ -225,7 +216,7 @@ namespace Quanlychitieu.ViewModels
                 CancellationTokenSource cts = new();
                 const ToastDuration duration = ToastDuration.Short;
                 const double fontSize = 14;
-                string text = "All Synced Up !";
+                string text = "Đồng bộ !";
                 var toast = Toast.Make(text, duration, fontSize);
                 await toast.Show(cts.Token);
             }

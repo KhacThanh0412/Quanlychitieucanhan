@@ -107,7 +107,7 @@ namespace Quanlychitieu
 
             /*--  REGISTERING MOBILE VIEWS --*/
             builder.Services.AddSingleton<HomePage>();
-            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddSingleton<LoginPage>();
 
             /*-- Section for Expenditures --*/
             builder.Services.AddSingleton<ManageExpenditures>();
