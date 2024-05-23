@@ -1,75 +1,136 @@
-﻿
-namespace Quanlychitieu.DataAccess.Repositories;
+﻿using LiteDB;
+using System;
+using System.Threading.Tasks;
 
-public class UserRepository : IUsersRepository
+namespace Quanlychitieu.DataAccess.Repositories
 {
-    private readonly IMongoCollection<UsersModel> UserCollection;
-    private readonly IDataAccessRepo dataAccessRepo;
-
-    private const string userDataCollectionName = "Users";
-
-    public event Action OfflineUserDataChanged;
-
-    public UsersModel OfflineUser { get; set; }
-
-    public UserRepository(IDataAccessRepo dataAccess)
+    public class UserRepository : IUsersRepository
     {
-        dataAccessRepo = dataAccess;
-        var db = dataAccessRepo.GetDb();
-        UserCollection = db.GetCollection<UsersModel>(userDataCollectionName);
-    }
+        private LiteDatabase db;
+        private ILiteCollection<UsersModel> userCollection;
 
-    public async Task<bool> CheckIfAnyUserExists()
-    {
-        long numberOfUsers = await UserCollection.EstimatedDocumentCountAsync();
-        return numberOfUsers >= 1;
-    }
+        private readonly IDataAccessRepo dataAccessRepo;
 
-    public async Task<UsersModel> GetUserAsync(string userEmail, string userPassword)
-    {
-        OfflineUser = await UserCollection.Find(x => x.Email == userEmail && x.Password == userPassword).FirstOrDefaultAsync();
-        OfflineUserDataChanged?.Invoke();
-        return OfflineUser;
-    }
+        private const string userDataCollectionName = "Users";
 
-    public async Task<UsersModel> GetUserAsync(string userId)
-    {
-        OfflineUser = await UserCollection.Find(x => x.Id == userId).FirstOrDefaultAsync();
-        OfflineUserDataChanged?.Invoke();
-        return OfflineUser;
-    }
+        public event Action OfflineUserDataChanged;
 
-    public async Task<bool> AddUserAsync(UsersModel user)
-    {
-        if (await GetUserAsync(user.Email, user.Password) is null)
+        public UsersModel OfflineUser { get; set; }
+
+        public UserRepository(IDataAccessRepo dataAccess)
         {
-            await UserCollection.InsertOneAsync(user);
-            OfflineUser = user;
-            return true;
+            dataAccessRepo = dataAccess;
         }
-        return false; // User already exists
-    }
 
-    public async Task<bool> UpdateUserAsync(UsersModel user)
-    {
-        var result = await UserCollection.ReplaceOneAsync(x => x.Id == user.Id, user);
-        if (result.IsAcknowledged && result.ModifiedCount > 0)
+        void OpenDB()
         {
-            OfflineUser = user;
+            db = dataAccessRepo.GetDb();
+            userCollection = db.GetCollection<UsersModel>(userDataCollectionName);
+        }
+
+        public async Task<bool> CheckIfAnyUserExists()
+        {
+            OpenDB();
+            int numberOfUsers = userCollection.Count();
+            db.Dispose();
+            return numberOfUsers >= 1;
+        }
+
+        public async Task<UsersModel> GetUserAsync(string userEmail, string userPassword)
+        {
+            OpenDB();
+            OfflineUser = userCollection.FindOne(x => x.Email == userEmail && x.Password == userPassword);
+            db.Dispose();
+            return OfflineUser;
+        }
+
+        public async Task<UsersModel> GetUserAsync(string userId)
+        {
+            OpenDB();
+            OfflineUser = userCollection.FindOne(x => x.Id == userId);
+            db.Dispose();
             OfflineUserDataChanged?.Invoke();
-            return true;
+            return OfflineUser;
         }
-        return false;
-    }
 
-    public async Task<bool> DeleteUserAsync(UsersModel user)
-    {
-        var result = await UserCollection.DeleteOneAsync(x => x.Id == user.Id);
-        return result.IsAcknowledged && result.DeletedCount > 0;
-    }
+        public async Task<bool> AddUserAsync(UsersModel user)
+        {
+            if (GetUserAsync(user.Email, user.Password).Result == null)
+            {
+                OpenDB();
+                userCollection.Insert(user);
+                userCollection.EnsureIndex(x => x.Id);
+                db.Dispose();
+                OfflineUser = user;
+                return true;
+            }
+            else
+            {
+                return false; // User already exists
+            }
+        }
 
-    public async Task DropCollection()
-    {
-        await UserCollection.Database.DropCollectionAsync(userDataCollectionName);
+        public async Task<bool> UpdateUserAsync(UsersModel user)
+        {
+            try
+            {
+                OpenDB();
+                if (userCollection.Update(user))
+                {
+                    db.Dispose();
+                    OfflineUser = user;
+                    OfflineUserDataChanged?.Invoke();
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to Update User");
+                    db.Dispose();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Update user Exception Message: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteUserAsync(UsersModel user)
+        {
+            try
+            {
+                OpenDB();
+                if (userCollection.Delete(user.Id))
+                {
+                    db.Dispose();
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to delete User");
+                    db.Dispose();
+                    throw new Exception("Failed to Delete User");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Delete user Exception Message: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task DropCollection()
+        {
+            OpenDB();
+            db.DropCollection(userDataCollectionName);
+            db.Dispose();
+        }
+
+        public async Task LogOutUserAsync()
+        {
+            OfflineUser = null;
+            await DropCollection();
+        }
     }
 }

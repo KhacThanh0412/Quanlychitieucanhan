@@ -23,15 +23,13 @@
                         <!--  Section to show User Image, Name and email  -->
                         <Image HeightRequest="60" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" />
                         <VerticalStackLayout Margin="3" Spacing="10">
-                            <!--  Text="{Binding UserName}"  -->
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="20"
-                                Text="Khac Thanh" />
-                            <!--  Text="{Binding UserName}"  -->
+                                Text="{Binding UserName}" />
                             <HorizontalStackLayout Spacing="5">
                                 <Image HeightRequest="20" Source="{AppThemeBinding Light=email_dsb, Dark=email_dsb}" />
-                                <Label Text="khacthanhkma0412@gmail.com" />
+                                <Label Text="{Binding UserEmail}" />
                             </HorizontalStackLayout>
 
                         </VerticalStackLayout>
@@ -59,13 +57,13 @@
                 <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="10">
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
                         <!--  For total Expenditures  -->
-                        <Label FontAttributes="Bold" Text="1000">
-                            <!--<Label.Text>
+                        <Label FontAttributes="Bold">
+                            <Label.Text>
                                 <MultiBinding StringFormat="{} {0:n2} {1}">
                                     <Binding Path="TotalExpendituresAmount" />
                                     <Binding Path="UserCurrency" />
                                 </MultiBinding>
-                            </Label.Text>-->
+                            </Label.Text>
                         </Label>
                         <Label
                             FontSize="13"
@@ -77,13 +75,13 @@
 
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
                         <!--  For Total Income  -->
-                        <Label FontAttributes="Bold" Text="20000">
-                            <!--<Label.Text>
+                        <Label FontAttributes="Bold">
+                            <Label.Text>
                                 <MultiBinding StringFormat="{} {0:n2} {1}">
                                     <Binding Path="TotalIncomeAmount" />
                                     <Binding Path="UserCurrency" />
                                 </MultiBinding>
-                            </Label.Text>-->
+                            </Label.Text>
                         </Label>
                         <Label Text="Tổng thu" />
                     </VerticalStackLayout>
@@ -95,12 +93,12 @@
                             <TapGestureRecognizer Command="{Binding DeleteIdsCollectionCommand}" NumberOfTapsRequired="2" />
                         </VerticalStackLayout.GestureRecognizers>
                         <!--  For total debts  -->
-                        <Label FontAttributes="Bold" Text="12500">
-                            <!--<Label.Text>
+                        <Label FontAttributes="Bold">
+                            <Label.Text>
                                 <MultiBinding StringFormat="{} XXX {0}">
                                     <Binding Path="UserCurrency" />
                                 </MultiBinding>
-                            </Label.Text>-->
+                            </Label.Text>
                         </Label>
                         <Label Text="Tổng dư nợ" />
                     </VerticalStackLayout>
@@ -110,14 +108,13 @@
                     Margin="5"
                     FontAttributes="Bold"
                     FontSize="15"
-                    HorizontalOptions="Center"
-                    Text="Số dư hiện tại: 7500 VND">
-                    <!--<Label.Text>
-                        <MultiBinding StringFormat="{} Current Balance : {0:n2} {1}">
+                    HorizontalOptions="Center">
+                    <Label.Text>
+                        <MultiBinding StringFormat="{} Số dư hiện tại : {0:n2} {1}">
                             <Binding Path="PocketMoney" />
                             <Binding Path="UserCurrency" />
                         </MultiBinding>
-                    </Label.Text>-->
+                    </Label.Text>
                 </Label>
 
             </VerticalStackLayout>
@@ -136,21 +133,19 @@
                 <Rectangle />
                 <VerticalStackLayout Margin="5,15" Spacing="10">
                     <Label FontSize="13" Text="Họ và tên" />
-                    <!--  Text="{Binding UserName}"  -->
                     <Label
                         FontAttributes="Bold"
                         FontSize="15"
-                        Text="Khac Thanh" />
+                        Text="{Binding UserName}" />
                 </VerticalStackLayout>
                 <Rectangle />
 
                 <VerticalStackLayout Margin="5,15" Spacing="10">
                     <Label FontSize="13" Text="Email" />
-                    <!--  Text="{Binding UserEmail}"  -->
                     <Label
                         FontAttributes="Bold"
                         FontSize="15"
-                        Text="khacthanhkma0412@gmail.com" />
+                        Text="{Binding UserEmail}" />
                 </VerticalStackLayout>
                 <Rectangle />
 
@@ -159,7 +154,16 @@
                     <Label
                         FontAttributes="Bold"
                         FontSize="15"
-                        Text="Hà Nội" />
+                        Text="{Binding UserCountry}" />
+                </VerticalStackLayout>
+                <Rectangle />
+
+                <VerticalStackLayout Margin="5,15" Spacing="10">
+                    <Label FontSize="11" Text="Tiền tệ" />
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        Text="{Binding UserCurrency}" />
                 </VerticalStackLayout>
                 <Rectangle />
 

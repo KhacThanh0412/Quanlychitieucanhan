@@ -23,13 +23,13 @@ public partial class ManageExpenditures : UraniumContentPage
 
     protected override async void OnAppearing()
     {
-        //if (UpSertExpbSheet.IsPresented)
-        //{
-        //    UpSertExpbSheet.IsPresented = false;
-        //}
+        if (UpSertExpbSheet.IsPresented)
+        {
+            UpSertExpbSheet.IsPresented = false;
+        }
         base.OnAppearing();
         
-        // await viewModel.PageloadedAsync();
+        await viewModel.PageloadedAsync();
         
     }
 
@@ -52,10 +52,10 @@ public partial class ManageExpenditures : UraniumContentPage
 
     private void AddExpBtn_Clicked(object sender, EventArgs e)
     {
-        //upSertExpVM.SingleExpenditureDetails = new()
-        //{
-        //    DateSpent = DateTime.Now,
-        //};
+        upSertExpVM.SingleExpenditureDetails = new()
+        {
+            DateSpent = DateTime.Now,
+        };
         upSertExpVM.PageLoaded();
         UpSertExpbSheet.IsPresented = true;
     }

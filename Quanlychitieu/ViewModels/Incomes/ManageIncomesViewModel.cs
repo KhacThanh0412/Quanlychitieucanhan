@@ -16,7 +16,7 @@ public partial class ManageIncomesViewModel : ObservableObject
 
     private void HandleUserUpdated()
     {
-        ActiveUser = userService.OfflineUser;
+        //ActiveUser = userService.OfflineUser;
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
     }
@@ -47,8 +47,8 @@ public partial class ManageIncomesViewModel : ObservableObject
     [RelayCommand]
     public void PageLoaded()
     {
-        var user = userService.OfflineUser;
-        ActiveUser = user;
+        //var user = userService.OfflineUser;
+        //ActiveUser = user;
         UserPocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
         FilterGetAllIncomes();
@@ -180,7 +180,7 @@ public partial class ManageIncomesViewModel : ObservableObject
         {
             ActiveUser.PocketMoney = amount;
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-            userService.OfflineUser = ActiveUser;
+            // userService.OfflineUser = ActiveUser;
             await userService.UpdateUserAsync(ActiveUser);
 
             CancellationTokenSource cancellationTokenSource = new();

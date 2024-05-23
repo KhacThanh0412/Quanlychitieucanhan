@@ -13,7 +13,8 @@
     x:Name="page"
     x:DataType="viewModels:UpSertExpenditureViewModel"
     BackgroundColor="Transparent"
-    CloseOnTapOutside="True">
+    CloseOnTapOutside="True"
+    IsPresented="{Binding IsBottomSheetOpened}">
     <materialAttach:BottomSheetView.Header>
         <BoxView HeightRequest="0" />
     </materialAttach:BottomSheetView.Header>
@@ -32,7 +33,6 @@
                 Margin="10,0"
                 Spacing="5"
                 SubmitCommand="{Binding UpSertExpenditureCommand}">
-
                 <Label
                     Margin="0,10,0,0"
                     FontAttributes="Italic"
@@ -67,7 +67,6 @@
                         <validation:RequiredValidation />
                     </material:DatePickerField.Validations>
                 </material:DatePickerField>
-                <!--  Text="{Binding SingleExpenditureDetails.UnitPrice}"  -->
                 <material:TextField
                     x:Name="UnitPrice"
                     Title="Đơn giá"
@@ -75,7 +74,7 @@
                     AccentColor="#CBCBCB"
                     Focused="UnitPrice_Focused"
                     Keyboard="Numeric"
-                    Text="123456"
+                    Text="{Binding SingleExpenditureDetails.UnitPrice}"
                     TextChanged="UnitPrice_TextChanged" />
 
                 <material:PickerField
@@ -84,11 +83,10 @@
                     SelectedItem="{Binding SingleExpenditureDetails.Category}"
                     TextColor="{AppThemeBinding Light=black,
                                                 Dark=white}" />
-                <!--  Text="{Binding SingleExpenditureDetails.Reason}"  -->
                 <material:EditorField
                     Title="Lý do"
                     IsTextPredictionEnabled="True"
-                    Text="Testing"
+                    Text="{Binding SingleExpenditureDetails.Reason}"
                     TextColor="{AppThemeBinding Light=black,
                                                 Dark=white}"
                     TitleColor="{AppThemeBinding Light=black}">

@@ -9,17 +9,13 @@ public partial class UpSertExpenditureViewModel : ObservableObject
 {
     readonly IExpendituresRepository expenditureRepo;
     readonly IUsersRepository userRepo;
-    public UpSertExpenditureViewModel()
+    public UpSertExpenditureViewModel(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
     {
-        ExpenditureCategory = ExpenditureCategoryDescriptions.Descriptions;
+        expenditureRepo = expendituresRepository;
+        userRepo = usersRepository;
+        ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
+        userRepo.OfflineUserDataChanged += UserRepo_OfflineUserDataChanged;
     }
-    //public UpSertExpenditureViewModel(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository)
-    //{
-    //    expenditureRepo = expendituresRepository;
-    //    userRepo = usersRepository;
-    //    ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
-    //    userRepo.OfflineUserDataChanged += UserRepo_OfflineUserDataChanged;
-    //}
 
 
     [ObservableProperty]
@@ -47,24 +43,24 @@ public partial class UpSertExpenditureViewModel : ObservableObject
     bool closePopUp;
 
     [ObservableProperty]
-    List<string> expenditureCategory;
+    List<ExpenditureCategory> expenditureCategory;
 
     double _initialUserPocketMoney;
     double _initialExpenditureAmount;
     double _initialTotalExpAmount;
     public void PageLoaded()
     {
-        //ActiveUser = userRepo.OfflineUser;
-        //_initialUserPocketMoney = ActiveUser.PocketMoney;
-        //_initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
-        //_initialTotalExpAmount = ActiveUser.TotalExpendituresAmount;
-        //if (SingleExpenditureDetails.Taxes is not null)
-        //{
-        //    IsAddTaxesChecked = true;
-        //}
+        ActiveUser = userRepo.OfflineUser;
+        _initialUserPocketMoney = ActiveUser.PocketMoney;
+        _initialExpenditureAmount = SingleExpenditureDetails.AmountSpent;
+        _initialTotalExpAmount = ActiveUser.TotalExpendituresAmount;
+        if (SingleExpenditureDetails.Taxes is not null)
+        {
+            IsAddTaxesChecked = true;
+        }
 
-        //ResultingBalance = ActiveUser.PocketMoney;
-        //TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
+        ResultingBalance = ActiveUser.PocketMoney;
+        TotalAmountSpent = SingleExpenditureDetails.AmountSpent;
     }
     private void UserRepo_OfflineUserDataChanged()
     {
@@ -81,7 +77,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
         {
             ThisPopUpResult = PopupResult.Cancel;
             ClosePopUp = true;
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Not Enough balance to save"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Số dư không đủ để tiết kiệm"));
             return;
         }
         CancellationTokenSource cancellationTokenSource = new();
@@ -115,7 +111,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
 
         await UpdateUserAsync(FinalTotalExp);
 
-        const string toastNotifMessage = "Flow Out Updated";
+        const string toastNotifMessage = "Cập nhật tiền chi";
         var toast = Toast.Make(toastNotifMessage, toastDuration, fontsize);
         await toast.Show(tokenSource.Token);
 
@@ -154,7 +150,6 @@ public partial class UpSertExpenditureViewModel : ObservableObject
     [RelayCommand]
     public void CancelBtn()
     {
-        Debug.WriteLine("Action cancelled by user");
         SingleExpenditureDetails.AmountSpent = _initialExpenditureAmount;
         SingleExpenditureDetails.UnitPrice = _initialExpenditureAmount; 
         ThisPopUpResult = PopupResult.Cancel;
@@ -179,7 +174,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
     [RelayCommand]
     public async Task HardResetUserBalance()
     {
-        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Enter New Pocket Money"));
+        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Nhập tiền tiêu mới"));
         if (result.Result == PopupResult.OK)
         {
             double amount = (double)result.Data;
@@ -194,7 +189,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
                 CancellationTokenSource cancellationTokenSource = new();
                 const ToastDuration duration = ToastDuration.Short;
                 const double fontSize = 16;
-                const string text = "User Balance Updated!";
+                const string text = "Cập nhật số dư người dùng!";
                 var toast = Toast.Make(text, duration, fontSize);
                 await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
 

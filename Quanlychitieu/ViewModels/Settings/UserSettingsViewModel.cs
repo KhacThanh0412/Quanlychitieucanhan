@@ -9,7 +9,7 @@ using Quanlychitieu.ViewModels;
 
 namespace Quanlychitieu.ViewModels.Settings;
 
-public partial class UserSettingsViewModel(
+public partial class UserSettingsViewModel(IUsersRepository usersRepository,
     HomeViewModel homePageVM) : ObservableObject
 {
     private readonly CountryAndCurrencyCodes countryAndCurrency = new();
@@ -55,7 +55,7 @@ public partial class UserSettingsViewModel(
     [RelayCommand]
     public void PageLoaded()
     {
-        // ActiveUser = usersRepository.OfflineUser;
+        ActiveUser = usersRepository.OfflineUser;
         PocketMoney = ActiveUser.PocketMoney;
         UserCurrency = ActiveUser.UserCurrency;
         UserCountry = ActiveUser.UserCountry;
@@ -110,21 +110,20 @@ public partial class UserSettingsViewModel(
     [RelayCommand]
     public async Task LogOutUser()
     {
-        //bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Do You want to Log Out?"));
-        //if (response)
-        //{
-        //    string LoginDetectFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QuickLogin.text");
-        //    File.Delete(LoginDetectFile);
+        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Bạn có muốn đăng xuất không?"));
+        if (response)
+        {
+            string LoginDetectFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QuickLogin.text");
+            File.Delete(LoginDetectFile);
 
-        //    await usersRepository.LogOutUserAsync();
-        //    await expendituresRepository.LogOutUserAsync();
-        //    await incomeRepository.LogOutUserAsync();
-        //    await debtRepository.LogOutUserAsync();
-        //    homePageVM._isInitialized = false;
+            await usersRepository.LogOutUserAsync();
+            //await expendituresRepository.LogOutUserAsync();
+            //await incomeRepository.LogOutUserAsync();
+            //await debtRepository.LogOutUserAsync();
+            homePageVM._isInitialized = false;
 
-        //    await NavFunctions.GoToLoginInPage();
-        //}
-        await NavFunctions.GoToLoginInPage();
+            await NavFunctions.GoToLoginInPage();
+        }
     }
 
     [RelayCommand]
@@ -149,31 +148,31 @@ public partial class UserSettingsViewModel(
     [RelayCommand]
     public async Task UpdateUserInformation()
     {
-        //bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Save Profile?"));
-        //if (dialogResult)
-        //{
-        //    ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
+        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Lưu thông tin cá nhân?"));
+        if (dialogResult)
+        {
+            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
 
-        //    if (Taxes is not null)
-        //    {
-        //        ActiveUser.Taxes = Taxes.ToList();
-        //    }
+            if (Taxes is not null)
+            {
+                ActiveUser.Taxes = Taxes.ToList();
+            }
 
-        //    await expendituresRepository.GetAllExpendituresAsync();
-        //    if (await usersRepository.UpdateUserAsync(ActiveUser))
-        //    {
-        //        usersRepository.OfflineUser = ActiveUser;
+            // await expendituresRepository.GetAllExpendituresAsync();
+            if (await usersRepository.UpdateUserAsync(ActiveUser))
+            {
+                usersRepository.OfflineUser = ActiveUser;
 
-        //        CancellationTokenSource cancellationTokenSource = new();
-        //        const ToastDuration duration = ToastDuration.Short;
-        //        const double fontSize = 16;
-        //        const string text = "Profile Updated!";
-        //        var toast = Toast.Make(text, duration, fontSize);
-        //        await toast.Show(cancellationTokenSource.Token); //toast a notification about user profile updated
-        //        await Shell.Current.GoToAsync("..", true);
-        //    }
-        //}
-        //IsNotInEditingMode = true;
+                CancellationTokenSource cancellationTokenSource = new();
+                const ToastDuration duration = ToastDuration.Short;
+                const double fontSize = 16;
+                const string text = "Hồ sơ cá nhân đã cập nhật!";
+                var toast = Toast.Make(text, duration, fontSize);
+                await toast.Show(cancellationTokenSource.Token); //toast a notification about user profile updated
+                await Shell.Current.GoToAsync("..", true);
+            }
+        }
+        IsNotInEditingMode = true;
     }
 
     [RelayCommand]

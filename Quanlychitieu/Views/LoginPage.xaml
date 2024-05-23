@@ -217,6 +217,7 @@
                             Title="Mật khẩu"
                             Icon="{AppThemeBinding Dark=password_d.png,
                                                    Light=password_l.png}"
+                            IsPassword="True"
                             Text="{Binding CurrentUser.Password}">
                             <validation:RequiredValidation />
                             <material:TextField.Attachments>
@@ -234,37 +235,6 @@
                                 <validation:RequiredValidation />
                             </material:TextField.Validations>
                         </material:TextField>
-
-                        <!--<material:PickerField
-                            Title="Select Your Country"
-                            Grid.Column="1"
-                            AccentColor="DarkSlateBlue"
-                            BackgroundColor="Transparent"
-                            Icon="{AppThemeBinding Dark=globe,
-                                                   Light=globe_l}"
-                            ItemsSource="{Binding CountryNamesList}"
-                            SelectedItem="{Binding SelectedCountry}"
-                            SelectedValueChangedCommand="{Binding CurrencyFromCountryPickedCommand}">
-                            <material:PickerField.Validations>
-                                <validation:RequiredValidation />
-                            </material:PickerField.Validations>
-                        </material:PickerField>-->
-
-
-                        <!--<Grid ColumnDefinitions="340,*">
-                            <material:CheckBox
-                                Grid.Column="0"
-                                IsChecked="{Binding RegisterAccountOnline}"
-                                Text="Register Account Online (Requires Internet)"
-                                TextFontSize="16"
-                                Color="{AppThemeBinding Light=black,
-                                                        Dark=white}" />
-                            <ImageButton
-                                Grid.Column="1"
-                                HeightRequest="25"
-                                HorizontalOptions="End"
-                                Source="information" />
-                        </Grid>-->
                         <ImageButton input:FormView.IsSubmitButton="True" Source="{AppThemeBinding Dark=register_account_d, Light=register_account_l}" />
                         <Button
                             input:FormView.IsSubmitButton="True"

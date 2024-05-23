@@ -35,7 +35,7 @@
                     FontAttributes="Bold"
                     FontSize="24"
                     HorizontalOptions="Start"
-                    Text="Error Alert"
+                    Text="Lỗi"
                     TextColor="{AppThemeBinding Dark=white,
                                                 Light=black}"
                     VerticalOptions="Start" />

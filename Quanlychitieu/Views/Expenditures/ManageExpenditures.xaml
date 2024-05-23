@@ -71,29 +71,13 @@
                     VerticalOptions="Center" />
                 <!--  IsVisible="{Binding ShowStatisticBtn}"  -->
             </Grid>
-
-            <!--<HorizontalStackLayout
-                x:Name="SyncIndicator"
-                toolkit:DockLayout.DockPosition="Top"
-                HorizontalOptions="Center">
-                <Label
-                    Margin="0,0,0,0"
-                    FontSize="13"
-                    IsVisible="{Binding IsBusy}"
-                    Text="Đang đồng bộ..." />
-                <ActivityIndicator
-                    HeightRequest="20"
-                    IsRunning="{Binding IsBusy}"
-                    IsVisible="{Binding IsBusy}" />
-            </HorizontalStackLayout>-->
-            <!--  Text="{Binding ExpTitle}"  -->
-            <!--<Label
+            <Label
                 Margin="5"
                 toolkit:DockLayout.DockPosition="Top"
                 FontAttributes="Bold"
                 FontSize="20"
                 HorizontalOptions="Center"
-                Text="12345" />-->
+                Text="{Binding ExpTitle}" />
 
             <Label
                 Margin="3"
@@ -115,9 +99,9 @@
                 x:Name="ColView"
                 EmptyView="Không có hóa đơn nào..."
                 IsGrouped="True"
-                IsVisible="true">
-
-                <!--<CollectionView.GroupHeaderTemplate>
+                IsVisible="true"
+                ItemsSource="{Binding GroupedExpenditures}">
+                <CollectionView.GroupHeaderTemplate>
                     <DataTemplate x:DataType="viewModels:DateGroup">
                         <Label
                             Padding="10,3"
@@ -139,7 +123,7 @@
                             HorizontalOptions="End"
                             Opacity="0.5">
                             <Label.Text>
-                                <MultiBinding StringFormat="{}{0} Flows, Total : {1:n2} {2}">
+                                <MultiBinding StringFormat="{}{0} Hóa đơn, Tổng tiền : {1:n2} {2}">
                                     <Binding Path="TotalCount" />
                                     <Binding Path="TotalAmount" />
                                     <Binding Path="Currency" />
@@ -150,13 +134,6 @@
                 </CollectionView.GroupFooterTemplate>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:ExpendituresModel">
-                -->
-                <!--
-                    I JUST HAVE TO MAKE SURE NO VIEW ABOVE IS CENTERED OR SOMETHING
-                    also, set dock to top or center to see
-                    NOPE -> set to fill and expand for it to take the whole width of the screen
-                -->
-                <!--
                         <SwipeView Margin="0,2" BackgroundColor="Transparent">
                             <SwipeView.RightItems>
                                 <SwipeItems>
@@ -226,7 +203,7 @@
                         </SwipeView>
 
                     </DataTemplate>
-                </CollectionView.ItemTemplate>-->
+                </CollectionView.ItemTemplate>
             </CollectionView>
 
 

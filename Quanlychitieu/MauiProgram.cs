@@ -80,7 +80,7 @@ namespace Quanlychitieu
 
             /*-- Section for HomePage AND Login --*/
             builder.Services.AddSingleton<HomeViewModel>();
-            builder.Services.AddSingleton<LoginViewModel>();
+            builder.Services.AddTransient<LoginViewModel>();
 
             /*-- Section for Expenditures --*/
             builder.Services.AddSingleton<UpSertExpenditureViewModel>();

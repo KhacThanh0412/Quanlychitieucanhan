@@ -34,10 +34,10 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresViewModel : Observab
     [RelayCommand]
     public async Task PageLoaded()
     {
-        var user = userService.OfflineUser;
-        ActiveUser = user;
-        _ = await monthlyPlannedExpService.GetAllPlannedExp();
-        GetAllMonthlyPlanned();
+        //var user = userService.OfflineUser;
+        //ActiveUser = user;
+        //_ = await monthlyPlannedExpService.GetAllPlannedExp();
+        //GetAllMonthlyPlanned();
     }
 
     private void GetAllMonthlyPlanned()

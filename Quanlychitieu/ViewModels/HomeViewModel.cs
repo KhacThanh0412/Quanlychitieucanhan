@@ -21,25 +21,15 @@ namespace Quanlychitieu.ViewModels
         private readonly IUsersRepository userRepo;
         private readonly IIncomeRepository incomeRepo;
         private readonly IDebtRepository debtRepo;
-        public HomeViewModel()
+        public HomeViewModel(ISettingsServiceRepository settingsServiceRepo,IExpendituresRepository expendituresRepository,
+                        IUsersRepository usersRepository)
         {
-
+            expenditureRepo = expendituresRepository;
+            settingsService = settingsServiceRepo;
+            userRepo = usersRepository;
+            expenditureRepo.OfflineExpendituresListChanged += OnExpendituresChanged;
+            UpdateIsSyncing();
         }
-        //public HomeViewModel(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
-        //                IUsersRepository usersRepository, IIncomeRepository incomeRepository,
-        //                IDebtRepository debtRepository)
-        //{
-        //    expenditureRepo = expendituresRepository;
-        //    settingsService = settingsServiceRepo;
-        //    userRepo = usersRepository;
-        //    incomeRepo = incomeRepository;
-        //    debtRepo = debtRepository;
-        //    expenditureRepo.OfflineExpendituresListChanged += OnExpendituresChanged;
-        //    incomeRepo.OfflineIncomesListChanged += OnIncomesChanged;
-        //    userRepo.OfflineUserDataChanged += OnUserDataChanged;
-
-        //    UpdateIsSyncing();
-        //}
 
         [ObservableProperty]
         ObservableCollection<ExpendituresModel> latestExpenditures = new();
@@ -71,7 +61,7 @@ namespace Quanlychitieu.ViewModels
         }
         public async Task DisplayInfo()
         {
-            await SyncAndNotifyAsync();
+            // await SyncAndNotifyAsync();
         }
         public void GetUserData()
         {
@@ -130,7 +120,7 @@ namespace Quanlychitieu.ViewModels
                 CancellationTokenSource cts = new();
                 const ToastDuration duration = ToastDuration.Short;
                 const double fontSize = 14;
-                string text = "All Synced Up !";
+                string text = "Tất cả đã được đồng bộ hóa !";
                 var toast = Toast.Make(text, duration, fontSize);
                 await toast.Show(cts.Token);
             }
@@ -151,16 +141,15 @@ namespace Quanlychitieu.ViewModels
         public async Task GoToAddExpenditurePage()
         {
             var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
-            var NewUpSertVM = new UpSertExpenditureViewModel();
-            //var NewUpSertVM = new UpSertExpenditureViewModel(expenditureRepo, userRepo);
+            var NewUpSertVM = new UpSertExpenditureViewModel(expenditureRepo, userRepo);
             var newUpSertExpPopUp = new UpSertExpendituresPopUp(NewUpSertVM);
             try
             {
 
                 if (ActiveUser is null)
                 {
-                    Debug.WriteLine("Can't Open PopUp");
-                    await Shell.Current.DisplayAlert("Wait", "Cannot go", "Ok");
+                    Debug.WriteLine("Không thể mở hộp thoại!");
+                    await Shell.Current.DisplayAlert("Wait", "Không thể đi", "Ok");
                 }
                 else
                 {

@@ -18,11 +18,16 @@ public partial class ManageExpendituresViewModel : ObservableObject
     private readonly UpSertExpenditureViewModel upSertExpenditureVM;
     private readonly IFolderPicker folderPickerService;
 
-    public ManageExpendituresViewModel(
+    public ManageExpendituresViewModel(IExpendituresRepository expendituresRepository, IUsersRepository usersRepository,
         UpSertExpenditureViewModel upSertExpenditureVM, IFolderPicker folderPickerService)
     {
+        expendituresService = expendituresRepository;
+        userRepo = usersRepository;
+        this.upSertExpenditureVM = upSertExpenditureVM;
         this.folderPickerService = folderPickerService;
         ExpendituresCat = ExpenditureCategoryDescriptions.Descriptions;
+        expendituresService.OfflineExpendituresListChanged += HandleExpendituresListUpdated;
+        userRepo.OfflineUserDataChanged += HandleUserDataChanged;
     }
 
     private void HandleUserDataChanged()
@@ -84,7 +89,6 @@ public partial class ManageExpendituresViewModel : ObservableObject
     public int startAction;
     [RelayCommand]
     //Function to show very single expenditure from DB
-
     public void GetAllExp()
     {
         try

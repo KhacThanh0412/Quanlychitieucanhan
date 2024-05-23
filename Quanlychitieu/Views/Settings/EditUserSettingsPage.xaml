@@ -10,7 +10,7 @@
     xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
     xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Settings"
     x:Name="settingsPage"
-    Title="Edit Profile"
+    Title="Chỉnh sửa thông tin cá nhân"
     x:DataType="viewModel:UserSettingsViewModel">
     <toolkit:DockLayout>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Top">
@@ -22,11 +22,11 @@
             toolkit:DockLayout.DockPosition="Top"
             Spacing="10"
             SubmitCommand="{Binding UpdateUserInformationCommand}">
-            <material:TextField Title="User name" Text="{Binding ActiveUser.Username}">
-                <validation:RequiredValidation Message="Please enter your Username" />
+            <material:TextField Title="Họ và tên" Text="{Binding ActiveUser.Username}">
+                <validation:RequiredValidation Message="Vui lòng nhập họ và tên" />
             </material:TextField>
             <material:TextField Title="Email" Text="{Binding ActiveUser.Email}">
-                <validation:RequiredValidation Message="Please enter your Email" />
+                <validation:RequiredValidation Message="Vui lòng nhập Email" />
             </material:TextField>
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5">
                 <material:PickerField
@@ -38,7 +38,7 @@
                     SelectedValueChanged="CountryPicker_SelectedValueChanged"
                     TextColor="{AppThemeBinding Light=black}"
                     TitleColor="{AppThemeBinding Light=black}">
-                    <validation:RequiredValidation Message="Please Select a Country" />
+                    <validation:RequiredValidation Message="Vui lòng chọn địa chỉ" />
                 </material:PickerField>
                 <Label
                     Grid.Column="1"
