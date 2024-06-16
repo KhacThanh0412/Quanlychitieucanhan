@@ -272,7 +272,7 @@
                         FontAttributes="Bold"
                         FontSize="20"
                         HeightRequest="50"
-                        Text="Quick Login"
+                        Text="Đăng nhập tài khoản hiện tại"
                         TextColor="White" />
 
                 </VerticalStackLayout>

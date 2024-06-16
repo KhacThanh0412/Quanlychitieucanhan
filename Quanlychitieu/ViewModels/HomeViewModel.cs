@@ -132,7 +132,7 @@ namespace Quanlychitieu.ViewModels
             {
                 foreach (var ex in aEx.InnerExceptions)
                 {
-                    await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Error when syncing " + ex.Message));
+                    await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Lỗi khi đồng bộ " + ex.Message));
                 }
             }
         }
@@ -170,7 +170,7 @@ namespace Quanlychitieu.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"PopUp Exception on {DeviceInfo.Platform} : {ex.Message}");
+                Debug.WriteLine($"Exception : {ex.Message}");
             }
         }
 

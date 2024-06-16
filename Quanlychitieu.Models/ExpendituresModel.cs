@@ -44,16 +44,16 @@ public class ExpendituresModel : INotifyPropertyChanged
 public enum ExpenditureCategory
 {
     [Description("Học tập")]
-    Education = 0,
+    HocTap = 0,
 
     [Description("Giải trí")]
-    Entertainment = 1,
+    GiaiTri = 1,
 
     [Description("Ăn uống")]
-    Food = 2,
+    AnUong = 2,
 
     [Description("Sức khỏe")]
-    Health = 3,
+    SucKhoe = 3,
 
     [Description("Không có")]
     None = 4,

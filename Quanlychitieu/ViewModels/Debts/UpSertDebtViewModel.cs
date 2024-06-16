@@ -202,8 +202,6 @@ public partial class UpSertDebtViewModel(IDebtRepository debtRepository, IUsersR
             var eventID = await calendarStoreRepo.CreateEventWithReminder(calendarProfileID, "Thời gian chờ !",
                 $"{(SingleDebtDetails.DebtType == DebtType.Lent ? $"{SingleDebtDetails.PersonOrOrganization.Name} Nợ bạn" : $"Bạn nợ {SingleDebtDetails.PersonOrOrganization.Name}")} {SingleDebtDetails.Amount} {SingleDebtDetails.Currency} {Environment.NewLine}{SingleDebtDetails.PhoneAddress}",
                 "Ứng dụng quản lý chi tiêu", deadlineOffsetStart, deadlineOffsetEnd, 30);
-
-            Debug.WriteLine("Event ID " + eventID);
         }
 
         const string toastNotifMessage = "Thêm";

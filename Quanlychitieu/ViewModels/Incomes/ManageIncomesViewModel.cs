@@ -73,7 +73,7 @@ public partial class ManageIncomesViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception MESSAGE: {ex.Message}");
+            Debug.WriteLine($"Exception: {ex.Message}");
         }
     }
 

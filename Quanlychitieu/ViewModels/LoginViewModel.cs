@@ -127,8 +127,6 @@ namespace Quanlychitieu.ViewModels
             var dict = countryAndCurrency.LoadDictionaryWithCountryAndCurrency();
             CurrentUser.UserCountry = SelectedCountry;
             dict.TryGetValue(SelectedCountry, out userCurrency);
-
-            Debug.WriteLine($"The Country Name is {SelectedCountry}, and its currency is {userCurrency}");
         }
 
         [RelayCommand]
@@ -157,7 +155,6 @@ namespace Quanlychitieu.ViewModels
             }
             else
             {
-                Debug.WriteLine("Failed to add user");
             }
         }
 
@@ -224,7 +221,7 @@ namespace Quanlychitieu.ViewModels
             {
                 foreach (var ex in aEx.InnerExceptions)
                 {
-                    await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Error when syncing " + ex.Message));
+                    await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Lỗi khi đồng bộ " + ex.Message));
                 }
             }
         }

@@ -137,8 +137,6 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository, IEx
         SelectCountryCurrency = curr;
         ActiveUser.UserCurrency = curr;
         ActiveUser.UserCountry = countryName;
-
-        Debug.WriteLine($"The Country Name is {countryName}, and its currency is {ActiveUser.UserCurrency}");
     }
 
     [RelayCommand]

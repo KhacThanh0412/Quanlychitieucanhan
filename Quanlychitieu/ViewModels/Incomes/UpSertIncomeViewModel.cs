@@ -79,7 +79,7 @@ public partial class UpSertIncomeViewModel : ObservableObject
         SingleIncomeDetails.PlatformModel = DeviceInfo.Current.Model;
         if (FinalPocketMoney < 0)
         {
-            // show error that.. for some reason, you amount can't be -ve
+            // Chưa xử lý
         }
         else if (await incomeService.UpdateIncomeAsync(SingleIncomeDetails))
         {
@@ -88,7 +88,7 @@ public partial class UpSertIncomeViewModel : ObservableObject
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
             await userService.UpdateUserAsync(ActiveUser);
 
-            const string toastNotifMessage = "Flow In Update";
+            const string toastNotifMessage = "Đang cập nhật";
             var toastObj = Toast.Make(toastNotifMessage, duration, fontSize);
             await toastObj.Show(tokenSource.Token);
 
@@ -101,8 +101,7 @@ public partial class UpSertIncomeViewModel : ObservableObject
         SingleIncomeDetails.Currency = ActiveUser.UserCurrency;
         if (SingleIncomeDetails.AmountReceived <= 0)
         {
-            //call the error popup page here
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Amount Receive must be greater than 0"));
+            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Số tiền không thể nhỏ hơn 0"));
             return;
         }
         else

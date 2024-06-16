@@ -88,7 +88,6 @@ public partial class ManageExpendituresViewModel : ObservableObject
     [ObservableProperty]
     public int startAction;
     [RelayCommand]
-    //Function to show very single expenditure from DB
     public void GetAllExp()
     {
         try
@@ -105,7 +104,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception when loading all exp MESSAGE: {ex.Message}");
+            Debug.WriteLine($"Exception: {ex.Message}");
         }
     }
 
@@ -152,7 +151,6 @@ public partial class ManageExpendituresViewModel : ObservableObject
     {
         if (ActiveUser is null)
         {
-            Debug.WriteLine("Can't Open Add Exp PopUp user is null");
             await Shell.Current.DisplayAlert("Đợi", "Không thể đi", "Ok");
         }
         else

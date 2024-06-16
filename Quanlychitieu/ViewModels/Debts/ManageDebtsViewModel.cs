@@ -107,7 +107,7 @@ public partial class ManageDebtsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception when loading all debts MESSAGE : {ex.Message}");
+            Debug.WriteLine($"Exception : {ex.Message}");
         }
     }
 
@@ -200,7 +200,6 @@ public partial class ManageDebtsViewModel : ObservableObject
     {
         if (ActiveUser is null)
         {
-            Debug.WriteLine("Can't Open Add Debt PopUp because User is null");
             await Shell.Current.DisplayAlert("Đợi", "Không thể đi", "Ok");
         }
         else
@@ -247,7 +246,7 @@ public partial class ManageDebtsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"FLOW HOLD EXCEPTION : {ex.Message}");
+            Debug.WriteLine($"Exception : {ex.Message}");
         }
     }
 
@@ -295,7 +294,6 @@ public partial class ManageDebtsViewModel : ObservableObject
         var result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new UpSertInstallmentPayment(upSertDebtVM));
         {
             RefreshTitleText();
-            Debug.WriteLine($"Installments Popup Closed {result.Result}");
         }
     }
     [RelayCommand]
@@ -404,7 +402,7 @@ public partial class ManageDebtsViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Exception when Marking as completed debt MESSAGE : {ex.Message}");
+                Debug.WriteLine($"Exception : {ex.Message}");
             }
         }
 
@@ -429,7 +427,7 @@ public partial class ManageDebtsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception when opening phone dialer MESSAGE : {ex.Message}");
+            Debug.WriteLine($"Exception : {ex.Message}");
         }
     }
 
@@ -441,7 +439,7 @@ public partial class ManageDebtsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Error when added debts "+ ex.Message);
+            Debug.WriteLine("Error "+ ex.Message);
         }
     }
 }
