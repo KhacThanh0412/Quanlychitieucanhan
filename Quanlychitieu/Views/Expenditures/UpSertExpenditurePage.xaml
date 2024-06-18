@@ -110,38 +110,6 @@
                 </material:EditorField.Validations>
             </material:EditorField>
 
-            <material:CheckBox
-                x:Name="AddTaxCheckBox"
-                Margin="5,0,10,0"
-                BorderColor="Gray"
-                CheckChanged="AddTax_CheckChanged"
-                IsChecked="{Binding IsAddTaxesChecked}"
-                Text="Thuế" />
-
-            <ListView
-                x:Name="TaxesList"
-                IsVisible="{Binding IsAddTaxesChecked}"
-                ItemsSource="{Binding ActiveUser.Taxes}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:TaxModel">
-                        <ViewCell>
-                            <material:CheckBox
-                                Margin="0,2"
-                                BorderColor="Gray"
-                                CheckChanged="TaxCheckbox_CheckChanged"
-                                IsChecked="{Binding IsChecked}">
-                                <material:CheckBox.Text>
-                                    <MultiBinding StringFormat="{} {0} : {1} %">
-                                        <Binding Path="Name" />
-                                        <Binding Path="Rate" />
-                                    </MultiBinding>
-                                </material:CheckBox.Text>
-                            </material:CheckBox>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
             <ImageButton input:FormView.IsSubmitButton="True" Source="{AppThemeBinding Dark=save_icon_d, Light=save_icon_l}" />
 
 

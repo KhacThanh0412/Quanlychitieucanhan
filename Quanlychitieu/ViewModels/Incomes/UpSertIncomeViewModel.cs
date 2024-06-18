@@ -98,7 +98,6 @@ public partial class UpSertIncomeViewModel : ObservableObject
 
     async Task AddIncomeAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
     {
-        SingleIncomeDetails.Currency = ActiveUser.UserCurrency;
         if (SingleIncomeDetails.AmountReceived <= 0)
         {
             await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Số tiền không thể nhỏ hơn 0"));
@@ -110,7 +109,6 @@ public partial class UpSertIncomeViewModel : ObservableObject
             SingleIncomeDetails.UserId = ActiveUser.Id;
             SingleIncomeDetails.AddedDateTime = DateTime.UtcNow;
             SingleIncomeDetails.UpdatedDateTime = DateTime.UtcNow;
-            SingleIncomeDetails.UserId = ActiveUser.UserIDOnline;
             SingleIncomeDetails.PlatformModel = DeviceInfo.Current.Model;
             if (await incomeService.AddIncomeAsync(SingleIncomeDetails))
             {

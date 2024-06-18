@@ -78,7 +78,6 @@ public partial class ManageExpendituresViewModel : ObservableObject
         ActiveUser = user;
 
         UserPocketMoney = ActiveUser.PocketMoney;
-        UserCurrency = ActiveUser.UserCurrency;
         GetAllExp();
 
     }
@@ -239,7 +238,6 @@ public partial class ManageExpendituresViewModel : ObservableObject
     [RelayCommand]
     public async Task CopyToClipboard(ExpendituresModel singlExp)
     {
-        await Clipboard.SetTextAsync($"{singlExp.Reason} : {singlExp.AmountSpent} {ActiveUser.UserCurrency}");
         CancellationTokenSource cancellationTokenSource = new();
         const ToastDuration duration = ToastDuration.Short;
         const double fontSize = 14;

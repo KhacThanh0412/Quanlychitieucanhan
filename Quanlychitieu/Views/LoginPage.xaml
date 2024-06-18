@@ -10,16 +10,12 @@
     x:DataType="viewModel:LoginViewModel"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False" IsVisible="False" />
+    </Shell.BackButtonBehavior>
     <ScrollView>
         <VerticalStackLayout Spacing="5">
             <VerticalStackLayout>
-                <Image
-                    Grid.Row="0"
-                    Margin="5"
-                    HeightRequest="70"
-                    HorizontalOptions="Center"
-                    Source="{AppThemeBinding Dark=user_icon_d,
-                                             Light=user_icon_l}" />
                 <Label
                     FontAttributes="Bold"
                     FontSize="Title"
@@ -134,150 +130,98 @@
                 </Border>
             </VerticalStackLayout>
 
-            <VerticalStackLayout>
+            <StackLayout>
                 <!--  Section for Login begins below  -->
-                <VerticalStackLayout x:Name="LoginForm" Margin="25">
-
-                    <input:FormView Spacing="25" SubmitCommand="{Binding GoToHomePageFromLoginCommand}">
-                        <Label
-                            x:Name="NoUserFoundText"
-                            FontAttributes="Bold"
-                            FontSize="23"
-                            HorizontalOptions="Center"
-                            IsVisible="{Binding ErrorMessageVisible}"
-                            Text="Nhấn đăng nhập trực tuyến lại"
-                            TextColor="CadetBlue" />
-                        <Label IsVisible="{Binding IsBusy}" Text="Đồng bộ hóa luồng của bạn" />
-                        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-                        <material:TextField
-                            Title="Email"
-                            AllowClear="True"
-                            Icon="{AppThemeBinding Dark=email_icon_d.png,
-                                                   Light=email_icon_l.png}"
-                            IsTextPredictionEnabled="True"
-                            Text="{Binding CurrentUser.Email}">
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation />
-                            </material:TextField.Validations>
-                        </material:TextField>
-                        <material:TextField
-                            Title="Mật khẩu"
-                            Icon="{AppThemeBinding Dark=password_d.png,
-                                                   Light=password_l.png}"
-                            IsPassword="True"
-                            Text="{Binding CurrentUser.Password}">
-                            <material:TextField.Attachments>
-                                <material:TextFieldPasswordShowHideAttachment />
-                            </material:TextField.Attachments>
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation />
-                            </material:TextField.Validations>
-                        </material:TextField>
-                        <ImageButton
-                            input:FormView.IsSubmitButton="True"
-                            IsVisible="false"
-                            Source="{AppThemeBinding Dark=login_d,
-                                                     Light=login_l}" />
-
-                        <ImageButton
-                            x:Name="LoginButton"
-                            input:FormView.IsSubmitButton="True"
-                            Clicked="LoginOnlineBtn_Clicked"
-                            Source="{AppThemeBinding Dark=login_online_d,
-                                                     Light=login_online_l}" />
-
-
-                    </input:FormView>
-
-                </VerticalStackLayout>
+                <StackLayout
+                    x:Name="LoginForm"
+                    Margin="25"
+                    Spacing="25">
+                    <Label
+                        x:Name="NoUserFoundText"
+                        FontAttributes="Bold"
+                        FontSize="23"
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding ErrorMessageVisible}"
+                        Text="Email hoặc mật khẩu không đúng vui lòng nhập lại"
+                        TextColor="CadetBlue" />
+                    <material:TextField
+                        Title="Email"
+                        AllowClear="True"
+                        Icon="{AppThemeBinding Dark=email_icon_d.png,
+                                               Light=email_icon_l.png}"
+                        IsTextPredictionEnabled="True"
+                        Text="{Binding Email}">
+                        <material:TextField.Validations>
+                            <validation:RequiredValidation />
+                        </material:TextField.Validations>
+                    </material:TextField>
+                    <material:TextField
+                        Title="Mật khẩu"
+                        Icon="{AppThemeBinding Dark=password_d.png,
+                                               Light=password_l.png}"
+                        IsPassword="True"
+                        Text="{Binding Password}">
+                        <material:TextField.Attachments>
+                            <material:TextFieldPasswordShowHideAttachment />
+                        </material:TextField.Attachments>
+                        <material:TextField.Validations>
+                            <validation:RequiredValidation />
+                        </material:TextField.Validations>
+                    </material:TextField>
+                    <ImageButton
+                        x:Name="LoginButton"
+                        input:FormView.IsSubmitButton="True"
+                        Source="{AppThemeBinding Dark=login_d,
+                                                 Light=login_l}">
+                        <ImageButton.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToHomePageFromLoginCommand}" CommandParameter="{Binding .}" />
+                        </ImageButton.GestureRecognizers>
+                    </ImageButton>
+                </StackLayout>
 
                 <!--  Section for Registration begins below  -->
-                <VerticalStackLayout
+                <StackLayout
                     x:Name="RegisterForm"
                     Margin="25"
-                    Opacity="0">
-                    <input:FormView Spacing="20" SubmitCommand="{Binding GoToHomePageFromRegisterCommand}">
-                        <material:TextField
-                            Title="Tên tài khoản"
-                            Icon="{AppThemeBinding Dark=user_icon_d.png,
-                                                   Light=user_icon_l.png}"
-                            Text="{Binding CurrentUser.Username}">
+                    Opacity="0"
+                    Spacing="20">
+                    <material:TextField
+                        Title="Tên tài khoản"
+                        Icon="{AppThemeBinding Dark=user_icon_d.png,
+                                               Light=user_icon_l.png}"
+                        Text="{Binding UserName}">
+                        <validation:RequiredValidation />
+                    </material:TextField>
+                    <material:TextField
+                        Title="Email"
+                        Icon="{AppThemeBinding Dark=email_icon_d.png,
+                                               Light=email_icon_l.png}"
+                        Text="{Binding Email}">
+                        <material:TextField.Validations>
                             <validation:RequiredValidation />
-                        </material:TextField>
-                        <material:TextField
-                            Title="Email"
-                            Icon="{AppThemeBinding Dark=email_icon_d.png,
-                                                   Light=email_icon_l.png}"
-                            Text="{Binding CurrentUser.Email}">
-                            <material:TextField.Validations>
-                                <validation:RequiredValidation />
-                            </material:TextField.Validations>
-                        </material:TextField>
-                        <material:TextField
-                            Title="Mật khẩu"
-                            Icon="{AppThemeBinding Dark=password_d.png,
-                                                   Light=password_l.png}"
-                            IsPassword="True"
-                            Text="{Binding CurrentUser.Password}">
-                            <validation:RequiredValidation />
-                            <material:TextField.Attachments>
-                                <material:TextFieldPasswordShowHideAttachment />
-                            </material:TextField.Attachments>
-                        </material:TextField>
-                        <material:TextField
-                            Title="Số dư hiện tại"
-                            Icon="{AppThemeBinding Dark=pocket_money_icon_d.png,
-                                                   Light=pocket_money_icon_l.png}"
-                            Keyboard="Numeric"
-                            Text="{Binding PocketMoney}">
-                            <material:TextField.Validations>
-                                <validation:MinValueValidation Message="Số dư hiện tại không thể nhỏ hơn 1" MinValue="1" />
-                                <validation:RequiredValidation />
-                            </material:TextField.Validations>
-                        </material:TextField>
-                        <ImageButton input:FormView.IsSubmitButton="True" Source="{AppThemeBinding Dark=register_account_d, Light=register_account_l}" />
-                        <Button
-                            input:FormView.IsSubmitButton="True"
-                            BackgroundColor="DarkSlateBlue"
-                            FontAttributes="Bold"
-                            FontSize="20"
-                            IsVisible="False"
-                            Text="Đăng ký tài khoản" />
-
-                    </input:FormView>
-
-                </VerticalStackLayout>
-
-
-                <!--  Section for QUICK Login begins below  -->
-                <VerticalStackLayout
-                    x:Name="QuickLogin"
-                    Margin="0,200,0,0"
-                    IsVisible="false"
-                    Spacing="15"
-                    VerticalOptions="Center">
-
-                    <Label
-                        x:Name="WelcomeLabel"
-                        FontAttributes="Bold"
-                        FontSize="Title"
-                        HorizontalOptions="Center"
-                        Text="{Binding Username, StringFormat='Signed in as {0}'}" />
-
-
+                        </material:TextField.Validations>
+                    </material:TextField>
+                    <material:TextField
+                        Title="Mật khẩu"
+                        Icon="{AppThemeBinding Dark=password_d.png,
+                                               Light=password_l.png}"
+                        IsPassword="True"
+                        Text="{Binding Password}">
+                        <validation:RequiredValidation />
+                        <material:TextField.Attachments>
+                            <material:TextFieldPasswordShowHideAttachment />
+                        </material:TextField.Attachments>
+                    </material:TextField>
                     <Button
-                        x:Name="QuickLoginBtn"
-                        Margin="70,70,70,0"
-                        Clicked="QuickLoginBtn_Clicked"
+                        input:FormView.IsSubmitButton="True"
+                        BackgroundColor="DarkSlateBlue"
+                        Command="{Binding GoToHomePageFromRegisterCommand}"
                         FontAttributes="Bold"
                         FontSize="20"
-                        HeightRequest="50"
-                        Text="Đăng nhập tài khoản hiện tại"
-                        TextColor="White" />
-
-                </VerticalStackLayout>
-
-            </VerticalStackLayout>
+                        IsVisible="True"
+                        Text="Đăng ký" />
+                </StackLayout>
+            </StackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

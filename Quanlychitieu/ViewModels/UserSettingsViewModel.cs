@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
+using Newtonsoft.Json;
 using Quanlychitieu.AdditionalResourcefulAPIClasses;
 using Quanlychitieu.DataAccess.IRepositories;
 using Quanlychitieu.Models;
@@ -8,28 +9,18 @@ using Quanlychitieu.Utilities;
 using Quanlychitieu.ViewModels;
 using Quanlychitieu.Views;
 
-namespace Quanlychitieu.ViewModels.Settings;
+namespace Quanlychitieu.ViewModels;
 
-public partial class UserSettingsViewModel(IUsersRepository usersRepository, IExpendituresRepository expendituresRepository,
-    IIncomeRepository incomeRepository, IDebtRepository debtRepository,
-    HomeViewModel homePageVM) : ObservableObject
+public partial class UserSettingsViewModel : BaseViewModel
 {
-    private readonly CountryAndCurrencyCodes countryAndCurrency = new();
-
-    LoginNavs NavFunctions = new();
-    [ObservableProperty]
-    public List<string> countryNamesList = new();
-
+    private readonly IUsersRepository usersRepository;
+    private readonly IExpendituresRepository expendituresRepository;
+    private readonly IIncomeRepository incomeRepository;
+    private readonly IDebtRepository debtRepository;
     [ObservableProperty]
     public double pocketMoney;
     [ObservableProperty]
     public string userCurrency;
-    [ObservableProperty]
-    public string userCountry;
-    [ObservableProperty]
-    public string userName;
-    [ObservableProperty]
-    public string userEmail;
     [ObservableProperty]
     public double totalIncomeAmount;
     [ObservableProperty]
@@ -44,30 +35,27 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository, IEx
     public double totalLentPendingAmount;
     [ObservableProperty]
     public string selectCountryCurrency;
-
     [ObservableProperty]
-    private UsersModel activeUser = new();
+    private UsersModel _activeUser;
 
     [ObservableProperty]
     bool isNotInEditingMode;
 
-    [ObservableProperty]
-    private ObservableCollection<TaxModel> taxes;
-
-    [RelayCommand]
-    public void PageLoaded()
+    public UserSettingsViewModel(IUsersRepository usersRepository)
     {
-        ActiveUser = usersRepository.User;
-        PocketMoney = ActiveUser.PocketMoney;
-        UserCurrency = ActiveUser.UserCurrency;
-        UserCountry = ActiveUser.UserCountry;
-        UserEmail = ActiveUser.Email;
-        UserName = ActiveUser.Username;
-        Taxes = ActiveUser.Taxes is not null ? new ObservableCollection<TaxModel>(ActiveUser.Taxes) : [];
-        
-        IsNotInEditingMode = true;
-        SelectCountryCurrency = ActiveUser.UserCurrency;
-        GetTotals();
+        this.usersRepository = usersRepository;
+    }
+
+    public async override Task LoadDataAsync()
+    {
+        var userJson = await SecureStorage.GetAsync("user");
+        if (!string.IsNullOrEmpty(userJson))
+        {
+            ActiveUser = JsonConvert.DeserializeObject<UsersModel>(userJson);
+        }
+
+        // GetTotals();
+        await base.LoadDataAsync();
     }
 
     private void GetTotals()
@@ -95,18 +83,10 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository, IEx
             .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely)
             .OrderBy(x => x.AddedDateTime)); //tổng nợ vẫn đang chờ người dùng trả
 
-
-
         TotalBorrowedCompletedAmount = BorrowedCompletedList.Sum(x => x.Amount);
         TotalBorrowedPendingAmount = BorrowedPendingList.Sum(x => x.Amount);
         TotalLentCompletedAmount = LentCompletedList.Sum(x => x.Amount);
         TotalLentPendingAmount = LentPendingList.Sum(x => x.Amount);
-
-    }
-
-    public void GetCountryNamesList()
-    {
-        CountryNamesList = countryAndCurrency.GetCountryNames();
     }
 
     [RelayCommand]
@@ -122,21 +102,7 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository, IEx
             await expendituresRepository.LogOutUserAsync();
             await incomeRepository.LogOutUserAsync();
             await debtRepository.LogOutUserAsync();
-            homePageVM._isInitialized = false;
-
-            await NavFunctions.GoToLoginInPage();
         }
-    }
-
-    [RelayCommand]
-    public void CurrencyFromCountryPicked(string countryName)
-    {
-        Dictionary<string, string> dictOfCountry = countryAndCurrency.LoadDictionaryWithCountryAndCurrency();
-        string curr;
-        dictOfCountry.TryGetValue(countryName, out curr);
-        SelectCountryCurrency = curr;
-        ActiveUser.UserCurrency = curr;
-        ActiveUser.UserCountry = countryName;
     }
 
     [RelayCommand]
@@ -152,12 +118,6 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository, IEx
         if (dialogResult)
         {
             ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-
-            if (Taxes is not null)
-            {
-                ActiveUser.Taxes = Taxes.ToList();
-            }
-
             await expendituresRepository.GetAllExpendituresAsync();
             if (await usersRepository.UpdateUserAsync(ActiveUser))
             {
@@ -173,63 +133,5 @@ public partial class UserSettingsViewModel(IUsersRepository usersRepository, IEx
             }
         }
         IsNotInEditingMode = true;
-    }
-
-    [RelayCommand]
-    public void DeleteIdsCollection()
-    {
-    }
-
-    [RelayCommand]
-    public async Task AddTax()
-    {
-        List<string> fieldTitles = new() { "Tên thuế", "Phần trăm thuế" };
-        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Thêm thông tin thuế", IsDeleteBtnVisible: false));
-        if (result.Result == PopupResult.OK)
-        {
-            Dictionary<string, double> dict = (Dictionary<string, double>)result.Data;
-            TaxModel tax = new() { Name = dict.Keys.First(), Rate = dict.Values.First() };
-
-            Taxes ??= new ObservableCollection<TaxModel>();
-            Taxes.Add(tax);
-        }
-    }
-
-    [RelayCommand]
-    public async Task ViewEditDeleteTax(TaxModel Selectedtax)
-    {
-        List<string> fieldTitles = new() { "Tên thuế", "Phần trăm thuế" };
-        PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric | InputType.Text, fieldTitles, "Thông tin thuế", Selectedtax, true));
-        if (result.Result == PopupResult.OK)
-        {
-            int indexOfTax = Taxes.IndexOf(Selectedtax);
-            if (indexOfTax != -1)
-            {
-                Dictionary<string, double> dict = (Dictionary<string, double>)result.Data;
-                TaxModel tax = new() { Name = dict.Keys.First(), Rate = dict.Values.First() };
-                Taxes[indexOfTax] = tax;
-            }
-        }
-        else if (result.Result == PopupResult.Delete)
-        {
-            Taxes.Remove(Selectedtax);
-        }
-    }
-
-    [ObservableProperty]
-    int selectedTheme;
-    [ObservableProperty]
-    bool isLightTheme;
-
-    public void SetThemeConfig()
-    {
-        SelectedTheme = AppThemesSettings.ThemeSettings.Theme;
-        IsLightTheme = SelectedTheme == 0;
-    }
-    [RelayCommand]
-    public void ThemeToggler()
-    {
-        SelectedTheme = AppThemesSettings.ThemeSettings.SwitchTheme();
-        IsLightTheme = !IsLightTheme;
     }
 }

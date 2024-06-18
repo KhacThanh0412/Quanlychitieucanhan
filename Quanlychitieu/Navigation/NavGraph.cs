@@ -12,8 +12,8 @@ namespace Quanlychitieu.Navigation
         public static void RegisterRoute()
         {
             Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
-            Routing.RegisterRoute(nameof(RecentTransactionsView), typeof(RecentTransactionsView));
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(UserSettingsPage), typeof(UserSettingsPage));
         }
     }
 }

@@ -17,16 +17,11 @@ public partial class UpSertExpenditurePage : ContentPage
     {
         base.OnAppearing();
         viewModel.PageLoaded();
-        if (viewModel.IsAddTaxesChecked)
-        {
-            AddTaxCheckBox.IsChecked = true;
-        }
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        AddTaxCheckBox.IsChecked = false;
     }
 
     private void UnitPriceOrQty_TextChanged(object sender, TextChangedEventArgs e)
@@ -61,19 +56,5 @@ public partial class UpSertExpenditurePage : ContentPage
 
     private void AddTax_CheckChanged(object sender, EventArgs e)
     {
-        if (AddTaxCheckBox.IsChecked)
-        {
-            foreach (TaxModel tax in TaxesList.ItemsSource)
-            {
-                viewModel.AddTax(tax);
-            }
-        }
-        else
-        {
-            foreach (TaxModel tax in TaxesList.ItemsSource)
-            {
-                viewModel.RemoveTax(tax);
-            }
-        }
     }
 }

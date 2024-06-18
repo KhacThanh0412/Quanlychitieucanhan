@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="Quanlychitieu.Views.Settings.UserSettingsPage"
+    x:Class="Quanlychitieu.Views.UserSettingsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Settings"
+    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels"
     Title="Thông tin cá nhân"
     x:DataType="viewModel:UserSettingsViewModel">
-
-    <toolkit:DockLayout BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}, Dark={StaticResource BackGroundDark}}">
+    <StackLayout>
         <Border
-            toolkit:DockLayout.DockPosition="Top"
             BackgroundColor="{AppThemeBinding Light=White,
                                               Dark=#171717}"
             Stroke="transparent"
@@ -26,10 +24,10 @@
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="20"
-                                Text="{Binding UserName}" />
+                                Text="{Binding ActiveUser.Username}" />
                             <HorizontalStackLayout Spacing="5">
                                 <Image HeightRequest="20" Source="{AppThemeBinding Light=email_dsb, Dark=email_dsb}" />
-                                <Label Text="{Binding UserEmail}" />
+                                <Label Text="{Binding ActiveUser.Email}" />
                             </HorizontalStackLayout>
 
                         </VerticalStackLayout>
@@ -89,9 +87,6 @@
                     <Rectangle Fill="darkslateblue" />
 
                     <VerticalStackLayout HorizontalOptions="End" Spacing="5">
-                        <VerticalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding DeleteIdsCollectionCommand}" NumberOfTapsRequired="2" />
-                        </VerticalStackLayout.GestureRecognizers>
                         <!--  For total debts  -->
                         <Label FontAttributes="Bold">
                             <Label.Text>
@@ -136,7 +131,7 @@
                     <Label
                         FontAttributes="Bold"
                         FontSize="15"
-                        Text="{Binding UserName}" />
+                        Text="{Binding ActiveUser.Username}" />
                 </VerticalStackLayout>
                 <Rectangle />
 
@@ -145,54 +140,14 @@
                     <Label
                         FontAttributes="Bold"
                         FontSize="15"
-                        Text="{Binding UserEmail}" />
+                        Text="{Binding ActiveUser.Email}" />
                 </VerticalStackLayout>
-                <Rectangle />
-
-                <VerticalStackLayout Margin="5,15" Spacing="10">
-                    <Label FontSize="13" Text="Địa chỉ" />
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="15"
-                        Text="{Binding UserCountry}" />
-                </VerticalStackLayout>
-                <Rectangle />
-
-                <VerticalStackLayout Margin="5,15" Spacing="10">
-                    <Label FontSize="11" Text="Tiền tệ" />
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="15"
-                        Text="{Binding UserCurrency}" />
-                </VerticalStackLayout>
-                <Rectangle />
 
                 <VerticalStackLayout
                     Margin="5,15"
                     IsVisible="false"
                     Spacing="10">
                     <Label FontSize="13" Text="Taxes" />
-                    <ListView
-                        ItemsSource="{Binding ActiveUser.Taxes}"
-                        SelectionMode="None"
-                        SeparatorVisibility="None"
-                        VerticalScrollBarVisibility="Never">
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="models:TaxModel">
-                                <ViewCell>
-
-                                    <Label FontAttributes="Bold" FontSize="15">
-                                        <Label.Text>
-                                            <MultiBinding StringFormat="{} {0} : {1} %">
-                                                <Binding Path="Name" />
-                                                <Binding Path="Rate" />
-                                            </MultiBinding>
-                                        </Label.Text>
-                                    </Label>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
                 </VerticalStackLayout>
                 <ImageButton
                     Command="{Binding LogOutUserCommand}"
@@ -203,5 +158,5 @@
 
             </VerticalStackLayout>
         </ScrollView>
-    </toolkit:DockLayout>
+    </StackLayout>
 </ContentPage>

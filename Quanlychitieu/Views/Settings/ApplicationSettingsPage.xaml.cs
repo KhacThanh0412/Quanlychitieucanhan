@@ -1,17 +1,14 @@
 using Microsoft.Maui.Controls;
-using Quanlychitieu.ViewModels.Settings;
+using Quanlychitieu.ViewModels;
 
 namespace Quanlychitieu.Views.Settings;
 
 public partial class ApplicationSettingsPage : ContentPage
 {
     UserSettingsViewModel viewModel;
-    public ApplicationSettingsPage(UserSettingsViewModel vm)
+    public ApplicationSettingsPage()
     {
         InitializeComponent();
-        viewModel = vm;
-        BindingContext = vm;
-        // viewModel.SetThemeConfig();
     }
 
     private async void ImageButton_Clicked(object sender, EventArgs e)

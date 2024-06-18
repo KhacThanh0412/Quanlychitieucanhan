@@ -153,17 +153,5 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresViewModel : Observab
         Debug.WriteLine(ListofListofExps.Count);
         Debug.WriteLine(listofExpTitles.Count);
         PrintFunction = new PrintDetailsMonthlyExpenditure();
-        string dialogueResponse = (string)await Shell.Current.ShowPopupAsync(new InputCurrencyForPrintPopUpPage("Share PDF File? (Requires Internet)", ActiveUser.UserCurrency));
-        if (dialogueResponse is not "Cancel")
-        {
-            if (Connectivity.NetworkAccess.Equals(NetworkAccess.Internet))
-            {
-                await PrintFunction.SaveListDetailMonthlyPlanned(ListofListofExps, ActiveUser.UserCurrency, dialogueResponse, ActiveUser.Username, listofExpTitles);
-            }
-            else
-            {
-                await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("No Internet Found ! \nPlease Connect to the Internet"));
-            }
-        }
     }
 }

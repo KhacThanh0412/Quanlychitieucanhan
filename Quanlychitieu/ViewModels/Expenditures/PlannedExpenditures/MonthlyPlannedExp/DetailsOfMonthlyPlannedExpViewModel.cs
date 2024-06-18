@@ -51,7 +51,6 @@ public partial class DetailsOfMonthlyPlannedExpViewModel : ObservableObject
     public void PageLoaded()
     {
         // UsersModel user = ActiveUser;
-        UserCurrency = ActiveUser.UserCurrency;
         GetAllPlannedExpForMonth();
     }
 

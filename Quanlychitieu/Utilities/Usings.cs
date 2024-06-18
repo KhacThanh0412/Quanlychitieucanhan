@@ -6,7 +6,7 @@ global using Quanlychitieu.ViewModels;
 global using Quanlychitieu.ViewModels.Expenditures;
 global using Quanlychitieu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 global using Quanlychitieu.ViewModels.Incomes;
-global using Quanlychitieu.ViewModels.Settings;
+global using Quanlychitieu.ViewModels;
 global using Quanlychitieu.ViewModels.Statistics;
 global using Quanlychitieu.ViewModels.Debts;
 

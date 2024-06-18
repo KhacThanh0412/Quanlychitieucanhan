@@ -12,7 +12,7 @@ using Quanlychitieu.DataAccess;
 using Quanlychitieu.ViewModels;
 using Quanlychitieu.ViewModels.Expenditures;
 using Quanlychitieu.ViewModels.Incomes;
-using Quanlychitieu.ViewModels.Settings;
+using Quanlychitieu.ViewModels;
 using Quanlychitieu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 using Quanlychitieu.ViewModels.Statistics;
 using Quanlychitieu.ViewModels.Debts;
@@ -34,6 +34,7 @@ namespace Quanlychitieu
             builder
                 .UseSkiaSharp(true)
                 .UseMauiApp<App>()
+                .RegisterCompatibilityRenderer()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -54,33 +55,17 @@ namespace Quanlychitieu
                 .UseUraniumUIBlurs()
                 .UseMauiCommunityToolkit();
 
-            builder.ConfigureMauiHandlers(handlers =>
-            {
-#if ANDROID
-                handlers.AddHandler(typeof(Shell), typeof(MyShellRenderer));
-#endif
-
-                handlers.AddInputKitHandlers();
-                handlers.AddUraniumUIHandlers();
-            });
-            builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
+            builder.Services.AddApplication();
+            builder.Services.AddSingleton<HttpClient>();
             /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
             builder.Services.AddSingleton(CalendarStore.Default);
             builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();
             builder.Services.AddSingleton<IIncomeRepository, IncomeRepository>();
             builder.Services.AddSingleton<IDebtRepository, DebtRepository>();
-
-            builder.Services.AddSingleton<IDataAccessRepo, DataAccessRepo>();
-            builder.Services.AddSingleton<ISettingsServiceRepository, SettingsServiceRepository>();
-            builder.Services.AddSingleton<IUsersRepository, UserRepository>();
             // builder.Services.AddSingleton<IOnlineCredentialsRepository, OnlineDataAccessRepository>();
             builder.Services.AddSingleton<IPlannedExpendituresRepository, PlannedExpendituresRepository>();
 
             /*--------------------ADDING VIEWMODELS----------------------------------------------------------------------------------------*/
-
-            /*-- Section for HomePage AND Login --*/
-            builder.Services.AddSingleton<HomeViewModel>();
-            builder.Services.AddTransient<LoginViewModel>();
 
             /*-- Section for Expenditures --*/
             builder.Services.AddSingleton<UpSertExpenditureViewModel>();
@@ -89,7 +74,6 @@ namespace Quanlychitieu
             /* -- Section for Incomes --*/
             //builder.Services.AddSingleton<UpSertIncomeViewModel>();
             builder.Services.AddSingleton<ManageIncomesViewModel>();
-            builder.Services.AddSingleton<UserSettingsViewModel>();
 
             /*-- Section for Planned Expenditures --*/
             builder.Services.AddSingleton<ManageMonthlyMonthlyPlannedExpendituresViewModel>();
@@ -105,10 +89,6 @@ namespace Quanlychitieu
             builder.Services.AddSingleton<UpSertDebtViewModel>();
             /*-------------------------------REGISTERING MOBILE VIEWS ---------------------------------------------------------------*/
 
-            /*--  REGISTERING MOBILE VIEWS --*/
-            builder.Services.AddSingleton<HomePage>();
-            builder.Services.AddSingleton<LoginPage>();
-
             /*-- Section for Expenditures --*/
             builder.Services.AddSingleton<ManageExpenditures>();
             builder.Services.AddSingleton<UpSertExpenditurePage>();
@@ -118,7 +98,6 @@ namespace Quanlychitieu
             builder.Services.AddSingleton<UpSertIncomePage>();
 
             /*-- Section for Settings --*/
-            builder.Services.AddSingleton<UserSettingsPage>();
             builder.Services.AddSingleton<ApplicationSettingsPage>();
             builder.Services.AddTransient<EditUserSettingsPage>();
 

@@ -1,4 +1,5 @@
-﻿using Quanlychitieu.Services;
+﻿using Quanlychitieu.Navigation;
+using Quanlychitieu.Services;
 using Quanlychitieu.ViewModels;
 using Quanlychitieu.Views;
 using System;
@@ -13,15 +14,20 @@ namespace Quanlychitieu
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddSingleton<FinanceService>();
-            
+            services.AddSingleton<IDataAccessRepo, DataAccessRepo>();
+            services.AddSingleton<IUsersRepository, UserRepository>();
+            services.AddSingleton<ISettingsServiceRepository, SettingsServiceRepository>();
+
+            services.AddSingleton<INavigationService, NavigationService>();
+
+
             services.AddTransient<HomePage>();
-            services.AddTransient<RecentTransactionsView>();
             services.AddSingleton<LoginPage>();
+            services.AddTransient<UserSettingsPage>();
 
             services.AddTransient<HomeViewModel>();
-            services.AddTransient<RecentTransactionsViewModel>();
             services.AddSingleton<LoginViewModel>();
+            services.AddTransient<UserSettingsViewModel>();
             return services;
         }
     }

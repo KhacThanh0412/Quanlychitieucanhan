@@ -22,7 +22,6 @@ public partial class ManageIncomesViewModel : ObservableObject
     {
         ActiveUser = userService.User;
         UserPocketMoney = ActiveUser.PocketMoney;
-        UserCurrency = ActiveUser.UserCurrency;
     }
 
     [ObservableProperty]
@@ -54,7 +53,6 @@ public partial class ManageIncomesViewModel : ObservableObject
         var user = userService.User;
         ActiveUser = user;
         UserPocketMoney = ActiveUser.PocketMoney;
-        UserCurrency = ActiveUser.UserCurrency;
         FilterGetAllIncomes();
     }
     bool IsLoaded;

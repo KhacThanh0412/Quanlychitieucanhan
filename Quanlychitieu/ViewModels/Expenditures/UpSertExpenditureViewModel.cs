@@ -121,10 +121,7 @@ public partial class UpSertExpenditureViewModel : ObservableObject
     private async Task<bool> AddExpenditureAsync(double fontSize, CancellationTokenSource tokenSource, ToastDuration toastDuration)
     {
         SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
-        SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
-        
         SingleExpenditureDetails.AddedDateTime = DateTime.UtcNow;
-        SingleExpenditureDetails.UserId = userRepo.User.UserIDOnline;
 
         if (!await expenditureRepo.AddExpenditureAsync(SingleExpenditureDetails))
         {

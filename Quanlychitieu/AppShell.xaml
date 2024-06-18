@@ -9,7 +9,6 @@
     xmlns:viewsExp="clr-namespace:Quanlychitieu.Views.Expenditures"
     xmlns:viewsInc="clr-namespace:Quanlychitieu.Views.Incomes"
     xmlns:viewsPlannedExp="clr-namespace:Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
-    xmlns:viewsSettings="clr-namespace:Quanlychitieu.Views.Settings"
     xmlns:viewsStats="clr-namespace:Quanlychitieu.Views.Statistics"
     CurrentItem="{x:Reference login}">
     <Shell.Behaviors>
@@ -55,21 +54,11 @@
             ContentTemplate="{DataTemplate viewsDebts:DebtsOverviewPage}"
             Icon="{AppThemeBinding Dark=time_to_pay_d,
                                    Light=time_to_pay_l}" />
-
-        <Tab Title="Cài đặt" Icon="{AppThemeBinding Dark=settings_d.png, Light=settings_l.png}">
-
-            <ShellContent Title="Thông tin cá nhân" ContentTemplate="{DataTemplate viewsSettings:UserSettingsPage}" />
-
-            <ShellContent Title="Ứng dụng" ContentTemplate="{DataTemplate viewsSettings:ApplicationSettingsPage}" />
-
-        </Tab>
+        <ShellContent
+            Title="Cài đặt"
+            ContentTemplate="{DataTemplate views:UserSettingsPage}"
+            Icon="{AppThemeBinding Dark=settings_d.png,
+                                   Light=settings_l.png}"
+            Route="UserSettingsPage" />
     </TabBar>
-
-    <ShellContent
-        x:Name="login"
-        Title="Đăng nhập"
-        ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="Login" />
-
-
 </Shell>

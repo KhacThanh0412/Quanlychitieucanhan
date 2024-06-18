@@ -149,12 +149,10 @@ public partial class UpSertMonthlyPlannedExpViewModel : ObservableObject
 
     async Task<bool> AddMonthlyPlannedExp(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
     {
-        SingleMonthlyPlanned.Currency = ActiveUser.UserCurrency;
         SingleMonthlyPlanned.Id = Guid.NewGuid().ToString();
         SingleMonthlyPlanned.UserId = ActiveUser.Id;
 
         SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
-        SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
         SingleMonthlyPlanned.Expenditures.Add(SingleExpenditureDetails);
 
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;
@@ -178,7 +176,6 @@ public partial class UpSertMonthlyPlannedExpViewModel : ObservableObject
     {
         SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
 
-        SingleExpenditureDetails.Currency = ActiveUser.UserCurrency;
         SingleMonthlyPlanned.Expenditures.Add(SingleExpenditureDetails);
 
         SingleMonthlyPlanned.TotalAmount += SingleExpenditureDetails.AmountSpent;

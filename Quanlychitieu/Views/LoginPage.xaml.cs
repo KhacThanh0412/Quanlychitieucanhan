@@ -8,12 +8,11 @@ namespace Quanlychitieu.Views;
 public partial class LoginPage : ContentPage
 {
 	private readonly LoginViewModel viewModel;
-	public LoginPage(LoginViewModel vm)
+    public LoginPage(LoginViewModel vm)
 	{
 		InitializeComponent();
         viewModel = vm;
         BindingContext = vm;
-
         Microsoft.Maui.Handlers.PickerHandler.Mapper.AppendToMapping("MyCustomization", (handler, view) =>
         {
             if (view is Picker)
@@ -29,18 +28,14 @@ public partial class LoginPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await viewModel.PageLoaded();
-        bool HasLoginRemembered = viewModel.HasLoginRemembered;
-        bool isLoginFormVisible = viewModel.IsLoginFormVisible;
-
-        ToggleFormAndValidation(HasLoginRemembered, isLoginFormVisible);
+        await Task.Delay(0);
+        // await viewModel.PageLoaded();
     }
 
     private async Task ShowRegisterForm()
     {
         LoginForm.IsVisible = false;
         SignUpUnFocused.IsVisible = false;
-
         RegisterForm.IsVisible = true;
         LoginUnFocused.IsVisible = true;
         SignUpFocused.IsVisible = true;
@@ -74,7 +69,6 @@ public partial class LoginPage : ContentPage
     {
         if (HasLoginRemembered && !isLoginVisible)
         {
-            QuickLogin.IsVisible = true;
             LoginForm.IsVisible = false;
             RegisterForm.IsVisible = false;
             LoginSignUpTab.IsVisible = false;
@@ -82,7 +76,6 @@ public partial class LoginPage : ContentPage
         else
         if (!HasLoginRemembered)
         {
-            QuickLogin.IsVisible = false;
             RegisterForm.IsVisible = false;
             LoginForm.IsVisible = true;
             LoginSignUpTab.IsVisible = true;
@@ -94,13 +87,6 @@ public partial class LoginPage : ContentPage
         LoginSignUpTab.IsVisible = true;
         LoginForm.IsVisible = true;
         RegisterForm.IsVisible = false;
-        QuickLogin.IsVisible = false;
-    }
-
-    private async void QuickLoginBtn_Clicked(object sender, EventArgs e)
-    {
-        QuickLoginBtn.IsEnabled = false;
-        await viewModel.QuickLogin();
     }
 
     private async void LoginUnFocused_Tapped(object sender, TappedEventArgs e)
@@ -120,11 +106,11 @@ public partial class LoginPage : ContentPage
     uint animationSpeed = 300;
     Easing animationIn = Easing.CubicIn;
     Easing animationOut = Easing.CubicOut;
-    Task<bool> VSLayoutFadeOut(VerticalStackLayout Form)
+    Task<bool> VSLayoutFadeOut(StackLayout Form)
     {
         return Form.FadeTo(0, animationSpeed, animationOut);
     }
-    Task<bool> VSLayoutFadeIn(VerticalStackLayout Form)
+    Task<bool> VSLayoutFadeIn(StackLayout Form)
     {
         return Form.FadeTo(1, animationSpeed, animationIn);
     }
@@ -135,10 +121,5 @@ public partial class LoginPage : ContentPage
     Task<bool> BorderFadeIn(Border border)
     {
         return border.FadeTo(1, animationSpeed, animationIn);
-    }
-
-    private void LoginOnlineBtn_Clicked(object sender, EventArgs e)
-    {
-        viewModel.IsLoginOnlineButtonClicked = true;
     }
 }

@@ -97,7 +97,6 @@ public partial class ManageDebtsViewModel : ObservableObject
                 ApplyChanges();
                 IsLoaded = true;
                 ActiveUser = usersRepo.User;
-                UserCurrency = ActiveUser.UserCurrency;
                 SingleDebtDetails = new DebtModel()
                 {
                     Amount = 0,
@@ -209,7 +208,6 @@ public partial class ManageDebtsViewModel : ObservableObject
             {
                 Amount = 1,
                 PersonOrOrganization = new PersonOrOrganizationModel(),
-                Currency = ActiveUser.UserCurrency
             };
             upSertDebtVM.SingleDebtDetails = newDebt;
             upSertDebtVM.IsLent = true;

@@ -167,10 +167,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Handlers\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\Quanlychitieu.DataAccess\Quanlychitieu.DataAccess.csproj" />
 	  <ProjectReference Include="..\Quanlychitieu.Models\Quanlychitieu.Models.csproj" />
 	</ItemGroup>
@@ -215,7 +211,7 @@
 	  <Compile Update="Views\Settings\EditUserSettingsPage.xaml.cs">
 	    <DependentUpon>EditUserSettingsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Settings\UserSettingsPage.xaml.cs">
+	  <Compile Update="Views\UserSettingsPage.xaml.cs">
 	    <DependentUpon>UserSettingsPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Statistics\SingleMonthStatsPage.xaml.cs">
@@ -305,16 +301,13 @@
 	  <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\RecentTransactionsView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\Settings\ApplicationSettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Settings\EditUserSettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Settings\UserSettingsPage.xaml">
+	  <MauiXaml Update="Views\UserSettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Statistics\SingleMonthStatsPage.xaml">

@@ -10,8 +10,7 @@
     xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
     xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Settings"
     x:Name="settingsPage"
-    Title="Chỉnh sửa thông tin cá nhân"
-    x:DataType="viewModel:UserSettingsViewModel">
+    Title="Chỉnh sửa thông tin cá nhân">
     <toolkit:DockLayout>
         <VerticalStackLayout toolkit:DockLayout.DockPosition="Top">
             <Image HeightRequest="90" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" />
@@ -28,51 +27,6 @@
             <material:TextField Title="Email" Text="{Binding ActiveUser.Email}">
                 <validation:RequiredValidation Message="Vui lòng nhập Email" />
             </material:TextField>
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5">
-                <material:PickerField
-                    x:Name="CountryPicker"
-                    Title="Country"
-                    Grid.Column="0"
-                    toolkit:DockLayout.DockPosition="Top"
-                    ItemsSource="{Binding CountryNamesList}"
-                    SelectedValueChanged="CountryPicker_SelectedValueChanged"
-                    TextColor="{AppThemeBinding Light=black}"
-                    TitleColor="{AppThemeBinding Light=black}">
-                    <validation:RequiredValidation Message="Vui lòng chọn địa chỉ" />
-                </material:PickerField>
-                <Label
-                    Grid.Column="1"
-                    FontAttributes="Bold"
-                    FontSize="16"
-                    Text="{Binding SelectCountryCurrency}"
-                    VerticalOptions="Center" />
-            </Grid>
-
-            <ListView
-                Header="Taxes"
-                IsVisible="false"
-                ItemsSource="{Binding Taxes}"
-                SeparatorVisibility="None"
-                VerticalScrollBarVisibility="Never">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:TaxModel">
-                        <ViewCell>
-                            <Label FontAttributes="Bold" FontSize="15">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={x:Reference settingsPage}, Path=BindingContext.ViewEditDeleteTaxCommand}" CommandParameter="{Binding .}" />
-                                </Label.GestureRecognizers>
-                                <Label.Text>
-                                    <MultiBinding StringFormat="{}{0} : {1} %">
-                                        <Binding Path="Name" />
-                                        <Binding Path="Rate" />
-                                    </MultiBinding>
-                                </Label.Text>
-                            </Label>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
             <ImageButton input:FormView.IsSubmitButton="True" Source="save_icon_l" />
         </input:FormView>
 
