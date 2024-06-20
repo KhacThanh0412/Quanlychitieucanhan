@@ -100,7 +100,6 @@ public partial class UserSettingsViewModel : BaseViewModel
 
             await usersRepository.LogOutUserAsync();
             await expendituresRepository.LogOutUserAsync();
-            await incomeRepository.LogOutUserAsync();
             await debtRepository.LogOutUserAsync();
         }
     }

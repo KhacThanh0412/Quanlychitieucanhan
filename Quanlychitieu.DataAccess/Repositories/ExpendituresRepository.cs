@@ -23,7 +23,6 @@ public class ExpendituresRepository : IExpendituresRepository
 
     void OpenDB()
     {
-        db = dataAccessRepo.GetDb();
         AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
         AllExpenditures.EnsureIndex(x => x.Id);
     }
@@ -37,11 +36,6 @@ public class ExpendituresRepository : IExpendituresRepository
         try
         {
             OpenDB();
-            string userId = usersRepo.User.Id;
-            string userCurrency = usersRepo.User.UserCurrency;
-            ExpendituresList = AllExpenditures.Query()
-                .Where(x => x.UserId == userId && x.Currency == userCurrency).ToList();
-
             db.Dispose();
             ExpendituresList ??= new List<ExpendituresModel>();
 

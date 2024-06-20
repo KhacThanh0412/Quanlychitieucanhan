@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LiteDB;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -9,8 +8,6 @@ public partial class DebtModel : ObservableObject
 {
     private bool isPaidCompletely;
     private string? displayText;
-  
-    [BsonId]
     public string Id { get; set; }
     [ObservableProperty]
     public double amount ;
@@ -77,7 +74,6 @@ public enum DebtType
 }
 public class InstallmentPayments
 {
-    [BsonId]
     public string Id { get; set; }
     public required double AmountPaid { get; set; }
     public string? ReasonForOptionalPayment { get; set; }

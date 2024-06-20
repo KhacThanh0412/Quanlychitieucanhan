@@ -13,7 +13,6 @@ public partial class EditUserSettingsPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewmodel.PageLoadedCommand.Execute(null);
     }
 
     private void CountryPicker_SelectedValueChanged(object sender, object e)

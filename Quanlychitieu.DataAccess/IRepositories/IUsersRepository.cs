@@ -10,7 +10,6 @@ public interface IUsersRepository
     Task<UsersModel> GetUserAsync(string userId);
     Task<bool> AddUserAsync(UsersModel user);
     Task<bool> UpdateUserAsync(UsersModel user);
-    Task<bool> DeleteUserAsync(UsersModel user);
     Task<bool> CheckIfAnyUserExists();
     Task LogOutUserAsync();
 }

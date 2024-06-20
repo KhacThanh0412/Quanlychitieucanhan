@@ -14,26 +14,17 @@ using System.Threading.Tasks;
 
 namespace Quanlychitieu.ViewModels
 {
-    public partial class HomeViewModel : ObservableObject
+    public partial class HomeViewModel : BaseViewModel
     {
         private readonly IExpendituresRepository expenditureRepo;
         private readonly ISettingsServiceRepository settingsService;
         private readonly IUsersRepository userRepo;
         private readonly IIncomeRepository incomeRepo;
         private readonly IDebtRepository debtRepo;
-        public HomeViewModel(IExpendituresRepository expendituresRepository, ISettingsServiceRepository settingsServiceRepo,
-                    IUsersRepository usersRepository, IIncomeRepository incomeRepository,
-                    IDebtRepository debtRepository)
+        public HomeViewModel(IUsersRepository usersRepository, IIncomeRepository incomeRepo)
         {
-            expenditureRepo = expendituresRepository;
-            settingsService = settingsServiceRepo;
-            userRepo = usersRepository;
-            incomeRepo = incomeRepository;
-            debtRepo = debtRepository;
-            expenditureRepo.ExpendituresListChanged += OnExpendituresChanged;
-            incomeRepo.IncomesListChanged += OnIncomesChanged;
-            userRepo.UserDataChanged += OnUserDataChanged;
-            UpdateIsSyncing();
+            this.userRepo = usersRepository;
+            this.incomeRepo = incomeRepo;
         }
 
         [ObservableProperty]
@@ -50,15 +41,31 @@ namespace Quanlychitieu.ViewModels
         [ObservableProperty]
         public string userCurrency;
         [ObservableProperty]
-        public double pocketMoney;
+        public double _totalIncomeAmount;
 
         [ObservableProperty]
         bool isSyncing;
 
         [ObservableProperty]
-        private UsersModel activeUser = new();
+        private UsersModel _activeUser;
 
         public bool _isInitialized;
+
+        public override Task InitAsync(object initData)
+        {
+            if (initData != null)
+            {
+                ActiveUser = (UsersModel)initData;
+            }
+            return base.InitAsync(initData);
+        }
+        public override async Task LoadDataAsync()
+        {
+            await Task.Delay(0);
+            await Task.WhenAll(incomeRepo.SynchronizeIncomesAsync());
+            TotalIncomeAmount = incomeRepo.CalculateTotalIncome();
+            base.LoadDataAsync();
+        }
 
         void UpdateIsSyncing()
         {
@@ -66,16 +73,16 @@ namespace Quanlychitieu.ViewModels
         }
         public async Task DisplayInfo()
         {
-            await SyncAndNotifyAsync();
+            await Task.Delay(0);
+            // await SyncAndNotifyAsync();
         }
         public void GetUserData()
         {
-            if (userRepo.User is not null)
-            {
-                PocketMoney = userRepo.User.PocketMoney;
-                Username = userRepo.User.Username;
-                UserCurrency = userRepo.User.UserCurrency;
-            }
+            //if (userRepo.User is not null)
+            //{
+            //    PocketMoney = userRepo.User.PocketMoney;
+            //    Username = userRepo.User.Username;
+            //}
         }
         private void OnExpendituresChanged()
         {
@@ -87,7 +94,6 @@ namespace Quanlychitieu.ViewModels
         }
         private void OnUserDataChanged()
         {
-            PocketMoney = userRepo.User.PocketMoney;
         }
 
         private void InitializeExpenditures()
@@ -163,8 +169,6 @@ namespace Quanlychitieu.ViewModels
                     {
                         ExpendituresModel exp = (ExpendituresModel)UpSertResult.Data;
                         //add logic if this exp is the latest in terms of datetime
-
-                        PocketMoney -= exp.AmountSpent;
                     }
                 }
             }

@@ -155,26 +155,6 @@ namespace Quanlychitieu.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> DeleteUserAsync(UsersModel user)
-        {
-            try
-            {
-                //var response = await dataAccessRepo.DeleteDataFromApiAsync($"api/users/{user.Id}");
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    return true;
-                //}
-                await Task.Delay(0);
-                return false;
-                //throw new Exception("Failed to Delete User");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Delete user Exception Message: {ex.Message}");
-                return false;
-            }
-        }
-
         public async Task LogOutUserAsync()
         {
             User = null;

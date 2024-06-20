@@ -76,7 +76,6 @@ public partial class UpSertIncomeViewModel : ObservableObject
         double FinalTotalInc = _initialTotalIncAmount + difference;
         double FinalPocketMoney = InitialUserPockerMoney + difference;
         SingleIncomeDetails.UpdatedDateTime = DateTime.UtcNow;
-        SingleIncomeDetails.PlatformModel = DeviceInfo.Current.Model;
         if (FinalPocketMoney < 0)
         {
             // Chưa xử lý
@@ -106,10 +105,8 @@ public partial class UpSertIncomeViewModel : ObservableObject
         else
         {
             SingleIncomeDetails.Id = Guid.NewGuid().ToString();
-            SingleIncomeDetails.UserId = ActiveUser.Id;
             SingleIncomeDetails.AddedDateTime = DateTime.UtcNow;
             SingleIncomeDetails.UpdatedDateTime = DateTime.UtcNow;
-            SingleIncomeDetails.PlatformModel = DeviceInfo.Current.Model;
             if (await incomeService.AddIncomeAsync(SingleIncomeDetails))
             {
                 ActiveUser.TotalIncomeAmount += SingleIncomeDetails.AmountReceived;

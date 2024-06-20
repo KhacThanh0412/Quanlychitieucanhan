@@ -1,10 +1,12 @@
-﻿using System.ComponentModel;
+﻿using Newtonsoft.Json;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Quanlychitieu.Models;
 
 public class UsersModel : INotifyPropertyChanged
 {
+    private string id;
     private string username;
     private string email;
     private string password;
@@ -21,6 +23,13 @@ public class UsersModel : INotifyPropertyChanged
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    [JsonProperty("_id")]
+    public string Id
+    {
+        get => id;
+        set => SetProperty(ref id, value);
     }
 
     public string Username

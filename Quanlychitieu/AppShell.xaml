@@ -7,7 +7,6 @@
     xmlns:views="clr-namespace:Quanlychitieu.Views"
     xmlns:viewsDebts="clr-namespace:Quanlychitieu.Views.Debts"
     xmlns:viewsExp="clr-namespace:Quanlychitieu.Views.Expenditures"
-    xmlns:viewsInc="clr-namespace:Quanlychitieu.Views.Incomes"
     xmlns:viewsPlannedExp="clr-namespace:Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
     xmlns:viewsStats="clr-namespace:Quanlychitieu.Views.Statistics"
     CurrentItem="{x:Reference login}">
@@ -31,10 +30,10 @@
 
         <ShellContent
             Title="Thu nhập"
-            ContentTemplate="{DataTemplate viewsInc:ManageIncomes}"
+            ContentTemplate="{DataTemplate views:IncomesPage}"
             Icon="{AppThemeBinding Dark=request_money_d.png,
                                    Light=request_money_l.png}"
-            Route="ManageIncomes" />
+            Route="IncomesPage" />
 
         <ShellContent
             Title="Thông tin chi tiết"

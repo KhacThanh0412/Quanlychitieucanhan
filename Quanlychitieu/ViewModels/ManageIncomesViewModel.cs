@@ -5,17 +5,17 @@ using Quanlychitieu.Views;
 
 namespace Quanlychitieu.ViewModels.Incomes;
 
-public partial class ManageIncomesViewModel : ObservableObject
+public partial class IncomesViewModel : BaseViewModel
 {
     private readonly IIncomeRepository incomeService;
     private readonly IUsersRepository userService;
 
-    public ManageIncomesViewModel(IIncomeRepository incomeRepository, IUsersRepository usersRepository)
+    public IncomesViewModel(IIncomeRepository incomeRepository, IUsersRepository usersRepository)
     {
-        incomeService = incomeRepository;
-        userService = usersRepository;
-        incomeRepository.IncomesListChanged += HandleIncomesListUpdated;
-        usersRepository.UserDataChanged += HandleUserUpdated;
+        //incomeService = incomeRepository;
+        //userService = usersRepository;
+        //incomeRepository.IncomesListChanged += HandleIncomesListUpdated;
+        //usersRepository.UserDataChanged += HandleUserUpdated;
     }
 
     private void HandleUserUpdated()
@@ -37,7 +37,7 @@ public partial class ManageIncomesViewModel : ObservableObject
     string userCurrency;
 
     [ObservableProperty]
-    double userPocketMoney;
+    double _userPocketMoney;
 
     [ObservableProperty]
     bool isBusy;
@@ -45,7 +45,7 @@ public partial class ManageIncomesViewModel : ObservableObject
     [ObservableProperty]
     string incTitle;
 
-    UsersModel ActiveUser = new();
+    UsersModel ActiveUser;
 
     [RelayCommand]
     public void PageLoaded()
@@ -55,6 +55,17 @@ public partial class ManageIncomesViewModel : ObservableObject
         UserPocketMoney = ActiveUser.PocketMoney;
         FilterGetAllIncomes();
     }
+
+    public override Task LoadDataAsync()
+    {
+        return base.LoadDataAsync();
+    }
+
+    public override Task InitAsync(object initData)
+    {
+        return base.InitAsync(initData);
+    }
+
     bool IsLoaded;
     public void FilterGetAllIncomes()
     {

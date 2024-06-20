@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Quanlychitieu.Services
 {
-    internal class IDataService
+    public interface IDataService
     {
+        bool Initialized { get; }
+        Task<bool> InitAsync(string locale);
     }
 }

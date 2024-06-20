@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<uranium:UraniumContentPage
+<ContentPage
     x:Class="Quanlychitieu.Views.HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels"
+    Title="Trang chủ"
     x:DataType="viewModels:HomeViewModel">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False" IsVisible="False" />
+    </Shell.BackButtonBehavior>
     <VerticalStackLayout>
         <Label
             Margin="10"
@@ -14,9 +18,8 @@
             FontSize="21"
             HorizontalTextAlignment="Center">
             <Label.Text>
-                <MultiBinding StringFormat="{} Số dư  hiện tại là {0:n2} {1}">
-                    <Binding Path="PocketMoney" />
-                    <Binding Path="UserCurrency" />
+                <MultiBinding StringFormat="{} Số dư  hiện tại là {0}">
+                    <Binding Path="TotalIncomeAmount" />
                 </MultiBinding>
             </Label.Text>
         </Label>
@@ -105,4 +108,4 @@
         <!--  End Section for Expenditure display  -->
 
     </VerticalStackLayout>
-</uranium:UraniumContentPage>
+</ContentPage>

@@ -59,7 +59,7 @@ public partial class ManageExpendituresViewModel : ObservableObject
     [ObservableProperty]
     string expTitle;
 
-    UsersModel ActiveUser = new();
+    UsersModel ActiveUser;
 
     [ObservableProperty]
     bool activ;

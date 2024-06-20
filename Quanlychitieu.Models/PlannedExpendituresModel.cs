@@ -1,10 +1,8 @@
-﻿using LiteDB;
-
+﻿
 namespace Quanlychitieu.Models;
 
 public class PlannedExpendituresModel
 {
-    [BsonId]
     public string Id { get; set; }
     public string Title { get; set; }
     public double TotalAmount { get; set; }

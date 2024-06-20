@@ -199,8 +199,8 @@
 	  <Compile Update="Views\Expenditures\UpSertExpenditurePage.xaml.cs">
 	    <DependentUpon>UpSertExpenditurePage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Incomes\ManageIncomes.xaml.cs">
-	    <DependentUpon>ManageIncomes.xaml</DependentUpon>
+	  <Compile Update="Views\IncomesPage.xaml.cs">
+	    <DependentUpon>IncomesPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Incomes\UpSertIncomePage.xaml.cs">
 	    <DependentUpon>UpSertIncomePage.xaml</DependentUpon>
@@ -292,7 +292,7 @@
 	  <MauiXaml Update="Views\HomePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Incomes\ManageIncomes.xaml">
+	  <MauiXaml Update="Views\IncomesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Incomes\UpSertIncomePage.xaml">

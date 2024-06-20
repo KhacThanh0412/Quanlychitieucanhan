@@ -1,21 +1,14 @@
-﻿using LiteDB;
+﻿using Newtonsoft.Json;
 
 namespace Quanlychitieu.DataAccess.Repositories;
 
 public class IncomeRepository : IIncomeRepository
 {
-    LiteDatabase db;
     public List<IncomeModel> IncomesList { get; set; }
-
-    ILiteCollection<IncomeModel> AllIncomes;
 
     readonly IDataAccessRepo dataAccessRepo;
     readonly IUsersRepository usersRepo;
-    readonly IOnlineCredentialsRepository onlineDataAccessRepo;
 
-    private const string incomesDataCollectionName = "IncomesCollection";
-
-    bool IsBatchUpdate;
     public event Action IncomesListChanged;
 
     public IncomeRepository(IDataAccessRepo dataAccess, IUsersRepository userRepository)
@@ -25,30 +18,31 @@ public class IncomeRepository : IIncomeRepository
         IncomesList = new List<IncomeModel>();
     }
 
-    void OpenDB()
-    {
-        db = dataAccessRepo.GetDb();
-        AllIncomes = db.GetCollection<IncomeModel>(incomesDataCollectionName);
-        AllIncomes.EnsureIndex(x => x.Id);
-    }
-
     public async Task<List<IncomeModel>> GetAllIncomesAsync()
     {
-        if (IncomesList is not null)
-        {
-            return IncomesList;
-        }
         try
         {
-            OpenDB();
-            string userId = usersRepo.User?.Id;
-            string userCurrency = usersRepo.User.UserCurrency;
-            IncomesList = AllIncomes.Query()
-                .Where(x => x.UserId == userId)
-                .OrderByDescending(x => x.UpdatedDateTime)
-                .ToList();
-            db.Dispose();
-            IncomesList ??= new List<IncomeModel>();
+            var userJson = await SecureStorage.GetAsync("user");
+
+            var userConvert = JsonConvert.DeserializeObject<UsersModel>(userJson);
+            var userId = userConvert.Id;
+            if (userId == null)
+            {
+                Console.WriteLine("=====> User not logged in");
+                return new List<IncomeModel>();
+            }
+
+            var incomes = await dataAccessRepo.GetDataFromApiAsync<List<IncomeModel>>($"api/v1/income/user/{userId}");
+            if (incomes != null)
+            {
+                IncomesList = incomes;
+                IncomesListChanged?.Invoke();
+            }
+            else
+            {
+                IncomesList = new List<IncomeModel>();
+            }
+
             return IncomesList;
         }
         catch (Exception ex)
@@ -60,25 +54,18 @@ public class IncomeRepository : IIncomeRepository
         }
     }
 
+    public double CalculateTotalIncome()
+    {
+        return IncomesList
+            .Where(income => !income.IsDeleted)
+            .Sum(income => income.AmountReceived);
+    }
+
     public async Task<bool> AddIncomeAsync(IncomeModel newIncome)
     {
         try
         {
-            OpenDB();
-
-            if (AllIncomes.Insert(newIncome) is not null)
-            {
-                IncomesList.Add(newIncome);
-                IncomesListChanged?.Invoke();
-                db.Dispose();
-                return true;
-            }
-            else
-            {
-                Debug.WriteLine("Error while adding Income");
-                return false;
-            }
-
+            return false;
         }
         catch (Exception ex)
         {
@@ -91,26 +78,7 @@ public class IncomeRepository : IIncomeRepository
     {
         try
         {
-            OpenDB();
-            if (AllIncomes.Update(income))
-            {
-                Debug.WriteLine("Income updated Locally");
-
-                int index = IncomesList.FindIndex(x => x.Id == income.Id);
-                IncomesList[index] = income;
-                if (!IsBatchUpdate)
-                {
-                    IncomesListChanged?.Invoke();
-                }
-                db.Dispose();
-                return true;
-            }
-            else
-            {
-                Debug.WriteLine("Error while updating Income");
-                return false;
-            }
-
+            return false;
         }
         catch (Exception ex)
         {
@@ -125,25 +93,7 @@ public class IncomeRepository : IIncomeRepository
 
         try
         {
-            OpenDB();
-            if (AllIncomes.Update(income))
-            {
-                IncomesList.Remove(income);
-                Debug.WriteLine("Income deleted Locally");
-                if (!IsBatchUpdate)
-                {
-                    IncomesListChanged?.Invoke();
-                }
-
-                db.Dispose();
-                return true;
-            }
-            else
-            {
-                Debug.WriteLine("Error while deleting Income");
-                return false;
-            }
-
+            return false;
         }
         catch (Exception ex)
         {
@@ -152,27 +102,10 @@ public class IncomeRepository : IIncomeRepository
         }
     }
 
-    public async Task DropIncomesCollection()
-    {
-        OpenDB();
-        db.DropCollection(incomesDataCollectionName);
-        db.Dispose();
-        Debug.WriteLine("Incomes Collection dropped!");
-    }
-
-    public async Task LogOutUserAsync()
-    {
-        IncomesList.Clear();
-        IncomesListChanged?.Invoke();
-        await DropIncomesCollection();
-
-    }
-
     bool IsSyncing;
     public async Task SynchronizeIncomesAsync()
     {
         await GetAllIncomesAsync();
-        IsBatchUpdate = false;
         IncomesListChanged?.Invoke();
     }
 }

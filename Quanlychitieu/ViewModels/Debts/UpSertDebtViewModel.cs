@@ -101,7 +101,6 @@ public partial class UpSertDebtViewModel(IDebtRepository debtRepository, IUsersR
 
         SingleDebtDetails.UpdateDateTime = DateTime.UtcNow;
         SingleDebtDetails.PlatformModel = DeviceInfo.Current.Model;
-        SingleDebtDetails.UserId = userRepo.User.Id;
         SingleDebtDetails.DebtType = DebtType;
         if (HasDeadLine is false)
         {

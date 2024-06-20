@@ -9,7 +9,5 @@ public interface IIncomeRepository
     Task<bool> DeleteIncomeAsync(IncomeModel incomeId);
     Task<bool> UpdateIncomeAsync(IncomeModel income);
     Task SynchronizeIncomesAsync();
-
-    Task LogOutUserAsync();
-    Task DropIncomesCollection();
+    double CalculateTotalIncome();
 }

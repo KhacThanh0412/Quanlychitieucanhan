@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Quanlychitieu.Helpers;
 using Quanlychitieu.Navigation;
+using Quanlychitieu.Services;
 
 namespace Quanlychitieu.ViewModels
 {
@@ -26,7 +27,7 @@ namespace Quanlychitieu.ViewModels
         [ObservableProperty]
         private bool _isEnableScroll = true;
         public ViewModelBusyManager BusyManager { get; }
-        // public IDataService DataService { get; private set; }
+        public IDataService DataService { get; private set; }
         protected INavigationService NavigationService { get; private set; }
         private object _initData;
         public virtual object AppearingTreasureData => _initData;

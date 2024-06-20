@@ -1,12 +1,10 @@
-﻿using LiteDB;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Quanlychitieu.Models;
 
 public class ExpendituresModel : INotifyPropertyChanged
 {
     double amountSpent;
-    [BsonId]
     public string Id { get; set; }
     public DateTime DateSpent { get; set; }
     public double UnitPrice { get; set; }

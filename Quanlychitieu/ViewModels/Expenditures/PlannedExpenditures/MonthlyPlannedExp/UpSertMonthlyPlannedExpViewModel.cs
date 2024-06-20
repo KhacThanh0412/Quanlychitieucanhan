@@ -150,7 +150,6 @@ public partial class UpSertMonthlyPlannedExpViewModel : ObservableObject
     async Task<bool> AddMonthlyPlannedExp(ToastDuration duration, double fontsize, CancellationTokenSource tokenSource)
     {
         SingleMonthlyPlanned.Id = Guid.NewGuid().ToString();
-        SingleMonthlyPlanned.UserId = ActiveUser.Id;
 
         SingleExpenditureDetails.Id = Guid.NewGuid().ToString();
         SingleMonthlyPlanned.Expenditures.Add(SingleExpenditureDetails);

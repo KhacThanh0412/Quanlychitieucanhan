@@ -1,10 +1,7 @@
 ﻿using Quanlychitieu.Navigation;
-using Quanlychitieu.Views;
 using Quanlychitieu.Views.Debts;
 using Quanlychitieu.Views.Expenditures;
 using Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
-using Quanlychitieu.Views.Incomes;
-using Quanlychitieu.Views;
 using Quanlychitieu.Views.Statistics;
 
 namespace Quanlychitieu
@@ -18,7 +15,6 @@ namespace Quanlychitieu
             Routing.RegisterRoute(nameof(ManageExpenditures), typeof(ManageExpenditures));
             Routing.RegisterRoute(nameof(UpSertExpenditurePage), typeof(UpSertExpenditurePage));
 
-            Routing.RegisterRoute(nameof(ManageIncomes), typeof(ManageIncomes));
             Routing.RegisterRoute(nameof(UpSertIncomePage), typeof(UpSertIncomePage));
 
             Routing.RegisterRoute(nameof(StatisticsPage), typeof(StatisticsPage));

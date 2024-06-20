@@ -16,9 +16,7 @@ using Quanlychitieu.ViewModels;
 using Quanlychitieu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 using Quanlychitieu.ViewModels.Statistics;
 using Quanlychitieu.ViewModels.Debts;
-using Quanlychitieu.Views;
 using Quanlychitieu.Views.Expenditures;
-using Quanlychitieu.Views.Incomes;
 using Quanlychitieu.Views.Settings;
 using Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 using Quanlychitieu.Views.Statistics;
@@ -60,7 +58,6 @@ namespace Quanlychitieu
             /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
             builder.Services.AddSingleton(CalendarStore.Default);
             builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();
-            builder.Services.AddSingleton<IIncomeRepository, IncomeRepository>();
             builder.Services.AddSingleton<IDebtRepository, DebtRepository>();
             // builder.Services.AddSingleton<IOnlineCredentialsRepository, OnlineDataAccessRepository>();
             builder.Services.AddSingleton<IPlannedExpendituresRepository, PlannedExpendituresRepository>();
@@ -73,7 +70,6 @@ namespace Quanlychitieu
 
             /* -- Section for Incomes --*/
             //builder.Services.AddSingleton<UpSertIncomeViewModel>();
-            builder.Services.AddSingleton<ManageIncomesViewModel>();
 
             /*-- Section for Planned Expenditures --*/
             builder.Services.AddSingleton<ManageMonthlyMonthlyPlannedExpendituresViewModel>();
@@ -94,7 +90,6 @@ namespace Quanlychitieu
             builder.Services.AddSingleton<UpSertExpenditurePage>();
 
             /*-- Section for Incomes --*/
-            builder.Services.AddSingleton<ManageIncomes>();
             builder.Services.AddSingleton<UpSertIncomePage>();
 
             /*-- Section for Settings --*/

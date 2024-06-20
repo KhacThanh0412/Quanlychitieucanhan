@@ -21,7 +21,7 @@ public partial class ManageMonthlyMonthlyPlannedExpendituresViewModel : Observab
     }
     public ObservableCollection<PlannedExpendituresModel> MonthlyPlannedExpList { get; set; } = new();
 
-    UsersModel ActiveUser = new();
+    UsersModel ActiveUser;
 
     private List<PlannedExpendituresModel> tempList = new();
 

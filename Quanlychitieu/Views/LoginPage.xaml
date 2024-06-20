@@ -26,7 +26,7 @@
                     FontAttributes="Bold"
                     FontSize="Title"
                     HorizontalTextAlignment="Center"
-                    Text="Chào mừng đến với ứng dụng" />
+                    Text="Hãy quản lý tốt thu nhập của bạn nhé!" />
                 <Border
                     x:Name="LoginSignUpTab"
                     Margin="5,0,5,10"
@@ -168,15 +168,15 @@
                             <validation:RequiredValidation />
                         </material:TextField.Validations>
                     </material:TextField>
-                    <ImageButton
+                    <Button
                         x:Name="LoginButton"
                         input:FormView.IsSubmitButton="True"
-                        Source="{AppThemeBinding Dark=login_d,
-                                                 Light=login_l}">
-                        <ImageButton.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToHomePageFromLoginCommand}" CommandParameter="{Binding .}" />
-                        </ImageButton.GestureRecognizers>
-                    </ImageButton>
+                        BackgroundColor="DarkSlateBlue"
+                        Command="{Binding GoToHomePageFromLoginCommand}"
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        IsVisible="True"
+                        Text="Đăng nhập" />
                 </StackLayout>
 
                 <!--  Section for Registration begins below  -->

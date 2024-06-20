@@ -17,6 +17,8 @@ namespace Quanlychitieu
             services.AddSingleton<IDataAccessRepo, DataAccessRepo>();
             services.AddSingleton<IUsersRepository, UserRepository>();
             services.AddSingleton<ISettingsServiceRepository, SettingsServiceRepository>();
+            services.AddSingleton<IIncomeRepository, IncomeRepository>();
+
 
             services.AddSingleton<INavigationService, NavigationService>();
 
@@ -24,10 +26,13 @@ namespace Quanlychitieu
             services.AddTransient<HomePage>();
             services.AddSingleton<LoginPage>();
             services.AddTransient<UserSettingsPage>();
+            services.AddTransient<IncomesPage>();
 
             services.AddTransient<HomeViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddTransient<UserSettingsViewModel>();
+            services.AddTransient<IncomesViewModel>();
+
             return services;
         }
     }

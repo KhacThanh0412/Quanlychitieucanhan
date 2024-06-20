@@ -23,7 +23,6 @@ public class DebtRepository : IDebtRepository
 
     void OpenDB()
     {
-        db = dataAccess.GetDb();
         AllDebts = db.GetCollection<DebtModel>(DebtsCollectionName);
         AllDebts.EnsureIndex(x => x.Id);
     }
@@ -34,19 +33,7 @@ public class DebtRepository : IDebtRepository
         {
             OpenDB();
 
-            string userId = usersRepo.User.Id;
-            string userCurrency = usersRepo.User.UserCurrency;
-            if (usersRepo.User.UserIDOnline != string.Empty)
-            {
-                userId = usersRepo.User.UserIDOnline;
-            }
-            // await AllDebts.DeleteAllAsync();
-
-            //await db.DropCollectionAsync(DebtsCollectionName);
             DebtList = AllDebts.Query().ToList();
-            var ss = DebtList
-                .Where(x => x.UserId == userId)
-                .OrderByDescending(x => x.UpdateDateTime);
 
             //OfflineDebtList ??= Enumerable.Empty<DebtModel>().ToList();
             return DebtList;

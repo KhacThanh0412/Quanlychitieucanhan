@@ -1,25 +1,12 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Quanlychitieu.AdditionalResourcefulAPIClasses;
-using Quanlychitieu.DataAccess.IRepositories;
-using Quanlychitieu.Models;
-using Quanlychitieu.Platforms.Android.NavigationsMethods;
-using Quanlychitieu.PopUpPages;
-using Quanlychitieu.Utilities;
-using Quanlychitieu.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Quanlychitieu.Helpers;
+using Quanlychitieu.Navigation;
 
 namespace Quanlychitieu.ViewModels
 {
-    public partial class LoginViewModel : ObservableObject
+    public partial class LoginViewModel : BaseViewModel
     {
         private readonly ISettingsServiceRepository settingsRepo;
         private readonly IUsersRepository userRepo;
-        private readonly CountryAndCurrencyCodes countryAndCurrency = new();
-
         readonly LoginNavs NavFunctions = new();
         public LoginViewModel(ISettingsServiceRepository sessionServiceRepository, IUsersRepository userRepository)
         {
@@ -28,21 +15,16 @@ namespace Quanlychitieu.ViewModels
         }
 
         [ObservableProperty]
-        public List<string> countryNamesList = [];
+        private string _email;
 
         [ObservableProperty]
-        public string username;
+        private string _password;
 
         [ObservableProperty]
-        public double pocketMoney;
+        private string _userName;
 
         [ObservableProperty]
-        public bool hasLoginRemembered = true;
-
-        [ObservableProperty]
-        public UsersModel currentUser;
-
-        private string userCurrency;
+        public UsersModel _currentUser;
 
         [ObservableProperty]
         private bool errorMessageVisible;
@@ -52,109 +34,35 @@ namespace Quanlychitieu.ViewModels
         [ObservableProperty]
         private bool isLoginFormVisible;
 
-        [ObservableProperty]
-        private bool isRegisterFormVisible;
-
-        [ObservableProperty]
-        private bool isQuickLoginVisible;
-
-        [ObservableProperty]
-        private bool registerAccountOnline;
-
-        [ObservableProperty]
-        private bool isBusy;
-
-        [ObservableProperty]
-        private bool showQuickLoginErrorMessage;
-
-        [ObservableProperty]
-        private bool isLoginOnlineButtonClicked;
-
-        readonly string LoginDetectFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QuickLogin.text");
-
         [RelayCommand]
         public async Task PageLoaded()
         {
-            if (IsQuickLoginDetectionFilePresent())
+            if (await userRepo.CheckIfAnyUserExists())
             {
-                if (!await userRepo.CheckIfAnyUserExists())
+                if (userId is null)
                 {
-                    File.Delete(LoginDetectFile);
-                    await PageLoaded();
+                    IsLoginFormVisible = true;
                 }
-                Username = await settingsRepo.GetPreference<string>("Username", null);
-                if (Username is null)
-                {
-                    File.Delete(LoginDetectFile);
-                    await PageLoaded();
-                }
-                IsQuickLoginVisible = true;
-                userId = await settingsRepo.GetPreference<string>(nameof(CurrentUser.Id), null);
-                userRepo.User = await userRepo.GetUserAsync(userId); 
+
+                IsLoginFormVisible = false;
             }
             else
             {
-                CurrentUser = new();
-
-                HasLoginRemembered = false;
-                CountryNamesList = countryAndCurrency.GetCountryNames();
-
-                if (await userRepo.CheckIfAnyUserExists())
-                {
-                    CurrentUser.Id = userId;
-                    if (userId is null)
-                    {
-                        IsLoginFormVisible = true;
-                        HasLoginRemembered = false;
-                    }
-
-                    IsLoginFormVisible = false;
-                }
-                else
-                {
-                    await settingsRepo.ClearPreferences();
-                    HasLoginRemembered = false;
-                }
+                await settingsRepo.ClearPreferences();
             }
-        }
-
-        [ObservableProperty]
-        string selectedCountry;
-
-        [RelayCommand]
-        public void CurrencyFromCountryPicked()
-        {
-            var dict = countryAndCurrency.LoadDictionaryWithCountryAndCurrency();
-            CurrentUser.UserCountry = SelectedCountry;
-            dict.TryGetValue(SelectedCountry, out userCurrency);
         }
 
         [RelayCommand]
         public async Task GoToHomePageFromRegister()
         {
-            CurrentUser.Email = CurrentUser.Email.Trim();
-            CurrentUser.Id = Guid.NewGuid().ToString();
-            CurrentUser.UserCurrency = userCurrency;
-            CurrentUser.PocketMoney = PocketMoney;
-            CurrentUser.RememberLogin = true;
-            if (await userRepo.AddUserAsync(CurrentUser))
+            bool success = await userRepo.RegisterAsync(UserName, Email, Password);
+            if (success)
             {
-                await settingsRepo.SetPreference(nameof(CurrentUser.Id), CurrentUser.Id);
-                await settingsRepo.SetPreference("Username", CurrentUser.Username);
-                await settingsRepo.SetPreference(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
-
-                if (!File.Exists(LoginDetectFile))
-                {
-                    File.Create(LoginDetectFile).Close();
-                }
-
-                await Shell.Current.DisplayAlert("Đăng ký tài khoản", "Tài khoản đã được tạo", "Ok");
-                await NavFunctions.GoToHomePage();
-
-                IsQuickLoginVisible = false;
+                await AlertHelper.ShowInformationAlertAsync("Bạn đã đăng ký thành công tài khoản mới");
             }
             else
             {
+                await AlertHelper.ShowErrorAlertAsync("Email đã tồn tại vui lòng đăng ký email mới");
             }
         }
 
@@ -162,47 +70,24 @@ namespace Quanlychitieu.ViewModels
         public async Task GoToHomePageFromLogin()
         {
             ErrorMessageVisible = false;
-            IsBusy = true;
-            UsersModel User = new();
-            User = await userRepo.GetUserAsync(CurrentUser.Email.Trim(), CurrentUser.Password);
+            try
+            {
+                var user = await userRepo.LoginAsync(Email, Password);
 
-            if (User is null)
-            {
-                IsBusy = false;
-                ErrorMessageVisible = true;
-            }
-            else
-            {
-                if (!File.Exists(LoginDetectFile))
+                if (user == null)
                 {
-                    File.Create(LoginDetectFile).Close();
+                    ErrorMessageVisible = true;
+                    return;
                 }
-                CurrentUser = User;
-                userRepo.User = await userRepo.GetUserAsync(CurrentUser.Id); //initialized user to be used by the entire app
-                await settingsRepo.SetPreference<string>(nameof(CurrentUser.Id), CurrentUser.Id);
-                await settingsRepo.SetPreference<string>("Username", CurrentUser.Username);
-                await settingsRepo.SetPreference<string>(nameof(CurrentUser.UserCurrency), CurrentUser.UserCurrency);
 
-                await SyncAndNotifyAsync();
-                IsBusy = false;
-
-                IsQuickLoginVisible = true;
-                await NavFunctions.GoToHomePage();
+                CurrentUser = user;
+                App.Current.MainPage = new AppShell();
+                await NavigationService.PushToPageAsync<HomePage>(CurrentUser);
             }
-        }
-
-        public async Task QuickLogin()
-        {
-
-            if (File.Exists(LoginDetectFile))
+            catch (Exception ex)
             {
-                IsQuickLoginVisible = false;
-                userRepo.User = await userRepo.GetUserAsync(userId); //initialized user to be used by the entire app                                
-                await NavFunctions.GoToHomePage();
-            }
-            else
-            {
-                ShowQuickLoginErrorMessage = true;
+                Console.WriteLine($"Error during login: {ex.Message}");
+                ErrorMessageVisible = true;
             }
         }
 
@@ -242,15 +127,6 @@ namespace Quanlychitieu.ViewModels
         {
             SelectedTheme = AppThemesSettings.ThemeSettings.SwitchTheme();
             IsLightTheme = !IsLightTheme;
-        }
-        bool IsQuickLoginDetectionFilePresent()
-        {
-            return File.Exists(LoginDetectFile);
-        }
-
-        void DeletedLoginDetectFile()
-        {
-            File.Delete(LoginDetectFile);
         }
     }
 }
