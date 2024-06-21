@@ -93,7 +93,6 @@ namespace Quanlychitieu
             builder.Services.AddSingleton<UpSertIncomePage>();
 
             /*-- Section for Settings --*/
-            builder.Services.AddSingleton<ApplicationSettingsPage>();
             builder.Services.AddTransient<EditUserSettingsPage>();
 
             /*-- Section for Monthly Planned Expenditures --*/

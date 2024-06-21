@@ -29,6 +29,7 @@ namespace Quanlychitieu.ViewModels
         public ViewModelBusyManager BusyManager { get; }
         public IDataService DataService { get; private set; }
         protected INavigationService NavigationService { get; private set; }
+        protected INavigationCommunityPopupService NavigationCommunityPopupService { get; private set; }
         private object _initData;
         public virtual object AppearingTreasureData => _initData;
         public virtual bool ShouldRotate => false;
@@ -91,6 +92,7 @@ namespace Quanlychitieu.ViewModels
             // NOTE: The appearingTreasure parameter is now obsolete.
             // DataService = dataService;
             NavigationService = ServiceHelper.GetService<INavigationService>();
+            NavigationCommunityPopupService = ServiceHelper.GetService<INavigationCommunityPopupService>();
             LoadDataOnAppearing = loadDataOnAppearing;
             IsCustomTitle = isCustomTitle;
             BusyManager = new ViewModelBusyManager((busy) => IsBusy = busy, isLoadingIconAppearing);

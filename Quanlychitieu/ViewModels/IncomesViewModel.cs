@@ -1,5 +1,7 @@
 ﻿using Quanlychitieu.DataAccess.IRepositories;
+using Quanlychitieu.Helpers;
 using Quanlychitieu.Models;
+using Quanlychitieu.Navigation;
 using Quanlychitieu.PopUpPages;
 using Quanlychitieu.Views;
 
@@ -12,58 +14,65 @@ public partial class IncomesViewModel : BaseViewModel
 
     public IncomesViewModel(IIncomeRepository incomeRepository, IUsersRepository usersRepository)
     {
-        //incomeService = incomeRepository;
-        //userService = usersRepository;
-        //incomeRepository.IncomesListChanged += HandleIncomesListUpdated;
-        //usersRepository.UserDataChanged += HandleUserUpdated;
-    }
-
-    private void HandleUserUpdated()
-    {
-        ActiveUser = userService.User;
-        UserPocketMoney = ActiveUser.PocketMoney;
+        incomeService = incomeRepository;
+        userService = usersRepository;
     }
 
     [ObservableProperty]
-    ObservableCollection<IncomeModel> incomesList;
+    ObservableCollection<IncomeModel> _incomesList;
 
     [ObservableProperty]
-    double totalAmount;
+    double _totalAmount;
 
     [ObservableProperty]
-    int totalIncomes;
+    double _totalIncomes;
 
     [ObservableProperty]
-    string userCurrency;
+    string _userCurrency;
 
     [ObservableProperty]
     double _userPocketMoney;
 
     [ObservableProperty]
-    bool isBusy;
+    bool _isBusy;
 
     [ObservableProperty]
-    string incTitle;
+    string _incTitle;
 
     UsersModel ActiveUser;
 
-    [RelayCommand]
-    public void PageLoaded()
+    public async override Task LoadDataAsync()
     {
-        var user = userService.User;
-        ActiveUser = user;
-        UserPocketMoney = ActiveUser.PocketMoney;
-        FilterGetAllIncomes();
-    }
-
-    public override Task LoadDataAsync()
-    {
-        return base.LoadDataAsync();
+        await Task.WhenAll(incomeService.SynchronizeIncomesAsync());
+        ActiveUser = await userService.GetUserAsync();
+        TotalIncomes = incomeService.CalculateTotalIncome();
+        IncomesList = incomeService.IncomesList;
+        TotalAmount = incomeService.IncomesList.Count();
+        base.LoadDataAsync();
     }
 
     public override Task InitAsync(object initData)
     {
         return base.InitAsync(initData);
+    }
+
+    [RelayCommand]
+    async Task AddIncomeAsync()
+    {
+        if (await AlertHelper.ShowConfirmationAlertAsync("Bạn có muốn thêm mới hóa đơn không?"))
+        {
+            await NavigationService.PushToPageAsync<AddIncomePage>();
+        }
+    }
+
+    [RelayCommand]
+    async Task EditIncomeAsync(object obj)
+    {
+        var valueObject = obj as IncomeModel;
+        if (await AlertHelper.ShowConfirmationAlertAsync("Bạn có muốn sửa thông tin hóa đơn không?"))
+        {
+            await NavigationService.PushToPageAsync<AddIncomePage>(valueObject);
+        }
     }
 
     bool IsLoaded;
@@ -76,7 +85,6 @@ public partial class IncomesViewModel : BaseViewModel
                 IsBusy = true;
                 IncTitle = "Tất cả thu nhập";
                 ApplyChanges();
-
                 IsLoaded = true;
             }
         }
@@ -131,7 +139,7 @@ public partial class IncomesViewModel : BaseViewModel
     private async Task AddEditIncome(IncomeModel newIncome, string pageTitle, bool isAdd)
     {
         var newUpserIncomeVM = new UpSertIncomeViewModel(incomeService, userService, newIncome, pageTitle, isAdd, ActiveUser);
-        await Shell.Current.ShowPopupAsync(new UpSertIncomePopUp(newUpserIncomeVM));
+        await NavigationService.PushToPageAsync<AddIncomePage>();
     }
 
     [RelayCommand]
@@ -143,43 +151,14 @@ public partial class IncomesViewModel : BaseViewModel
     [RelayCommand]
     public async Task DeleteIncomeBtn(IncomeModel income)
     {
-        CancellationTokenSource cancellationTokenSource = new();
-        const ToastDuration duration = ToastDuration.Short;
-        const double fontSize = 14;
-        const string text = "Xóa đơn";
-        var toast = Toast.Make(text, duration, fontSize);
-
-        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Xác nhận xóa?"));
-        if (response)
+        if(await AlertHelper.ShowConfirmationAlertAsync("Xác nhận xóa đơn?"))
         {
-            var updateDateTime = DateTime.UtcNow;
-            income.UpdatedDateTime = updateDateTime;
-            var deleteResponse = await incomeService.DeleteIncomeAsync(income);
-            if (deleteResponse)
+            if(await incomeService.DeleteIncomeAsync(income))
             {
-                ActiveUser.TotalIncomeAmount -= income.AmountReceived;
-                ActiveUser.PocketMoney -= income.AmountReceived;
-                UserPocketMoney -= income.AmountReceived;
-                ActiveUser.DateTimeOfPocketMoneyUpdate = updateDateTime;
-
-                await userService.UpdateUserAsync(ActiveUser);
-                IncomesList.Remove(income);
-
-                await toast.Show(cancellationTokenSource.Token);
+                TotalIncomes = incomeService.CalculateTotalIncome();
+                IncomesList = incomeService.IncomesList;
+                TotalAmount = incomeService.IncomesList.Count();
             }
-        }
-    }
-
-    [RelayCommand]
-    public async Task PrintIncomesBtn()
-    {
-        if (IncomesList?.Count < 1)
-        {
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Cannot Save an Empty List to PDF"));
-        }
-        else
-        {
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Saved"));
         }
     }
 
@@ -199,8 +178,6 @@ public partial class IncomesViewModel : BaseViewModel
             const string text = "Đã cập nhật số dư!";
             var toast = Toast.Make(text, duration, fontSize);
             await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
-
-            PageLoaded();
         }
     }
 

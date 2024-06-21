@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.AddIncomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:utilities="clr-namespace:Quanlychitieu.Utilities"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels"
+    Title="{Binding TitleIncome}">
+    <Border
+        Margin="15,10"
+        Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark},
+                                 Light=White}"
+        StrokeShape="RoundRectangle 12"
+        StrokeThickness="0">
+
+        <StackLayout Spacing="15">
+            <StackLayout.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="TextColor" Value="{AppThemeBinding Light=black, Dark=AliceBlue}" />
+                    </Style>
+                </ResourceDictionary>
+            </StackLayout.Resources>
+
+            <material:DatePickerField
+                Title="Ngày"
+                Date="{Binding DateReceived}"
+                MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                MinimumDate="01/01/2022"
+                TextColor="{AppThemeBinding Light=black,
+                                            Dark=white}">
+                <material:DatePickerField.Validations>
+                    <validation:RequiredValidation />
+                </material:DatePickerField.Validations>
+            </material:DatePickerField>
+            <material:TextField
+                x:Name="AmountReceived"
+                Title="Số tiền nhận"
+                BorderColor="DarkSlateBlue"
+                Keyboard="Numeric"
+                Text="{Binding AddIncomeDetails.AmountReceived}" />
+
+            <material:TextField
+                Title="Mô tả"
+                BorderColor="DarkSlateBlue"
+                Text="{Binding AddIncomeDetails.Reason}">
+                <material:TextField.Validations>
+                    <validation:RequiredValidation />
+                </material:TextField.Validations>
+            </material:TextField>
+            <Button
+                input:FormView.IsSubmitButton="True"
+                BackgroundColor="{StaticResource SaveBtnColor}"
+                Command="{Binding UpSertIncomeCommand}"
+                FontAttributes="Bold"
+                FontSize="12"
+                Text="Lưu"
+                TextColor="White" />
+        </StackLayout>
+    </Border>
+</ContentPage>

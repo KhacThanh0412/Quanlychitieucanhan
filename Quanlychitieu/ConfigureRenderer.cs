@@ -8,6 +8,7 @@ using Quanlychitieu.Handlers;
 using System.Threading.Tasks;
 using InputKit.Handlers;
 using UraniumUI;
+using Quanlychitieu.Views.Controls;
 
 namespace Quanlychitieu
 {
@@ -19,6 +20,7 @@ namespace Quanlychitieu
             {
                 handlers.AddHandler(typeof(Entry), typeof(CustomEntryHandler));
                 handlers.AddHandler(typeof(Shell), typeof(ShellHandler));
+                handlers.AddHandler(typeof(CustomCommunityPopup), typeof(CustomCommunityPopupHandler));
                 handlers.AddInputKitHandlers();
                 handlers.AddUraniumUIHandlers();
             });

@@ -18,19 +18,20 @@
     Color="Transparent">
     <Border
         Margin="15,10"
+        BackgroundColor="LightGray"
         Stroke="{AppThemeBinding Dark={StaticResource BackGroundDark},
                                  Light=White}"
         StrokeShape="RoundRectangle 12"
         StrokeThickness="0">
 
-        <VerticalStackLayout>
-            <VerticalStackLayout.Resources>
+        <StackLayout>
+            <StackLayout.Resources>
                 <ResourceDictionary>
                     <Style TargetType="Label">
                         <Setter Property="TextColor" Value="{AppThemeBinding Light=black, Dark=AliceBlue}" />
                     </Style>
                 </ResourceDictionary>
-            </VerticalStackLayout.Resources>
+            </StackLayout.Resources>
             <Label
                 Margin="0,10,0,0"
                 FontAttributes="Bold"
@@ -99,10 +100,17 @@
                     </material:TextField.Validations>
                 </material:TextField>
 
-                <HorizontalStackLayout
+                <StackLayout
                     Margin="0,15,0,0"
                     HorizontalOptions="Center"
+                    Orientation="Horizontal"
                     Spacing="15">
+                    <Button
+                        BackgroundColor="{StaticResource NegativeActionBtnDark}"
+                        Command="{Binding CancelBtnCommand}"
+                        FontSize="10"
+                        Text="Thoát"
+                        TextColor="White" />
                     <Button
                         input:FormView.IsSubmitButton="True"
                         BackgroundColor="{StaticResource SaveBtnColor}"
@@ -111,15 +119,9 @@
                         Text="Lưu"
                         TextColor="White" />
 
-                    <Button
-                        BackgroundColor="{StaticResource NegativeActionBtnDark}"
-                        Command="{Binding CancelBtnCommand}"
-                        FontSize="10"
-                        Text="Thoát"
-                        TextColor="White" />
 
-                </HorizontalStackLayout>
+                </StackLayout>
             </input:FormView>
-        </VerticalStackLayout>
+        </StackLayout>
     </Border>
 </mct:Popup>

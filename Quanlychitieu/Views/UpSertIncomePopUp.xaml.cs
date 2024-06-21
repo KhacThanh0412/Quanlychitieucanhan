@@ -11,22 +11,14 @@ public partial class UpSertIncomePopUp : Popup
     public UpSertIncomePopUp(UpSertIncomeViewModel vm)
     {
         InitializeComponent();
-        viewModel = vm;
-        BindingContext = vm;
-        viewModel.PageLoaded();
-#if ANDROID
+        BindingContext = viewModel = vm;
         Size = new Size(230, 340);
-#elif WINDOWS
-        Size = new Size(400, 350);
-#endif
-        viewModel.PropertyChanged += ViewModel_PropertyChanged;
     }
 
     private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(viewModel.ClosePopUp) && viewModel.ClosePopUp)
         {
-            viewModel.PropertyChanged -= ViewModel_PropertyChanged;
             if (viewModel.ThisPopUpResult == PopupResult.Cancel)
             {
                 Close(new PopUpCloseResult() { Data = null, Result = PopupResult.Cancel });

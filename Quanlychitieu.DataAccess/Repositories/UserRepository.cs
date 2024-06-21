@@ -109,11 +109,27 @@ namespace Quanlychitieu.DataAccess.Repositories
             }
         }
 
-        public async Task<UsersModel> GetUserAsync(string userId)
+        public async Task<UsersModel> GetUserAsync()
         {
-            User = await dataAccessRepo.GetDataFromApiAsync<UsersModel>($"api/users/{userId}");
-            UserDataChanged?.Invoke();
-            return User;
+            try
+            {
+                var userJson = await SecureStorage.GetAsync("user");
+                if (string.IsNullOrEmpty(userJson))
+                {
+                    Console.WriteLine("=====> User not logged in");
+                    return null;
+                }
+
+                var user = JsonConvert.DeserializeObject<UsersModel>(userJson);
+                User = user;
+                UserDataChanged?.Invoke();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching user: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<bool> AddUserAsync(UsersModel user)
