@@ -1,5 +1,4 @@
-﻿using Quanlychitieu.ViewModels.Incomes;
-using Quanlychitieu.PopUpPages;
+﻿using Quanlychitieu.PopUpPages;
 using Quanlychitieu.Utilities;
 
 namespace Quanlychitieu.Views;
@@ -7,7 +6,6 @@ namespace Quanlychitieu.Views;
 public partial class IncomesPage : ContentPage
 {
     private readonly IncomesViewModel _vm;
-    List<string> FilterResult { get; set; }
     public IncomesPage(IncomesViewModel vm)
     {
         InitializeComponent();

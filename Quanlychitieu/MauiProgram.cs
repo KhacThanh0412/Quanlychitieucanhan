@@ -11,7 +11,6 @@ using Quanlychitieu.DataAccess.Repositories;
 using Quanlychitieu.DataAccess;
 using Quanlychitieu.ViewModels;
 using Quanlychitieu.ViewModels.Expenditures;
-using Quanlychitieu.ViewModels.Incomes;
 using Quanlychitieu.ViewModels;
 using Quanlychitieu.ViewModels.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 using Quanlychitieu.ViewModels.Statistics;
@@ -62,8 +61,6 @@ namespace Quanlychitieu
 
             /*-- Section for Expenditures --*/
             builder.Services.AddSingleton<UpSertExpenditureViewModel>();
-            /* -- Section for Incomes --*/
-            //builder.Services.AddSingleton<UpSertIncomeViewModel>();
 
             /*-- Section for Planned Expenditures --*/
             builder.Services.AddSingleton<ManageMonthlyMonthlyPlannedExpendituresViewModel>();
@@ -81,9 +78,6 @@ namespace Quanlychitieu
 
             /*-- Section for Expenditures --*/
             builder.Services.AddSingleton<UpSertExpenditurePage>();
-
-            /*-- Section for Incomes --*/
-            builder.Services.AddSingleton<UpSertIncomePage>();
 
             /*-- Section for Settings --*/
             builder.Services.AddTransient<EditUserSettingsPage>();

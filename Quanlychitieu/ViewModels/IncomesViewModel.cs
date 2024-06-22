@@ -5,7 +5,7 @@ using Quanlychitieu.Navigation;
 using Quanlychitieu.PopUpPages;
 using Quanlychitieu.Views;
 
-namespace Quanlychitieu.ViewModels.Incomes;
+namespace Quanlychitieu.ViewModels;
 
 public partial class IncomesViewModel : BaseViewModel
 {
@@ -94,18 +94,6 @@ public partial class IncomesViewModel : BaseViewModel
         }
     }
 
-    private async void HandleIncomesListUpdated()
-    {
-        try
-        {
-            ApplyChanges();
-        }
-        catch (Exception ex)
-        {
-           await Shell.Current.DisplayAlert("Lỗi", ex.Message, "OK");
-        }
-    }
-
     private void ApplyChanges()
     {
         var IncList = incomeService.IncomesList
@@ -130,25 +118,6 @@ public partial class IncomesViewModel : BaseViewModel
                 IncomesList = incomeService.IncomesList;
                 TotalAmount = incomeService.IncomesList.Count();
             }
-        }
-    }
-
-    [RelayCommand]
-    public async Task ResetUserPocketMoney(double amount)
-    {
-        if (amount != 0)
-        {
-            ActiveUser.PocketMoney = amount;
-            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-            userService.User = ActiveUser;
-            await userService.UpdateUserAsync(ActiveUser);
-
-            CancellationTokenSource cancellationTokenSource = new();
-            const ToastDuration duration = ToastDuration.Short;
-            const double fontSize = 16;
-            const string text = "Đã cập nhật số dư!";
-            var toast = Toast.Make(text, duration, fontSize);
-            await toast.Show(cancellationTokenSource.Token); //toast a notification about exp deletion
         }
     }
 

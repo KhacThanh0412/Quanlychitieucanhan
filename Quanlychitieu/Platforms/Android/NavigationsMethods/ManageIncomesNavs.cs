@@ -8,10 +8,6 @@ namespace Quanlychitieu.Platforms.Android.NavigationsMethods
 {
     public class ManageIncomesNavs
     {
-        public async Task FromManageIncToUpsertIncome(Dictionary<string, object> navParams)
-        {
-            await Shell.Current.GoToAsync(nameof(UpSertIncomePage), true, navParams);
-        }
         public async Task FromUpsertIncToManageIncome(Dictionary<string, object> navParams)
         {
             await Task.Delay(0);

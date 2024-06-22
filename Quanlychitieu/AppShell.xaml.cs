@@ -13,8 +13,6 @@ namespace Quanlychitieu
             NavGraph.RegisterRoute();
             Routing.RegisterRoute(nameof(UpSertExpenditurePage), typeof(UpSertExpenditurePage));
 
-            Routing.RegisterRoute(nameof(UpSertIncomePage), typeof(UpSertIncomePage));
-
             Routing.RegisterRoute(nameof(StatisticsPage), typeof(StatisticsPage));
             Routing.RegisterRoute(nameof(SingleMonthStatsPage), typeof(SingleMonthStatsPage));
 

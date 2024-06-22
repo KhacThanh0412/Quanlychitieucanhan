@@ -7,7 +7,7 @@
     xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
     xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Incomes"
+    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels"
     x:Name="page"
     x:DataType="viewModel:IncomesViewModel">
     <ContentPage.Resources>
