@@ -1,17 +1,16 @@
-﻿using Quanlychitieu.Utilities;
+using Quanlychitieu.Models;
 
 namespace Quanlychitieu.Views;
 
-public partial class IncomesPage : ContentPage
+public partial class DebtsOverviewPage : ContentPage
 {
-    private readonly IncomesViewModel _vm;
-    public IncomesPage(IncomesViewModel vm)
+    readonly ManageDebtsViewModel _vm;
+    public DebtsOverviewPage(ManageDebtsViewModel vm)
     {
-        InitializeComponent();
         BindingContext = _vm = vm;
+        InitializeComponent();
     }
-
-    protected async override void OnAppearing()
+    protected override async void OnAppearing()
     {
         _vm.IsBusy = true;
         base.OnAppearing();

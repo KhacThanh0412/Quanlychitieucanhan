@@ -58,7 +58,19 @@ public class DebtRepository : IDebtRepository
         
         try
         {
-            var response = await dataAccess.PostDataToApiAsync("api/v1/add-debt", debt);
+            var postData = new
+            {
+                amountDebt = debt.AmountDebt,
+                personOrOrganization = new
+                {
+                    name = debt.PersonOrOrganization.Name,
+                    phoneNumber = debt.PersonOrOrganization.PhoneNumber,
+                    email = debt.PersonOrOrganization.Email
+                },
+                userId = debt.UserId
+            };
+
+            var response = await dataAccess.PostDataToApiAsync("api/v1/add-debt", postData);
             if (response.IsSuccessStatusCode)
             {
                 await GetAllDebtAsync();
@@ -112,8 +124,23 @@ public class DebtRepository : IDebtRepository
 
         try
         {
-
-            var response = await dataAccess.PutDataToApiAsync("api/v1/update-debt", debt);
+            var updateData = new
+            {
+                amountDebt = debt.AmountDebt,
+                debtType = debt.DebtType,
+                personOrOrganization = new
+                {
+                    name = debt.PersonOrOrganization.Name,
+                    phoneNumber = debt.PersonOrOrganization.PhoneNumber,
+                    email = debt.PersonOrOrganization.Email
+                },
+                amountPaid = debt.AmountPaid,
+                phoneAddress = debt.PhoneAddress,
+                isPaidCompletely = debt.IsPaidCompletely,
+                paymentAdvances = debt.PaymentAdvances,
+                userId = debt.UserId
+            };
+            var response = await dataAccess.PutDataToApiAsync($"api/v1/update-debt/{debt.Id}", updateData);
             if (response.IsSuccessStatusCode)
             {
                 await GetAllDebtAsync();

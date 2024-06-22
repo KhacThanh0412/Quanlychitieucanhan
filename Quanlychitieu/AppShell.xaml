@@ -4,10 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:mct="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
-    xmlns:views="clr-namespace:Quanlychitieu.Views"
-    xmlns:viewsDebts="clr-namespace:Quanlychitieu.Views.Debts"
-    xmlns:viewsPlannedExp="clr-namespace:Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
-    xmlns:viewsStats="clr-namespace:Quanlychitieu.Views.Statistics">
+    xmlns:views="clr-namespace:Quanlychitieu.Views">
     <Shell.Behaviors>
         <mct:StatusBarBehavior StatusBarColor="DarkSlateBlue" />
     </Shell.Behaviors>
@@ -34,23 +31,9 @@
             Route="IncomesPage" />
 
         <ShellContent
-            Title="Thông tin chi tiết"
-            ContentTemplate="{DataTemplate viewsStats:StatisticsPage}"
-            Icon="graph_d.png"
-            IsVisible="False" />
-
-        <ShellContent
-            Title="Dự báo dòng tiền"
-            ContentTemplate="{DataTemplate viewsPlannedExp:ManageMonthlyPlannedExpendituresPage}"
-            Icon="{AppThemeBinding Dark=monthly_planned_icon_d.png,
-                                   Light=monthly_planned_icon_l.png}"
-            IsVisible="False" />
-
-        <ShellContent
             Title="Chi tiết"
-            ContentTemplate="{DataTemplate viewsDebts:DebtsOverviewPage}"
-            Icon="{AppThemeBinding Dark=time_to_pay_d,
-                                   Light=time_to_pay_l}" />
+            ContentTemplate="{DataTemplate views:DebtsOverviewPage}"
+            Icon="{AppThemeBinding Light=calendar_l}" />
         <ShellContent
             Title="Cài đặt"
             ContentTemplate="{DataTemplate views:UserSettingsPage}"

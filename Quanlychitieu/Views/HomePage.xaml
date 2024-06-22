@@ -3,11 +3,17 @@
     x:Class="Quanlychitieu.Views.HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:Quanlychitieu.Helpers"
     xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels"
     Title="Trang chủ"
     x:DataType="viewModels:HomeViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeConverter x:Key="DateTimeConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Shell.BackButtonBehavior>
         <BackButtonBehavior IsEnabled="False" IsVisible="False" />
     </Shell.BackButtonBehavior>
@@ -81,28 +87,22 @@
                                         HorizontalTextAlignment="End"
                                         Opacity="{AppThemeBinding Dark=0.5,
                                                                   Light=0.8}"
-                                        Text="{Binding DateSpent, StringFormat='{0:ddd, MM/dd/yyyy}'}" />
+                                        Text="{Binding DateSpent, Converter={StaticResource DateTimeConverter}}" />
                                 </StackLayout>
                             </Grid>
 
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
-                <ActivityIndicator
-                    HorizontalOptions="Center"
-                    IsRunning="{Binding IsSyncing}"
-                    IsVisible="{Binding IsSyncing}"
-                    Color="DarkSlateBlue" />
-                <Label
-                    HorizontalOptions="Center"
-                    IsVisible="{Binding IsSyncing}"
-                    Text="Đang tải..." />
             </VerticalStackLayout>
 
         </Border>
         <VerticalStackLayout HorizontalOptions="Center">
-            <ImageButton Clicked="AddExpBtn_Clicked" Source="{AppThemeBinding Dark=add_btn_d.png, Light=add_btn_l.png}" />
+            <ImageButton Source="{AppThemeBinding Light=add_btn_l.png}">
+                <ImageButton.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToAddExpenditurePageCommand}" />
+                </ImageButton.GestureRecognizers>
+            </ImageButton>
         </VerticalStackLayout>
 
         <!--  End Section for Expenditure display  -->

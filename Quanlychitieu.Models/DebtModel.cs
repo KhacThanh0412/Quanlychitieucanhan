@@ -1,18 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace Quanlychitieu.Models;
 
 public partial class DebtModel : ObservableObject
 {
-    private bool isPaidCompletely;
     private string? displayText;
     [JsonProperty("_id")]
     public string Id { get; set; }
-    [ObservableProperty]
-    public double _amount;
+    public double AmountDebt { get; set; }
     public DebtType DebtType { get; set; } = DebtType.Lent;
     public required PersonOrOrganizationModel PersonOrOrganization { get; set; }
     public DateTime? Deadline { get; set; } 
@@ -53,21 +50,7 @@ public partial class DebtModel : ObservableObject
             }
         }
     }
-    public bool IsPaidCompletely
-    {
-        get => isPaidCompletely;
-        set
-        {
-            isPaidCompletely = value;
-            OnPropertyChanged(nameof(IsPaidCompletely));            
-        }
-    }
-    //public event PropertyChangedEventHandler? PropertyChanged;
-
-    //private void OnPropertyChanged(string propertyName)
-    //{
-    //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    //}
+    public bool IsPaidCompletely { get; set; }
 }
 public enum DebtType
 {
@@ -84,6 +67,6 @@ public class InstallmentPayments
 public class PersonOrOrganizationModel
 {
     public string Name { get; set; }
-    public string? PhoneNumber { get; set; }
-    public string? Email { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Email { get; set; }
 }

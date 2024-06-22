@@ -7,7 +7,6 @@ namespace Quanlychitieu.ViewModels
     {
         private readonly ISettingsServiceRepository settingsRepo;
         private readonly IUsersRepository userRepo;
-        readonly LoginNavs NavFunctions = new();
         public LoginViewModel(ISettingsServiceRepository sessionServiceRepository, IUsersRepository userRepository)
         {
             settingsRepo = sessionServiceRepository;
@@ -33,24 +32,6 @@ namespace Quanlychitieu.ViewModels
 
         [ObservableProperty]
         private bool isLoginFormVisible;
-
-        [RelayCommand]
-        public async Task PageLoaded()
-        {
-            if (await userRepo.CheckIfAnyUserExists())
-            {
-                if (userId is null)
-                {
-                    IsLoginFormVisible = true;
-                }
-
-                IsLoginFormVisible = false;
-            }
-            else
-            {
-                await settingsRepo.ClearPreferences();
-            }
-        }
 
         [RelayCommand]
         public async Task GoToHomePageFromRegister()
@@ -90,44 +71,6 @@ namespace Quanlychitieu.ViewModels
                 Console.WriteLine($"Error during login: {ex.Message}");
                 ErrorMessageVisible = true;
             }
-        }
-
-        private async Task SyncAndNotifyAsync()
-        {
-            try
-            {
-                CancellationTokenSource cts = new();
-                const ToastDuration duration = ToastDuration.Short;
-                const double fontSize = 14;
-                string text = "Đồng bộ !";
-                var toast = Toast.Make(text, duration, fontSize);
-                await toast.Show(cts.Token);
-            }
-            catch (AggregateException aEx)
-            {
-                foreach (var ex in aEx.InnerExceptions)
-                {
-                    await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Lỗi khi đồng bộ " + ex.Message));
-                }
-            }
-        }
-
-        //section for themes in windows version. i'll revise this later
-        [ObservableProperty]
-        int selectedTheme;
-        [ObservableProperty]
-        bool isLightTheme;
-
-        public void SetThemeConfig()
-        {
-            SelectedTheme = AppThemesSettings.ThemeSettings.Theme;
-            IsLightTheme = SelectedTheme == 0;
-        }
-        [RelayCommand]
-        public void ThemeToggler()
-        {
-            SelectedTheme = AppThemesSettings.ThemeSettings.SwitchTheme();
-            IsLightTheme = !IsLightTheme;
         }
     }
 }

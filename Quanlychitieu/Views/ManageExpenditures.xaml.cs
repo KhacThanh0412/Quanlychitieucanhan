@@ -1,6 +1,4 @@
-﻿using Quanlychitieu.ViewModels.Expenditures;
-using Quanlychitieu.Models;
-using Quanlychitieu.PopUpPages;
+﻿using Quanlychitieu.Models;
 
 namespace Quanlychitieu.Views;
 

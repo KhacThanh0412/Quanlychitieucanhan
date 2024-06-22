@@ -26,24 +26,6 @@
                 FontSize="21"
                 HorizontalOptions="Center"
                 Text="Danh sách các hóa đơn" />
-
-            <Grid toolkit:DockLayout.DockPosition="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <ImageButton
-                    x:Name="pie_chart"
-                    Grid.Column="1"
-                    Command="{Binding GoToSpecificStatsPageCommand}"
-                    HorizontalOptions="End"
-                    IsVisible="False"
-                    Source="{AppThemeBinding Dark=pie_chart,
-                                             Light=pie_chart_l}"
-                    VerticalOptions="Center" />
-                <!--  IsVisible="{Binding ShowStatisticBtn}"  -->
-            </Grid>
             <Label
                 Margin="5"
                 toolkit:DockLayout.DockPosition="Top"

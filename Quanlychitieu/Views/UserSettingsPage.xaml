@@ -10,8 +10,7 @@
     x:DataType="viewModel:UserSettingsViewModel">
     <StackLayout>
         <Border
-            BackgroundColor="{AppThemeBinding Light=White,
-                                              Dark=#171717}"
+            BackgroundColor="{AppThemeBinding Light=White}"
             Stroke="transparent"
             StrokeShape="RoundRectangle 0,0,25,25">
             <VerticalStackLayout>
@@ -19,7 +18,7 @@
 
                     <HorizontalStackLayout Grid.Column="0" Spacing="15">
                         <!--  Section to show User Image, Name and email  -->
-                        <Image HeightRequest="60" Source="{AppThemeBinding Dark=user_icon_d, Light=user_icon_l}" />
+                        <Image HeightRequest="60" Source="{AppThemeBinding Light=user_icon_l}" />
                         <VerticalStackLayout Margin="3" Spacing="10">
                             <Label
                                 FontAttributes="Bold"
@@ -29,58 +28,22 @@
                                 <Image HeightRequest="20" Source="{AppThemeBinding Light=email_dsb, Dark=email_dsb}" />
                                 <Label Text="{Binding ActiveUser.Email}" />
                             </HorizontalStackLayout>
-
                         </VerticalStackLayout>
                     </HorizontalStackLayout>
-
-                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="End">
-
-                        <Border
-                            HeightRequest="40"
-                            Stroke="transparent"
-                            StrokeShape="RoundRectangle 20"
-                            WidthRequest="40">
-                            <Border.Shadow>
-                                <Shadow Opacity="0.1" Offset="5,8" />
-                            </Border.Shadow>
-                            <ImageButton
-                                Command="{Binding GoToEditUserSettingsPageCommand}"
-                                HeightRequest="25"
-                                Source="{AppThemeBinding Dark=edit_d,
-                                                         Light=edit_l}" />
-                        </Border>
-                    </VerticalStackLayout>
                 </Grid>
-
                 <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="10">
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
                         <!--  For total Expenditures  -->
-                        <Label FontAttributes="Bold">
-                            <Label.Text>
-                                <MultiBinding StringFormat="{} {0:n2} {1}">
-                                    <Binding Path="TotalExpendituresAmount" />
-                                    <Binding Path="UserCurrency" />
-                                </MultiBinding>
-                            </Label.Text>
-                        </Label>
+                        <Label FontAttributes="Bold" Text="{Binding TotalExpensesAmount}" />
                         <Label
                             FontSize="13"
                             HorizontalOptions="Center"
                             Text="Tổng chi" />
                     </VerticalStackLayout>
-
                     <Rectangle Grid.Column="1" Fill="darkslateblue" />
-
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
                         <!--  For Total Income  -->
-                        <Label FontAttributes="Bold">
-                            <Label.Text>
-                                <MultiBinding StringFormat="{} {0:n2} {1}">
-                                    <Binding Path="TotalIncomeAmount" />
-                                    <Binding Path="UserCurrency" />
-                                </MultiBinding>
-                            </Label.Text>
-                        </Label>
+                        <Label FontAttributes="Bold" Text="{Binding TotalIncomeAmount}" />
                         <Label Text="Tổng thu" />
                     </VerticalStackLayout>
 
@@ -88,29 +51,10 @@
 
                     <VerticalStackLayout HorizontalOptions="End" Spacing="5">
                         <!--  For total debts  -->
-                        <Label FontAttributes="Bold">
-                            <Label.Text>
-                                <MultiBinding StringFormat="{} XXX {0}">
-                                    <Binding Path="UserCurrency" />
-                                </MultiBinding>
-                            </Label.Text>
-                        </Label>
+                        <Label FontAttributes="Bold" Text="{Binding TotalDebtRepaid}" />
                         <Label Text="Tổng dư nợ" />
                     </VerticalStackLayout>
                 </HorizontalStackLayout>
-
-                <Label
-                    Margin="5"
-                    FontAttributes="Bold"
-                    FontSize="15"
-                    HorizontalOptions="Center">
-                    <Label.Text>
-                        <MultiBinding StringFormat="{} Số dư hiện tại : {0:n2} {1}">
-                            <Binding Path="PocketMoney" />
-                            <Binding Path="UserCurrency" />
-                        </MultiBinding>
-                    </Label.Text>
-                </Label>
 
             </VerticalStackLayout>
         </Border>

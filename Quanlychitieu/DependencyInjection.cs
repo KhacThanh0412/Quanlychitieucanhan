@@ -1,15 +1,5 @@
 ﻿using CommunityToolkit.Maui;
-using Mopups.Interfaces;
-using Mopups.Services;
 using Quanlychitieu.Navigation;
-using Quanlychitieu.Services;
-using Quanlychitieu.ViewModels;
-using Quanlychitieu.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Quanlychitieu
 {
@@ -25,23 +15,30 @@ namespace Quanlychitieu
             services.AddSingleton<IIncomeRepository, IncomeRepository>();
             services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();
             services.AddSingleton<INavigationCommunityPopupService, NavigationCommunityPopupService>();
+            services.AddSingleton<IDebtRepository, DebtRepository>();
             services.AddSingleton<INavigationService, NavigationService>();
 
             services.AddTransient<HomePage>();
-            services.AddSingleton<LoginPage>();
+            services.AddTransient<LoginPage>();
             services.AddTransient<UserSettingsPage>();
             services.AddTransient<IncomesPage>();
             services.AddTransient<AddIncomePage>();
             services.AddTransient<AddExpendituresPage>();
-            services.AddSingleton<ManageExpenditures>();
+            services.AddTransient<ManageExpenditures>();
+            services.AddTransient<DebtsOverviewPage>();
+            services.AddTransient<AddSertDebtPage>();
+            services.AddTransient<DebtLendingPage>();
 
             services.AddTransient<HomeViewModel>();
-            services.AddSingleton<LoginViewModel>();
+            services.AddTransient<LoginViewModel>();
             services.AddTransient<UserSettingsViewModel>();
             services.AddTransient<IncomesViewModel>();
             services.AddTransient<AddIncomeViewModel>();
             services.AddTransient<AddExpendituresViewModel>();
             services.AddTransient<ManageExpendituresViewModel>();
+            services.AddTransient<ManageDebtsViewModel>();
+            services.AddTransient<AddSertDebtViewModel>();
+            services.AddTransient<DebtLendingViewModel>();
 
             return services;
         }

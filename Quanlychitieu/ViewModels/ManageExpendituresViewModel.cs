@@ -133,40 +133,6 @@ public partial class ManageExpendituresViewModel : BaseViewModel
         // Update ShowStatisticBtn
         ShowStatisticBtn = expList.Count >= 3;
     }
-
-    [RelayCommand]
-    public async Task GoToSpecificStatsPage()
-    {
-        if (GroupedExpenditures is null)
-        {
-            await Shell.Current.ShowPopupAsync(new ErrorPopUpAlert("Không có dữ liệu"));
-            return;
-        }
-
-        var navParam = new Dictionary<string, object>
-        {
-            { "GroupedExpList", GroupedExpenditures }
-        };
-
-        await ManageExpendituresNavs.FromManageExpToSingleMonthStats(navParam);
-    }
-
-    [RelayCommand]
-    public async Task CopyToClipboard(ExpendituresModel singlExp)
-    {
-        CancellationTokenSource cancellationTokenSource = new();
-        const ToastDuration duration = ToastDuration.Short;
-        const double fontSize = 14;
-        const string text = "Chi tiết hóa đơn được sao chép";
-        var toast = Toast.Make(text, duration, fontSize);
-        await toast.Show(cancellationTokenSource.Token); //toast a notification about exp being copied to clipboard
-    }
-
-    [RelayCommand]
-    public async Task DropCollection()
-    {
-        await Task.Delay(1);
-    }
 }
 
 public class DateGroup : ObservableCollection<ExpendituresModel>

@@ -190,121 +190,37 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\Debts\DebtsOverviewPage.xaml.cs">
+	  <Compile Update="Views\DebtsOverviewPage.xaml.cs">
 	    <DependentUpon>DebtsOverviewPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Debts\ManageBorrowingsPage.xaml.cs">
-	    <DependentUpon>ManageBorrowingsPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Debts\ManageLendingsPage.xaml.cs">
-	    <DependentUpon>ManageLendingsPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Debts\SingleDebtDetailsPage.xaml.cs">
-	    <DependentUpon>SingleDebtDetailsPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\ManageExpenditures.xaml.cs">
 	    <DependentUpon>ManageExpenditures.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\DetailsOfMonthlyPlannedExpPage.xaml.cs">
-	    <DependentUpon>DetailsOfMonthlyPlannedExpPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\ManageMonthlyPlannedExpendituresPage.xaml.cs">
-	    <DependentUpon>ManageMonthlyPlannedExpendituresPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\UpSertMonthlyPlannedExpPage.xaml.cs">
-	    <DependentUpon>UpSertMonthlyPlannedExpPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Expenditures\UpSertExpenditurePage.xaml.cs">
-	    <DependentUpon>UpSertExpenditurePage.xaml</DependentUpon>
-	  </Compile>
 	  <Compile Update="Views\IncomesPage.xaml.cs">
 	    <DependentUpon>IncomesPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Settings\EditUserSettingsPage.xaml.cs">
-	    <DependentUpon>EditUserSettingsPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\UserSettingsPage.xaml.cs">
 	    <DependentUpon>UserSettingsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Statistics\SingleMonthStatsPage.xaml.cs">
-	    <DependentUpon>SingleMonthStatsPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Statistics\StatisticsPage.xaml.cs">
-	    <DependentUpon>StatisticsPage.xaml</DependentUpon>
-	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Controls\TabBar.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Controls\TranscationView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PopUpPages\AcceptCancelPopUpAlert.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PopUpPages\ErrorPopUpAlert.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PopUpPages\FilterOptionsPopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PopUpPages\InputCurrencyForPrintPopUpPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PopUpPages\InputMonthAndYearPopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PopUpPages\InputPopUpPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PopUpPages\LoadingActivityIndicatorPopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PopUpPages\UpSertInstallmentPayment.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\AddExpendituresPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AddIncomePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Debts\DebtsOverviewPage.xaml">
+	  <MauiXaml Update="Views\AddSertDebtPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Debts\ManageBorrowingsPage.xaml">
+	  <MauiXaml Update="Views\DebtLendingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Debts\ManageLendingsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Debts\SingleDebtDetailsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Debts\UpSertDebtBottomSheet.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Debts\UpSertInstallmentBSheet.xaml">
+	  <MauiXaml Update="Views\DebtsOverviewPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ManageExpenditures.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\DetailsOfMonthlyPlannedExpPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\ManageMonthlyPlannedExpendituresPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\UpSertMonthlyPlannedExpPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Expenditures\UpSertExpenditureBottomSheet.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Expenditures\UpSertExpenditurePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HomePage.xaml">
@@ -316,16 +232,7 @@
 	  <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Settings\EditUserSettingsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\UserSettingsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Statistics\SingleMonthStatsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Statistics\StatisticsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
@@ -355,10 +262,6 @@
 
 	<ItemGroup>
 	  <None Include="C:\Users\DELL\Documents\Quanlychitieucanhan\Quanlychitieu\.editorconfig" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Views\Popups\" />
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,4 @@
 ﻿using Quanlychitieu.Navigation;
-using Quanlychitieu.Views.Debts;
-using Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
-using Quanlychitieu.Views.Statistics;
 
 namespace Quanlychitieu
 {
@@ -11,21 +8,24 @@ namespace Quanlychitieu
         {
             InitializeComponent();
             NavGraph.RegisterRoute();
-            Routing.RegisterRoute(nameof(UpSertExpenditurePage), typeof(UpSertExpenditurePage));
+        }
 
-            Routing.RegisterRoute(nameof(StatisticsPage), typeof(StatisticsPage));
-            Routing.RegisterRoute(nameof(SingleMonthStatsPage), typeof(SingleMonthStatsPage));
+        public async Task RemoveRootAsync()
+        {
+            List<Task> tasks = new();
+            foreach (var item in this.CurrentItem.Items)
+            {
+                var viewModel = (item.CurrentItem as IShellContentController)?.Page?.BindingContext as BaseViewModel;
 
-            Routing.RegisterRoute(nameof(EditUserSettingsPage), typeof(EditUserSettingsPage));
+                if (viewModel != null)
+                {
+                    var task = viewModel?.ViewIsRemovedAsync();
+                    if (task != null)
+                        tasks.Add(task);
+                }
+            }
 
-            Routing.RegisterRoute(nameof(ManageMonthlyPlannedExpendituresPage), typeof(ManageMonthlyPlannedExpendituresPage));
-            Routing.RegisterRoute(nameof(DetailsOfMonthlyPlannedExpPage), typeof(DetailsOfMonthlyPlannedExpPage));
-            Routing.RegisterRoute(nameof(UpSertMonthlyPlannedExpPage), typeof(UpSertMonthlyPlannedExpPage));
-
-            Routing.RegisterRoute(nameof(DebtsOverviewPage), typeof(DebtsOverviewPage));
-            Routing.RegisterRoute(nameof(ManageBorrowingsPage), typeof(ManageBorrowingsPage));
-            Routing.RegisterRoute(nameof(ManageLendingsPage), typeof(ManageLendingsPage));
-            Routing.RegisterRoute(nameof(SingleDebtDetailsPage), typeof(SingleDebtDetailsPage));
+            await Task.WhenAll(tasks);
         }
     }
 }

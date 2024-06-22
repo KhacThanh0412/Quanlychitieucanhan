@@ -1,129 +1,62 @@
-﻿using Microsoft.Maui.Controls;
-using Newtonsoft.Json;
-using Quanlychitieu.AdditionalResourcefulAPIClasses;
-using Quanlychitieu.DataAccess.IRepositories;
-using Quanlychitieu.Models;
-using Quanlychitieu.Platforms.Android.NavigationsMethods;
-using Quanlychitieu.PopUpPages;
-using Quanlychitieu.Utilities;
-using Quanlychitieu.ViewModels;
-using Quanlychitieu.Views;
+﻿using Quanlychitieu.Helpers;
 
 namespace Quanlychitieu.ViewModels;
 
 public partial class UserSettingsViewModel : BaseViewModel
 {
-    private readonly IUsersRepository usersRepository;
-    private readonly IExpendituresRepository expendituresRepository;
-    private readonly IIncomeRepository incomeRepository;
-    private readonly IDebtRepository debtRepository;
+    private readonly IExpendituresRepository expenditureRepo;
+    private readonly ISettingsServiceRepository settingsService;
+    private readonly IUsersRepository userRepo;
+    private readonly IIncomeRepository incomeRepo;
+    private readonly IDebtRepository debtRepo;
+
     [ObservableProperty]
-    public double pocketMoney;
-    [ObservableProperty]
-    public string userCurrency;
-    [ObservableProperty]
-    public double totalIncomeAmount;
-    [ObservableProperty]
-    public double totalExpendituresAmount;
-    [ObservableProperty]
-    public double totalBorrowedCompletedAmount;
-    [ObservableProperty]
-    public double totalBorrowedPendingAmount;
-    [ObservableProperty]
-    public double totalLentCompletedAmount;
-    [ObservableProperty]
-    public double totalLentPendingAmount;
-    [ObservableProperty]
-    public string selectCountryCurrency;
+    public double _totalIncomeAmount;
     [ObservableProperty]
     private UsersModel _activeUser;
+    [ObservableProperty]
+    private double _totalDebtRepaid;
+    [ObservableProperty]
+    private double _totalExpensesAmount;
+
 
     [ObservableProperty]
     bool isNotInEditingMode;
 
-    public UserSettingsViewModel(IUsersRepository usersRepository)
+    public UserSettingsViewModel(IUsersRepository usersRepository, IIncomeRepository incomeRepo, IExpendituresRepository expendituresRepository, IDebtRepository debtRepository)
     {
-        this.usersRepository = usersRepository;
+        this.userRepo = usersRepository;
+        this.incomeRepo = incomeRepo;
+        expenditureRepo = expendituresRepository;
+        debtRepo = debtRepository;
     }
 
     public async override Task LoadDataAsync()
     {
-        ActiveUser = await usersRepository.GetUserAsync();
-        // GetTotals();
+        ActiveUser = await userRepo.GetUserAsync();
+        await Task.WhenAll(incomeRepo.SynchronizeIncomesAsync());
+        await Task.WhenAll(expenditureRepo.SynchronizeExpendituresAsync());
+        await Task.WhenAll(debtRepo.SynchronizeDebtsAsync());
+        TotalIncomeAmount = incomeRepo.IncomesList.Sum(i => i.AmountReceived);
+        TotalExpensesAmount = expenditureRepo.ExpendituresList.Sum(e => e.AmountSpent);
+        CalculateTotalDebtRepaid();
         await base.LoadDataAsync();
     }
 
-    private void GetTotals()
+    private void CalculateTotalDebtRepaid()
     {
-        TotalExpendituresAmount = expendituresRepository.ExpendituresList.Select(x => x.AmountSpent).Sum();
-        TotalIncomeAmount = ActiveUser.TotalIncomeAmount;
-
-        var filteredAndSortedDebts = debtRepository.DebtList
-                        .Where(x => !x.IsDeleted)
-                        .Distinct()
-                        .ToList();
-        var BorrowedCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-            .Where(x => x.DebtType == DebtType.Borrowed && x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime)); //tổng nợ đã được trả lại
-
-        var LentCompletedList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-            .Where(x => x.DebtType == DebtType.Lent && x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));//Tổng nợ đã được trả hoàn toàn từ người dùng
-
-        var BorrowedPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-            .Where(x => x.DebtType == DebtType.Borrowed && !x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime));//tổng nợ vẫn đang chờ trả
-
-        var LentPendingList = new ObservableCollection<DebtModel>(filteredAndSortedDebts
-            .Where(x => x.DebtType == DebtType.Lent && !x.IsPaidCompletely)
-            .OrderBy(x => x.AddedDateTime)); //tổng nợ vẫn đang chờ người dùng trả
-
-        TotalBorrowedCompletedAmount = BorrowedCompletedList.Sum(x => x.Amount);
-        TotalBorrowedPendingAmount = BorrowedPendingList.Sum(x => x.Amount);
-        TotalLentCompletedAmount = LentCompletedList.Sum(x => x.Amount);
-        TotalLentPendingAmount = LentPendingList.Sum(x => x.Amount);
+        // Tính tổng số tiền đã trả nợ
+        TotalDebtRepaid = debtRepo.DebtList.Sum(d => d.AmountDebt);
     }
 
     [RelayCommand]
     public async Task LogOutUser()
     {
-        bool response = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Bạn có muốn đăng xuất không?"));
-        if (response)
+        if (await AlertHelper.ShowConfirmationAlertAsync("Bạn có muốn đăng xuất không?"));
         {
-            string LoginDetectFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QuickLogin.text");
-            File.Delete(LoginDetectFile);
-
-            await usersRepository.LogOutUserAsync();
+            await userRepo.LogOutUserAsync();
+            await (Shell.Current as AppShell)?.RemoveRootAsync();
+            App.Current.MainPage = new NavigationPage(new LoginPage(new LoginViewModel(settingsService, userRepo)));
         }
-    }
-
-    [RelayCommand]
-    public async Task GoToEditUserSettingsPage()
-    {
-        await Shell.Current.GoToAsync(nameof(EditUserSettingsPage), true);
-    }
-
-    [RelayCommand]
-    public async Task UpdateUserInformation()
-    {
-        bool dialogResult = (bool)await Shell.Current.ShowPopupAsync(new AcceptCancelPopUpAlert("Lưu thông tin cá nhân?"));
-        if (dialogResult)
-        {
-            ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
-            await expendituresRepository.GetAllExpendituresAsync();
-            if (await usersRepository.UpdateUserAsync(ActiveUser))
-            {
-                usersRepository.User = ActiveUser;
-
-                CancellationTokenSource cancellationTokenSource = new();
-                const ToastDuration duration = ToastDuration.Short;
-                const double fontSize = 16;
-                const string text = "Hồ sơ cá nhân đã cập nhật!";
-                var toast = Toast.Make(text, duration, fontSize);
-                await toast.Show(cancellationTokenSource.Token);
-                await Shell.Current.GoToAsync("..", true);
-            }
-        }
-        IsNotInEditingMode = true;
     }
 }

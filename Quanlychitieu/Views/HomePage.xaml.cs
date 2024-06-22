@@ -1,36 +1,31 @@
-using Quanlychitieu.ViewModels.Expenditures;
 using Quanlychitieu.ViewModels;
-using Quanlychitieu.Views.Expenditures;
 
 namespace Quanlychitieu.Views;
 
 public partial class HomePage : ContentPage
 {
-    private UpSertExpenditureBottomSheet UpSertExpbSheet;
+    readonly HomeViewModel _vm;
     public HomePage(HomeViewModel vm)
 	{
-        BindingContext = vm;
+        BindingContext = _vm = vm;
         InitializeComponent();
-        // Attachments.Add(UpSertExpbSheet);
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
-        //if (UpSertExpbSheet.IsPresented)
-        //{
-        //    UpSertExpbSheet.IsPresented = false;
-        //}
+        _vm.IsBusy = true;
         base.OnAppearing();
-        //viewModel.GetUserData();
-        //if (!viewModel._isInitialized)
-        //{
-        //    await viewModel.DisplayInfo();
-        //    viewModel._isInitialized = true;
-        //}
-    }
-    private void AddExpBtn_Clicked(object sender, EventArgs e)
-    {
-        UpSertExpbSheet.IsPresented = true;
-        Shell.Current.IsEnabled = false;
+        try
+        {
+            if (!_vm.IsPushPageWithNavService)
+            {
+                await _vm.InitAsync(null);
+                await _vm.ViewIsAppearingAsync();
+            }
+        }
+        finally
+        {
+            _vm.IsBusy = false;
+        }
     }
 }

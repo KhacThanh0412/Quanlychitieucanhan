@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.AddSertDebtPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:Quanlychitieu.Helpers"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels"
+    x:Name="page"
+    Title="Thêm mới"
+    x:DataType="viewModels:AddSertDebtViewModel"
+    BackgroundColor="Transparent">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeConverter x:Key="DateTimeConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout Margin="16,20">
+        <StackLayout
+            HorizontalOptions="Center"
+            Orientation="Horizontal"
+            Spacing="7">
+            <material:RadioButton
+                x:Name="IsLentRBtn"
+                CircleColor="{AppThemeBinding Light=darkslateblue,
+                                              Dark=darkslateblue}"
+                IsChecked="{Binding IsLent}"
+                Text="Cho vay"
+                TextColor="{AppThemeBinding Light=black,
+                                            Dark=gray}"
+                Color="DarkSlateBlue" />
+        </StackLayout>
+
+        <Grid BackgroundColor="Transparent" ColumnSpacing="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <material:TextField
+                x:Name="AmountTextField"
+                Title="Số tiền"
+                Grid.Column="0"
+                BackgroundColor="Transparent"
+                InputBackgroundColor="Red"
+                IsVisible="true"
+                Keyboard="Numeric"
+                Text="{Binding DebtDetails.AmountDebt}">
+                <material:TextField.Validations>
+                    <validation:RequiredValidation />
+                </material:TextField.Validations>
+            </material:TextField>
+        </Grid>
+        <Grid BackgroundColor="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <material:TextField
+                x:Name="PersonName"
+                Title="Tên"
+                Text="{Binding DebtDetails.PersonOrOrganization.Name}">
+                <material:TextField.Validations>
+                    <validation:RequiredValidation />
+                </material:TextField.Validations>
+            </material:TextField>
+        </Grid>
+        <material:EditorField
+            Title="Ghi chú"
+            Text="{Binding DebtDetails.Notes}"
+            TextColor="{AppThemeBinding Light=black,
+                                        Dark=white}"
+            TitleColor="{AppThemeBinding Light=black}">
+            <material:EditorField.Validations>
+                <validation:RequiredValidation />
+            </material:EditorField.Validations>
+        </material:EditorField>
+
+        <material:TextField
+            x:Name="PersonNumber"
+            Title="Liên hệ"
+            Keyboard="Numeric"
+            Text="{Binding DebtDetails.PersonOrOrganization.PhoneNumber}">
+            <material:TextField.Validations>
+                <validation:RequiredValidation />
+            </material:TextField.Validations>
+        </material:TextField>
+
+        <Grid BackgroundColor="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <HorizontalStackLayout Grid.Column="0" Margin="6,0">
+                <Label Text="Hạn" VerticalTextAlignment="Center" />
+                <Switch
+                    x:Name="DeadlineSwitch"
+                    IsToggled="{Binding HasDeadLine}"
+                    OnColor="DarkSlateBlue"
+                    ThumbColor="{AppThemeBinding Dark=white,
+                                                 Light=gray}" />
+
+
+            </HorizontalStackLayout>
+
+            <material:DatePickerField
+                x:Name="FlowHoldDeadline"
+                Title="Ngày hạn"
+                Grid.Column="1"
+                Date="{Binding DebtDetails.Deadline, StringFormat='{0:MMMM dd, yyyy}'}"
+                IsVisible="{Binding IsToggled, Source={x:Reference DeadlineSwitch}}"
+                MinimumDate="01/01/2022"
+                TextColor="{AppThemeBinding Dark=gray,
+                                            Light=black}" />
+        </Grid>
+        <Button
+            Margin="0,20,0,0"
+            BackgroundColor="{StaticResource SaveBtnColor}"
+            Command="{Binding UpSertDebtCommand}"
+            FontAttributes="Bold"
+            FontSize="20"
+            Text="Lưu"
+            TextColor="White" />
+    </StackLayout>
+</ContentPage>

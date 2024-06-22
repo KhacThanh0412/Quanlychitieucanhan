@@ -1,45 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<uranium:UraniumContentPage
-    x:Class="Quanlychitieu.Views.Debts.ManageLendingsPage"
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.DebtLendingPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Quanlychitieu.Views.Debts"
     xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
     xmlns:materialAttach="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
     xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:utilities="clr-namespace:Quanlychitieu.Utilities"
-    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels.Debts"
+    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels"
     x:Name="Page"
     Title="Khoản cho vay"
-    x:DataType="viewModels:ManageDebtsViewModel"
-    BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight},
-                                      Dark={StaticResource BackGroundDark}}">
-    <uranium:UraniumContentPage.ToolbarItems>
-        <ToolbarItem Order="Secondary" Text="1" />
-        <ToolbarItem Order="Secondary" Text="2" />
-        <ToolbarItem Order="Secondary" Text="3" />
-        <ToolbarItem Order="Secondary" Text="4" />
-    </uranium:UraniumContentPage.ToolbarItems>
+    x:DataType="viewModels:DebtLendingViewModel">
     <AbsoluteLayout>
         <toolkit:DockLayout
             Margin="8,3"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="All">
 
-            <SearchBar
-                x:Name="DebtsSearchBar"
-                toolkit:DockLayout.DockPosition="Top"
-                BackgroundColor="Transparent"
-                CancelButtonColor="DarkSlateBlue"
-                HorizontalOptions="Center"
-                IsTextPredictionEnabled="True"
-                Placeholder="Tìm kiếm..."
-                PlaceholderColor="{AppThemeBinding Dark=#B2B2B2}"
-                TextChanged="DebtsSearchBar_TextChanged" />
-
             <Label
+                x:Name="Khacthanh"
                 toolkit:DockLayout.DockPosition="Bottom"
                 FontAttributes="Bold"
                 FontSize="15"
@@ -57,13 +38,8 @@
                 toolkit:DockLayout.DockPosition="Top">
                 <uranium:ExpanderView.Header>
                     <Border Margin="5,0" Padding="15">
-                        <Label FontSize="18" Text="Khoản vay đang xử lý">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="PendingLentExpHeader_Tapped" />
-                            </Label.GestureRecognizers>
-                        </Label>
+                        <Label FontSize="18" Text="Khoản vay đang xử lý" />
                     </Border>
-
                 </uranium:ExpanderView.Header>
                 <VerticalStackLayout>
                     <CollectionView ItemsSource="{Binding LentPendingList}" VerticalOptions="Fill">
@@ -95,7 +71,6 @@
                                             x:Name="EditDebtBtn"
                                             BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
                                                                               Light={StaticResource BackGroundLight}}"
-                                            Clicked="EditDebtBtn_Clicked"
                                             IconImageSource="{AppThemeBinding Dark=edit_d,
                                                                               Light=edit_l}" />
                                     </SwipeView.RightItems>
@@ -104,13 +79,6 @@
                                         Margin="6,2"
                                         Padding="5"
                                         HorizontalOptions="Center">
-                                        <Border.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowDebtDetailsCommand}"
-                                                CommandParameter="{Binding .}"
-                                                NumberOfTapsRequired="2" />
-                                        </Border.GestureRecognizers>
-
                                         <VerticalStackLayout Spacing="5">
                                             <Label
                                                 FontAttributes="Bold"
@@ -154,7 +122,7 @@
                         FontSize="14"
                         HorizontalOptions="Center">
                         <Label.Text>
-                            <MultiBinding StringFormat="{}{0} Cho vay, Tổng cộng : {1:n2} {2}">
+                            <MultiBinding StringFormat="{}{0} Cho vay, Tổng cộng : {1} {2}">
                                 <Binding Path="TotalPendingLentCount" />
                                 <Binding Path="TotalLentPendingAmount" />
                                 <Binding Path="UserCurrency" />
@@ -170,11 +138,7 @@
                 toolkit:DockLayout.DockPosition="Top">
                 <uranium:ExpanderView.Header>
                     <Border Margin="5,0" Padding="15">
-                        <Label FontSize="18" Text="Khoản vay đã hoàn thành">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="CompletedLentExpHeader_Tapped" />
-                            </Label.GestureRecognizers>
-                        </Label>
+                        <Label FontSize="18" Text="Khoản vay đã hoàn thành" />
                     </Border>
                 </uranium:ExpanderView.Header>
                 <VerticalStackLayout>
@@ -200,16 +164,8 @@
                                             IconImageSource="{AppThemeBinding Dark=done_undone_d,
                                                                               Light=done_undone_l}" />
 
+
                                     </SwipeView.LeftItems>
-                                    <SwipeView.RightItems>
-                                        <SwipeItem
-                                            BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
-                                                                              Light={StaticResource BackGroundLight}}"
-                                            Command="{Binding Source={x:Reference Page}, Path=BindingContext.OpenEditDebtbSheetCommand}"
-                                            CommandParameter="{Binding .}"
-                                            IconImageSource="{AppThemeBinding Dark=edit_d,
-                                                                              Light=edit_l}" />
-                                    </SwipeView.RightItems>
 
                                     <Border
                                         Margin="6,2"
@@ -264,7 +220,7 @@
                         FontSize="14"
                         HorizontalOptions="Center">
                         <Label.Text>
-                            <MultiBinding StringFormat="{}{0} Cho vay, Tổng cộng : {1:n2} {2}">
+                            <MultiBinding StringFormat="{}{0} Cho vay, Tổng cộng : {1:} {2}">
                                 <Binding Path="TotalCompletedLentCount" />
                                 <Binding Path="TotalLentPendingAmount" />
                                 <Binding Path="UserCurrency" />
@@ -275,26 +231,5 @@
             </uranium:ExpanderView>
 
         </toolkit:DockLayout>
-
-        <Button
-            Margin="0,0,15,30"
-            Padding="0"
-            AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
-            AbsoluteLayout.LayoutFlags="PositionProportional"
-            BackgroundColor="DarkSlateBlue"
-            BorderColor="DarkSlateBlue"
-            Clicked="AddNewFlowHoldBtn_Clicked"
-            CornerRadius="26"
-            FontSize="40"
-            HeightRequest="55"
-            Text="+"
-            TextColor="White"
-            WidthRequest="55">
-            <Button.Shadow>
-                <Shadow Opacity="0.6" Offset="5,15" />
-            </Button.Shadow>
-        </Button>
     </AbsoluteLayout>
-
-
-</uranium:UraniumContentPage>
+</ContentPage>
