@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.ObjectModel;
 
 namespace Quanlychitieu.DataAccess.Repositories;
 
 public class IncomeRepository : IIncomeRepository
 {
-    public ObservableCollection<IncomeModel> IncomesList { get; set; }
+    public List<IncomeModel> IncomesList { get; set; }
 
     readonly IDataAccessRepo dataAccessRepo;
     readonly IUsersRepository usersRepo;
@@ -16,22 +15,24 @@ public class IncomeRepository : IIncomeRepository
     {
         dataAccessRepo = dataAccess;
         usersRepo = userRepository;
-        IncomesList = new ObservableCollection<IncomeModel>();
+        IncomesList = new List<IncomeModel>();
     }
 
-    public async Task<ObservableCollection<IncomeModel>> GetAllIncomesAsync()
+    public async Task<List<IncomeModel>> GetAllIncomesAsync()
     {
         try
         {
-            var userJson = await usersRepo.GetUserAsync();
-            var userId = userJson.Id;
+            var userJson = await SecureStorage.GetAsync("user");
+
+            var userConvert = JsonConvert.DeserializeObject<UsersModel>(userJson);
+            var userId = userConvert.Id;
             if (userId == null)
             {
                 Console.WriteLine("=====> User not logged in");
-                return new ObservableCollection<IncomeModel>();
+                return new List<IncomeModel>();
             }
 
-            var incomes = await dataAccessRepo.GetDataFromApiAsync<ObservableCollection<IncomeModel>>($"api/v1/income/user/{userId}");
+            var incomes = await dataAccessRepo.GetDataFromApiAsync<List<IncomeModel>>($"api/v1/income/user/{userId}");
             if (incomes != null)
             {
                 IncomesList = incomes;
@@ -39,7 +40,7 @@ public class IncomeRepository : IIncomeRepository
             }
             else
             {
-                IncomesList = new ObservableCollection<IncomeModel>();
+                IncomesList = new List<IncomeModel>();
             }
 
             return IncomesList;
@@ -48,7 +49,7 @@ public class IncomeRepository : IIncomeRepository
         {
             Debug.WriteLine(ex.InnerException?.Message);
             Debug.WriteLine("Get all INC function Exception: " + ex.Message);
-            IncomesList ??= new ObservableCollection<IncomeModel>();
+            IncomesList ??= new List<IncomeModel>();
             return IncomesList;
         }
     }
@@ -64,26 +65,7 @@ public class IncomeRepository : IIncomeRepository
     {
         try
         {
-            var postData = new
-            {
-                amountReceived = newIncome.AmountReceived,
-                dateReceived = newIncome.DateReceived,
-                reason = newIncome.Reason,
-                userId = newIncome.UserId,
-            };
-
-            var response = await dataAccessRepo.PostDataToApiAsync("api/v1/add-income", postData);
-            if (response.IsSuccessStatusCode)
-            {
-                // Gọi lại GetAllIncomesAsync để cập nhật danh sách
-                await GetAllIncomesAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            
+            return false;
         }
         catch (Exception ex)
         {
@@ -96,26 +78,7 @@ public class IncomeRepository : IIncomeRepository
     {
         try
         {
-            var postData = new
-            {
-                amountReceived = income.AmountReceived,
-                dateReceived = income.DateReceived,
-                reason = income.Reason,
-                userId = income.UserId,
-            };
-
-            var response = await dataAccessRepo.PutDataToApiAsync($"api/v1/updateIncome/{income.Id}", postData);
-
-            if (response.IsSuccessStatusCode)
-            {
-                await GetAllIncomesAsync();
-                return true;
-            }
-            else
-            {
-                Debug.WriteLine("Failed to update income: " + response.ReasonPhrase);
-                return false;
-            }
+            return false;
         }
         catch (Exception ex)
         {
@@ -126,20 +89,11 @@ public class IncomeRepository : IIncomeRepository
 
     public async Task<bool> DeleteIncomeAsync(IncomeModel income)
     {
+        income.IsDeleted = true;
+
         try
         {
-            var response = await dataAccessRepo.DeleteDataFromApiAsync($"api/v1/income/{income.Id}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                GetAllIncomesAsync();
-                return true;
-            }
-            else
-            {
-                Debug.WriteLine("Failed to delete income: " + response.ReasonPhrase);
-                return false;
-            }
+            return false;
         }
         catch (Exception ex)
         {

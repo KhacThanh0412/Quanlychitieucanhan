@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.Settings.ApplicationSettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:utils="clr-namespace:Quanlychitieu.Utilities"
+    xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels"
+    x:Name="Page"
+    Title="Cài đặt ứng dụng">
+    <ContentPage.Resources>
+        <utils:InverseBoolConverter x:Key="VisibilityToggler" />
+    </ContentPage.Resources>
+    <toolkit:DockLayout>
+        <VerticalStackLayout toolkit:DockLayout.DockPosition="Bottom" />
+    </toolkit:DockLayout>
+</ContentPage>

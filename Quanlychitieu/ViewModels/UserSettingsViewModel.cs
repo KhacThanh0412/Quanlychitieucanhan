@@ -48,7 +48,12 @@ public partial class UserSettingsViewModel : BaseViewModel
 
     public async override Task LoadDataAsync()
     {
-        ActiveUser = await usersRepository.GetUserAsync();
+        var userJson = await SecureStorage.GetAsync("user");
+        if (!string.IsNullOrEmpty(userJson))
+        {
+            ActiveUser = JsonConvert.DeserializeObject<UsersModel>(userJson);
+        }
+
         // GetTotals();
         await base.LoadDataAsync();
     }

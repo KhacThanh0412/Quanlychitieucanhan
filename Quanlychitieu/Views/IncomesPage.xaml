@@ -3,18 +3,12 @@
     x:Class="Quanlychitieu.Views.IncomesPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:converters="clr-namespace:Quanlychitieu.Helpers"
     xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
     xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModel="clr-namespace:Quanlychitieu.ViewModels.Incomes"
     x:Name="page"
     x:DataType="viewModel:IncomesViewModel">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:DateTimeConverter x:Key="DateTimeConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <AbsoluteLayout>
         <toolkit:DockLayout
             Margin="5,0"
@@ -35,6 +29,35 @@
                     </MultiBinding>
                 </Label.Text>
             </Label>
+            <!--<Grid
+                Margin="10,3"
+                toolkit:DockLayout.DockPosition="Top"
+                HeightRequest="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start">
+                    <ImageButton Clicked="ExportToPDFImageButton_Clicked" Source="{AppThemeBinding Dark=save_to_pdf_d.png, Light=save_to_pdf_l.png}" />
+                    <ProgressBar
+                        x:Name="PrintProgressBarIndic"
+                        IsVisible="false"
+                        ProgressColor="DarkSlateBlue"
+                        WidthRequest="50" />
+                </VerticalStackLayout>
+
+                <ImageButton
+                    x:Name="pie_chart"
+                    Grid.Column="1"
+                    HorizontalOptions="End"
+                    IsVisible="false"
+                    Source="{AppThemeBinding Dark=pie_chart,
+                                             Light=pie_chart_l}"
+                    VerticalOptions="Center"
+                    WidthRequest="35" />
+            </Grid>-->
+
             <Label
                 Margin="5"
                 toolkit:DockLayout.DockPosition="Top"
@@ -51,21 +74,13 @@
                 HorizontalOptions="Center"
                 HorizontalTextAlignment="Center"
                 VerticalOptions="End">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{Binding TotalAmount}" />
-                        <Span Text=" Thu nhập. Tổng số tiền: " />
-                        <Span Text="{Binding TotalIncomes}" />
-                    </FormattedString>
-                </Label.FormattedText>
-
-                <!--<Label.Text>
+                <Label.Text>
                     <MultiBinding StringFormat="{} {2} Thu nhập. Tổng số tiền: {0:n2} {1}">
-                        <Binding Path="" />
+                        <Binding Path="TotalAmount" />
                         <Binding Path="UserCurrency" />
                         <Binding Path="TotalIncomes" />
                     </MultiBinding>
-                </Label.Text>-->
+                </Label.Text>
             </Label>
 
             <CollectionView
@@ -74,16 +89,18 @@
                 ItemsSource="{Binding IncomesList}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:IncomeModel">
+
                         <SwipeView>
                             <SwipeView.LeftItems>
                                 <SwipeItem
                                     BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
                                                                       Light={StaticResource BackGroundLight}}"
-                                    Command="{Binding Source={x:Reference page}, Path=BindingContext.EditIncomeCommand}"
+                                    Command="{Binding Source={x:Reference page}, Path=BindingContext.ShowEditIncomePopUpCommand}"
                                     CommandParameter="{Binding .}"
                                     IconImageSource="{AppThemeBinding Dark=edit_d.png,
                                                                       Light=edit_l.png}" />
                             </SwipeView.LeftItems>
+
                             <SwipeView.RightItems>
                                 <SwipeItem
                                     BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
@@ -93,16 +110,19 @@
                                     IconImageSource="{AppThemeBinding Dark=delete_d.png,
                                                                       Light=delete_l.png}" />
                             </SwipeView.RightItems>
+
                             <Border
                                 Margin="6,2"
                                 Padding="5"
                                 HorizontalOptions="FillAndExpand">
+
                                 <VerticalStackLayout>
                                     <Label
                                         FontAttributes="Bold"
                                         FontSize="18"
                                         HorizontalOptions="Center"
-                                        Text="{Binding DateReceived, Converter={StaticResource DateTimeConverter}}" />
+                                        Text="{Binding DateReceived, StringFormat='{0:MMMM dd, yyyy}'}" />
+
                                     <FlexLayout
                                         Margin="10,0"
                                         Direction="Row"
@@ -111,17 +131,27 @@
                                             FontAttributes="Bold"
                                             FontSize="16"
                                             Text="{Binding Reason, StringFormat='{0}'}" />
-                                        <Label
-                                            FontAttributes="Bold"
-                                            FontSize="16"
-                                            Text="{Binding AmountReceived}" />
+
+                                        <Label FontAttributes="Bold" FontSize="16">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{} {0:n2} {1}">
+                                                    <Binding Path="AmountReceived" />
+                                                    <Binding Path="Currency" />
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+
                                     </FlexLayout>
                                 </VerticalStackLayout>
                             </Border>
+
                         </SwipeView>
+
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+
         </toolkit:DockLayout>
 
         <Button
@@ -131,7 +161,7 @@
             AbsoluteLayout.LayoutFlags="PositionProportional"
             BackgroundColor="DarkSlateBlue"
             BorderColor="DarkSlateBlue"
-            Command="{Binding AddIncomeCommand}"
+            Command="{Binding ShowAddIncomePopUpCommand}"
             CornerRadius="26"
             FontSize="40"
             HeightRequest="55"

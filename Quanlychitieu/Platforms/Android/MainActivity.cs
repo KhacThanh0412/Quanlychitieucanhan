@@ -1,10 +1,8 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.Views;
 using Android.Widget;
 using AndroidX.Activity;
-using Microsoft.Maui.Platform;
 using System.Diagnostics;
 using Activity = Android.App.Activity;
 
@@ -15,7 +13,6 @@ namespace Quanlychitieu
     Categories = new[] { global::Android.Content.Intent.CategoryDefault })]
     public class MainActivity : MauiAppCompatActivity
     {
-        public IEnumerable<EditText> EditTextsInView => (Window.DecorView as ViewGroup).GetChildrenOfType<EditText>();
         protected override void OnCreate(Android.OS.Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);

@@ -15,7 +15,6 @@ namespace Quanlychitieu.Navigation
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(UserSettingsPage), typeof(UserSettingsPage));
             Routing.RegisterRoute(nameof(IncomesPage), typeof(IncomesPage));
-            Routing.RegisterRoute(nameof(AddIncomePage), typeof(AddIncomePage));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Quanlychitieu.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,6 +77,7 @@ namespace Quanlychitieu.Navigation
             try
             {
                 IsProcessing = true;
+
                 var currentPageStack = Shell.Current.Navigation.NavigationStack;
                 var count = currentPageStack.Count;
                 if (count > 0)
@@ -113,7 +113,6 @@ namespace Quanlychitieu.Navigation
             if (IsProcessing)
                 return;
             IsProcessing = true;
-            var currentMainPage = App.Current?.MainPage?.GetCurrentPage();
             var currentViewModel = App.CurrentViewModel;
             var currentPage = AppShell.Current.CurrentPage as ContentPage;
             var tapGestureRecognizer = new TapGestureRecognizer();
@@ -141,9 +140,9 @@ namespace Quanlychitieu.Navigation
                 }
             }
 
-            IsProcessing = false;
             // TODO:  https://github.com/dotnet/maui/issues/10252
             currentPage.Content.GestureRecognizers.Remove(tapGestureRecognizer);
+            IsProcessing = false;
         }
 
         private async void OnAppearingAsync(object sender, EventArgs e)
