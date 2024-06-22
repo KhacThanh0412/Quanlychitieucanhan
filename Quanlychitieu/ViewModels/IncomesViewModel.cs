@@ -120,35 +120,6 @@ public partial class IncomesViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    public async Task ShowAddIncomePopUp()
-    {
-        if (ActiveUser is null)
-        {
-            await Shell.Current.DisplayAlert("Đợi", "Vui lòng đợi", "OK");
-        }
-        else
-        {
-            var newIncome = new IncomeModel() { DateReceived = DateTime.Now };
-            const string PageTitle = "Thêm mới";
-            const bool isAdd = true;
-
-            await AddEditIncome(newIncome, PageTitle, isAdd);
-        }
-    }
-
-    private async Task AddEditIncome(IncomeModel newIncome, string pageTitle, bool isAdd)
-    {
-        var newUpserIncomeVM = new UpSertIncomeViewModel(incomeService, userService, newIncome, pageTitle, isAdd, ActiveUser);
-        await NavigationService.PushToPageAsync<AddIncomePage>();
-    }
-
-    [RelayCommand]
-    public async Task ShowEditIncomePopUp(IncomeModel income)
-    {
-        await AddEditIncome(income, "Sửa đơn", false);
-    }
-
-    [RelayCommand]
     public async Task DeleteIncomeBtn(IncomeModel income)
     {
         if(await AlertHelper.ShowConfirmationAlertAsync("Xác nhận xóa đơn?"))

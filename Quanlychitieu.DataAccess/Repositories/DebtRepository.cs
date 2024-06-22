@@ -1,16 +1,15 @@
 ﻿using LiteDB;
+using Quanlychitieu.DataAccess.IRepositories;
+using System.Collections.ObjectModel;
 
 namespace Quanlychitieu.DataAccess.Repositories;
 
 public class DebtRepository : IDebtRepository
 {
-    private const string DebtsCollectionName = "Debts";
-    LiteDatabase db;
-    private ILiteCollection<DebtModel> AllDebts;
     private readonly IDataAccessRepo dataAccess;
     private readonly IUsersRepository usersRepo;
 
-    public List<DebtModel> DebtList { get; set; }
+    public ObservableCollection<DebtModel> DebtList { get; set; }
 
     public event Action DebtListChanged;
     bool IsSyncing;
@@ -19,55 +18,54 @@ public class DebtRepository : IDebtRepository
     {
         this.dataAccess = dataAccess;
         usersRepo = userRepo;
+        DebtList = new ObservableCollection<DebtModel>();
     }
 
-    void OpenDB()
-    {
-        AllDebts = db.GetCollection<DebtModel>(DebtsCollectionName);
-        AllDebts.EnsureIndex(x => x.Id);
-    }
-
-    public async Task<List<DebtModel>> GetAllDebtAsync()
+    public async Task<ObservableCollection<DebtModel>> GetAllDebtAsync()
     {
         try
         {
-            OpenDB();
+            var userJson = await usersRepo.GetUserAsync();
+            var userId = userJson.Id;
+            if (userId == null)
+            {
+                Console.WriteLine("=====> User not logged in");
+                return new ObservableCollection<DebtModel>();
+            }
 
-            DebtList = AllDebts.Query().ToList();
+            var debts = await dataAccess.GetDataFromApiAsync<ObservableCollection<DebtModel>>($"api/v1/debt/user/{userId}");
+            if (debts != null)
+            {
+                DebtList = debts;
+                DebtListChanged?.Invoke();
+            }
+            else
+            {
+                debts = new ObservableCollection<DebtModel>();
+            }
 
-            //OfflineDebtList ??= Enumerable.Empty<DebtModel>().ToList();
             return DebtList;
 
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.InnerException.Message);
-            Debug.WriteLine("Get all Debts fxn Exception: " + ex.Message);
-            return Enumerable.Empty<DebtModel>().ToList();
-        }
-        finally
-        {
-            db.Dispose();
+            return DebtList;
         }
     }
 
     public async Task<bool> AddDebtAsync(DebtModel debt)
     {
-        debt.UpdateDateTime = DateTime.UtcNow;
+        
         try
         {
-            OpenDB();
-
-            if (AllDebts.Insert(debt) is not null)
+            var response = await dataAccess.PostDataToApiAsync("api/v1/add-debt", debt);
+            if (response.IsSuccessStatusCode)
             {
-                DebtList.Add(debt);
-                DebtListChanged?.Invoke();
-                db.Dispose();
+                await GetAllDebtAsync();
                 return true;
             }
             else
             {
-                Debug.WriteLine("Failed to add local debt");
                 return false;
             }
 
@@ -75,35 +73,22 @@ public class DebtRepository : IDebtRepository
         catch (Exception ex)
         {
             Debug.WriteLine("Failed to add local debt: " + ex.InnerException.Message);
-            db.Dispose();
             return false;
         }
     }
 
     public async Task<bool> DeleteDebtAsync(DebtModel debt)
     {
-        debt.UpdateDateTime = DateTime.UtcNow;
-        debt.IsDeleted = true;
         try
         {
-            OpenDB();
-            DebtList.Remove(debt);
-            if (!IsBatchUpdate)
+            var response = await dataAccess.DeleteDataFromApiAsync($"api/v1/delete-debt/{debt.Id}");
+            if (response.IsSuccessStatusCode)
             {
-                DebtListChanged?.Invoke();
-            }
-            if (AllDebts.Delete(debt.Id))
-            {
-
-                Debug.WriteLine("Debt deleted locally");
-
-                db.Dispose();
+                await GetAllDebtAsync();
                 return true;
             }
             else
             {
-                Debug.WriteLine("Failed to delete local debt");
-                db.Dispose();
                 return false;
             }
 
@@ -124,28 +109,18 @@ public class DebtRepository : IDebtRepository
 
     public async Task<bool> UpdateDebtAsync(DebtModel debt)
     {
-        debt.UpdateDateTime = DateTime.UtcNow;
 
         try
         {
-            OpenDB();
-            if (AllDebts.Update(debt))
-            {
-                Debug.WriteLine("Debt updated locally");
 
-                int index = DebtList.FindIndex(x => x.Id == debt.Id);
-                DebtList[index] = debt;
-                if (!IsBatchUpdate)
-                {
-                    DebtListChanged?.Invoke();
-                }
-                
-                db.Dispose();
+            var response = await dataAccess.PutDataToApiAsync("api/v1/update-debt", debt);
+            if (response.IsSuccessStatusCode)
+            {
+                await GetAllDebtAsync();
                 return true;
             }
             else
             {
-                Debug.WriteLine("Failed to update local debt");
                 return false;
             }
 
@@ -155,21 +130,5 @@ public class DebtRepository : IDebtRepository
             Debug.WriteLine("Exception when doing local dept update " + ex.InnerException.Message);
             return false;
         }
-    }
-
-    public async Task DropDebtCollection()
-    {
-        OpenDB();
-        db.DropCollection(DebtsCollectionName);
-        db.Dispose();
-        Debug.WriteLine("debts Collection dropped!");
-    }
-
-    public async Task LogOutUserAsync()
-    {
-        DebtList.Clear();
-        DebtListChanged?.Invoke();
-
-        await DropDebtCollection();
     }
 }

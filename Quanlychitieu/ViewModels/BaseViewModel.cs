@@ -27,7 +27,6 @@ namespace Quanlychitieu.ViewModels
         [ObservableProperty]
         private bool _isEnableScroll = true;
         public ViewModelBusyManager BusyManager { get; }
-        public IDataService DataService { get; private set; }
         protected INavigationService NavigationService { get; private set; }
         protected INavigationCommunityPopupService NavigationCommunityPopupService { get; private set; }
         private object _initData;

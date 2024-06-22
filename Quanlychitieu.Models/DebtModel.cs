@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -8,9 +9,10 @@ public partial class DebtModel : ObservableObject
 {
     private bool isPaidCompletely;
     private string? displayText;
+    [JsonProperty("_id")]
     public string Id { get; set; }
     [ObservableProperty]
-    public double amount ;
+    public double _amount;
     public DebtType DebtType { get; set; } = DebtType.Lent;
     public required PersonOrOrganizationModel PersonOrOrganization { get; set; }
     public DateTime? Deadline { get; set; } 

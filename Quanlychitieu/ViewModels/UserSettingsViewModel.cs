@@ -94,7 +94,6 @@ public partial class UserSettingsViewModel : BaseViewModel
             File.Delete(LoginDetectFile);
 
             await usersRepository.LogOutUserAsync();
-            await debtRepository.LogOutUserAsync();
         }
     }
 

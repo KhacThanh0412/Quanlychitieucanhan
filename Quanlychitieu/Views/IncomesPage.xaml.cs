@@ -31,18 +31,4 @@ public partial class IncomesPage : ContentPage
             _vm.IsBusy = false;
         }
     }
-    private async void ExportToPDFImageButton_Clicked(object sender, EventArgs e)
-    {
-        await Task.Delay(1);
-    }
-    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-        Task.Delay(1);
-        //PopUpCloseResult result = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(new InputPopUpPage(InputType.Numeric, new List<string>() { "Amount" }, "Enter New Pocket Money"));
-        //if (result.Result is PopupResult.OK)
-        //{
-        //    double NewAmount = (double)result.Data;
-        //    await viewModel.ResetUserPocketMoney(NewAmount);
-        //}
-    }
 }
