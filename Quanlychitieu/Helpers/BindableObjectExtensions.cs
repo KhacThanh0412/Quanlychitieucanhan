@@ -7,11 +7,58 @@ namespace Quanlychitieu.Helpers
 {
     public static class BindableObjectExtensions
     {
+        public static void InvokeViewAndViewModelAction<T>(this BindableObject view, Action<T> action)
+            where T : class
+        {
+            if (view is T viewAsT)
+            {
+                action(viewAsT);
+            }
+
+            if (view is BindableObject element && element.BindingContext is T viewModelAsT)
+            {
+                action(viewModelAsT);
+            }
+        }
+
+        public static async Task InvokeViewAndViewModelActionAsync<T>(this BindableObject view, Func<T, Task> action)
+            where T : class
+        {
+            if (view is T viewAsT)
+            {
+                await action(viewAsT);
+            }
+
+            if (view is BindableObject element && element.BindingContext is T viewModelAsT)
+            {
+                await action(viewModelAsT);
+            }
+        }
+
         public static TViewModel GetViewModel<TViewModel>(this BindableObject element)
             where TViewModel : class
         {
             return element.BindingContext as TViewModel;
         }
+
+        public static Page GetCurrentPage(this Page mainPage) =>
+           _getCurrentPage(mainPage);
+
+        private static Func<Page, Page> _getCurrentPage = mainPage =>
+        {
+            var page = mainPage;
+            Page child = null;
+
+            var lastModal = page.Navigation.ModalStack.LastOrDefault();
+            if (lastModal != null)
+                page = lastModal;
+
+            if (page is AppShell appShell)
+                child = appShell.CurrentPage;
+            else
+                child = page;
+            return child;
+        };
 
         public static Page GetPage(this BindableObject binableObj)
         {

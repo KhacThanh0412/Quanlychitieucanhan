@@ -6,7 +6,7 @@ using Quanlychitieu.Utilities;
 
 namespace Quanlychitieu.ViewModels.Incomes;
 
-public partial class UpSertIncomeViewModel : ObservableObject
+public partial class UpSertIncomeViewModel : BaseViewModel
 {
     private readonly IIncomeRepository incomeService;
     private readonly IUsersRepository userService;
@@ -23,13 +23,13 @@ public partial class UpSertIncomeViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    IncomeModel singleIncomeDetails = new() { DateReceived = DateTime.Now };
+    IncomeModel _singleIncomeDetails;
 
     [ObservableProperty]
     string pageTitle;
 
     [ObservableProperty]
-    UsersModel activeUser;
+    UsersModel _activeUser;
     [ObservableProperty]
     double resultingBalance;
     [ObservableProperty]
@@ -69,6 +69,12 @@ public partial class UpSertIncomeViewModel : ObservableObject
         ClosePopUp = true;
     }
 
+    public override async Task LoadDataAsync()
+    {
+        ActiveUser = await userService.GetUserAsync();
+        base.LoadDataAsync();
+    }
+
     async Task UpdateIncomeAsync(ToastDuration duration, double fontSize, CancellationTokenSource tokenSource)
     {
         double difference = SingleIncomeDetails.AmountReceived - InitialIncomeAmout;
@@ -105,8 +111,7 @@ public partial class UpSertIncomeViewModel : ObservableObject
         else
         {
             SingleIncomeDetails.Id = Guid.NewGuid().ToString();
-            SingleIncomeDetails.AddedDateTime = DateTime.UtcNow;
-            SingleIncomeDetails.UpdatedDateTime = DateTime.UtcNow;
+            SingleIncomeDetails.UserId = ActiveUser.Id;
             if (await incomeService.AddIncomeAsync(SingleIncomeDetails))
             {
                 ActiveUser.TotalIncomeAmount += SingleIncomeDetails.AmountReceived;
@@ -114,7 +119,7 @@ public partial class UpSertIncomeViewModel : ObservableObject
                 ActiveUser.PocketMoney = FinalPocketMoney;
                 ActiveUser.DateTimeOfPocketMoneyUpdate = DateTime.UtcNow;
 
-                await userService.UpdateUserAsync(ActiveUser);
+                // await userService.UpdateUserAsync(ActiveUser);
 
                 const string toastNotifMessage = "Đã thêm";
                 var toast = Toast.Make(toastNotifMessage, duration, fontSize);

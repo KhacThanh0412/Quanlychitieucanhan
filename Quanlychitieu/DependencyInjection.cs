@@ -1,4 +1,7 @@
-﻿using Quanlychitieu.Navigation;
+﻿using CommunityToolkit.Maui;
+using Mopups.Interfaces;
+using Mopups.Services;
+using Quanlychitieu.Navigation;
 using Quanlychitieu.Services;
 using Quanlychitieu.ViewModels;
 using Quanlychitieu.Views;
@@ -18,20 +21,20 @@ namespace Quanlychitieu
             services.AddSingleton<IUsersRepository, UserRepository>();
             services.AddSingleton<ISettingsServiceRepository, SettingsServiceRepository>();
             services.AddSingleton<IIncomeRepository, IncomeRepository>();
-
-
+            services.AddSingleton<INavigationCommunityPopupService, NavigationCommunityPopupService>();
             services.AddSingleton<INavigationService, NavigationService>();
-
 
             services.AddTransient<HomePage>();
             services.AddSingleton<LoginPage>();
             services.AddTransient<UserSettingsPage>();
             services.AddTransient<IncomesPage>();
+            services.AddTransient<AddIncomePage>();
 
             services.AddTransient<HomeViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddTransient<UserSettingsViewModel>();
             services.AddTransient<IncomesViewModel>();
+            services.AddTransient<AddIncomeViewModel>();
 
             return services;
         }
