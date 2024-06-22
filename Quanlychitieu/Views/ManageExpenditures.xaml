@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<uranium:UraniumContentPage
-    x:Class="Quanlychitieu.Views.Expenditures.ManageExpenditures"
+<ContentPage
+    x:Class="Quanlychitieu.Views.ManageExpenditures"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
@@ -9,15 +9,10 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels.Expenditures"
+    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels"
     x:Name="Page"
     x:DataType="viewModels:ManageExpendituresViewModel"
-    BackgroundColor="{AppThemeBinding Light=#F0F0F0,
-                                      Dark={StaticResource BackGroundDark}}">
-    <!--<ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding ThemeTogglerCommand}" Text="Switch Mode" />
-
-    </ContentPage.ToolbarItems>-->
+    BackgroundColor="{AppThemeBinding Light=#F0F0F0}">
     <AbsoluteLayout>
 
         <toolkit:DockLayout
@@ -29,36 +24,14 @@
                 toolkit:DockLayout.DockPosition="Top"
                 FontAttributes="Bold"
                 FontSize="21"
-                HorizontalOptions="Center">
-                <Label.Text>
-                    <MultiBinding StringFormat="{} Số dư hiện tại là: {0:n2} {1}">
-                        <Binding Path="UserPocketMoney" />
-                        <Binding Path="UserCurrency" />
-                    </MultiBinding>
-                </Label.Text>
-            </Label>
+                HorizontalOptions="Center"
+                Text="Danh sách các hóa đơn" />
 
             <Grid toolkit:DockLayout.DockPosition="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-
-                <!--<VerticalStackLayout
-                    Grid.Column="0"
-                    BackgroundColor="Transparent"
-                    HorizontalOptions="Start">
-                    <ImageButton
-                        BackgroundColor="Transparent"
-                        Clicked="ExportToPDFImageButton_Clicked"
-                        Source="{AppThemeBinding Dark=save_to_pdf_d.png,
-                                                 Light=save_to_pdf_l.png}" />
-                    <ProgressBar
-                        x:Name="PrintProgressBarIndic"
-                        IsVisible="false"
-                        ProgressColor="DarkSlateBlue"
-                        WidthRequest="50" />
-                </VerticalStackLayout>-->
 
                 <ImageButton
                     x:Name="pie_chart"
@@ -86,77 +59,50 @@
                 FontSize="17"
                 HorizontalOptions="Center"
                 VerticalOptions="End">
-                <Label.Text>
-                    <MultiBinding StringFormat="{} {2} Hóa đơn. Tổng số tiền: {0:n2} {1}">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding TotalAmount}" />
+                        <Span Text=" Hóa đơn. Tổng số đã chi: " />
+                        <Span Text="{Binding TotalExpenditures}" />
+                    </FormattedString>
+                </Label.FormattedText>
+                <!--<Label.Text>
+                    <MultiBinding StringFormat="{} Hóa đơn. Tổng số tiền: {0:n2} {1}">
                         <Binding Path="TotalAmount" />
                         <Binding Path="UserCurrency" />
                         <Binding Path="TotalExpenditures" />
                     </MultiBinding>
-                </Label.Text>
+                </Label.Text>-->
             </Label>
 
             <CollectionView
                 x:Name="ColView"
                 EmptyView="Không có hóa đơn nào..."
-                IsGrouped="True"
                 IsVisible="true"
-                ItemsSource="{Binding GroupedExpenditures}">
-                <CollectionView.GroupHeaderTemplate>
-                    <DataTemplate x:DataType="viewModels:DateGroup">
-                        <Label
-                            Padding="10,3"
-                            BackgroundColor="{AppThemeBinding Dark={StaticResource BorderDark},
-                                                              Light={StaticResource Secondary}}"
-                            FontAttributes="Bold,Italic"
-                            FontSize="12"
-                            Text="{Binding Date, StringFormat='{0:ddd, MMMM dd, yyyy}'}"
-                            TextColor="{AppThemeBinding Dark={StaticResource Secondary},
-                                                        Light=black}" />
-                    </DataTemplate>
-                </CollectionView.GroupHeaderTemplate>
-                <CollectionView.GroupFooterTemplate>
-                    <DataTemplate x:DataType="viewModels:DateGroup">
-                        <Label
-                            Margin="10,5"
-                            FontAttributes="Bold"
-                            FontSize="12"
-                            HorizontalOptions="End"
-                            Opacity="0.5">
-                            <Label.Text>
-                                <MultiBinding StringFormat="{}{0} Hóa đơn, Tổng tiền : {1:n2} {2}">
-                                    <Binding Path="TotalCount" />
-                                    <Binding Path="TotalAmount" />
-                                    <Binding Path="Currency" />
-                                </MultiBinding>
-                            </Label.Text>
-                        </Label>
-                    </DataTemplate>
-                </CollectionView.GroupFooterTemplate>
+                ItemsSource="{Binding ExpendituresList}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:ExpendituresModel">
-                        <SwipeView Margin="0,2" BackgroundColor="Transparent">
-                            <SwipeView.RightItems>
-                                <SwipeItems>
-                                    <SwipeItem
-                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
-                                                                          Light=#D8D8D8}"
-                                        Clicked="EditExpIcon_Clicked"
-                                        IconImageSource="{AppThemeBinding Dark=edit_d,
-                                                                          Light=edit_l}" />
-                                </SwipeItems>
-                            </SwipeView.RightItems>
-
+                        <SwipeView>
                             <SwipeView.LeftItems>
                                 <SwipeItems>
                                     <SwipeItem
-                                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackGroundDark},
-                                                                          Light=#D8D8D8}"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource BackGroundLight}}"
+                                        Command="{Binding Source={x:Reference Page}, Path=BindingContext.OpenEditExpenditureCommand}"
+                                        CommandParameter="{Binding .}"
+                                        IconImageSource="{AppThemeBinding Dark=edit_d.png,
+                                                                          Light=edit_l.png}" />
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem
+                                        BackgroundColor="{AppThemeBinding Light=#D8D8D8}"
                                         Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteExpenditureBtnCommand}"
                                         CommandParameter="{Binding .}"
                                         IconImageSource="{AppThemeBinding Dark=delete_d,
                                                                           Light=delete_l}" />
                                 </SwipeItems>
-                            </SwipeView.LeftItems>
+                            </SwipeView.RightItems>
                             <Border Padding="0" StrokeThickness="0">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer
@@ -169,31 +115,43 @@
                                         Margin="6,2"
                                         Direction="Row"
                                         JustifyContent="SpaceBetween">
-                                        <VerticalStackLayout>
+                                        <StackLayout>
                                             <Label
                                                 FontAttributes="Bold"
                                                 FontSize="15"
-                                                Text="{Binding Reason}"
                                                 TextColor="{AppThemeBinding Dark={StaticResource WildBlueYonder},
-                                                                            Light=Darkslateblue}" />
+                                                                            Light=Darkslateblue}">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Tiêu đề: " />
+                                                        <Span Text="{Binding Reason}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
 
                                             <Label
                                                 FontAttributes="Italic"
                                                 Opacity="{AppThemeBinding Light=0.5}"
-                                                Text="{Binding Category}"
                                                 TextColor="{AppThemeBinding Dark={StaticResource Secondary},
-                                                                            Light=black}" />
-                                        </VerticalStackLayout>
+                                                                            Light=black}">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Nội dung: " />
+                                                        <Span Text="{Binding Category}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
                                         <Label
                                             FontAttributes="Bold"
                                             FontSize="15"
                                             VerticalTextAlignment="Center">
-                                            <Label.Text>
-                                                <MultiBinding StringFormat="{}{0:n2} {1}">
-                                                    <Binding Path="AmountSpent" />
-                                                    <Binding Path="Currency" />
-                                                </MultiBinding>
-                                            </Label.Text>
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Số tiền: " />
+                                                    <Span Text="{Binding AmountSpent}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
                                         </Label>
                                     </FlexLayout>
                                     <Rectangle Fill="#404040" HeightRequest="0.8" />
@@ -217,7 +175,7 @@
             AbsoluteLayout.LayoutFlags="PositionProportional"
             BackgroundColor="DarkSlateBlue"
             BorderColor="DarkSlateBlue"
-            Clicked="AddExpBtn_Clicked"
+            Command="{Binding OpenAddExpenditureCommand}"
             CornerRadius="26"
             FontSize="40"
             HeightRequest="55"
@@ -253,4 +211,4 @@
             </VerticalStackLayout>
         </materialAttach:BackdropView>
     </uranium:UraniumContentPage.Attachments>-->
-</uranium:UraniumContentPage>
+</ContentPage>

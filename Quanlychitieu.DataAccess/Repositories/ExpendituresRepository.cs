@@ -1,74 +1,81 @@
-﻿using LiteDB;
+﻿using System.Collections.ObjectModel;
 
 namespace Quanlychitieu.DataAccess.Repositories;
 
 public class ExpendituresRepository : IExpendituresRepository
 {
-    LiteDatabase db;
-    public List<ExpendituresModel> ExpendituresList { get; set; } = new List<ExpendituresModel>();
+    public ObservableCollection<ExpendituresModel> ExpendituresList { get; set; } = new ObservableCollection<ExpendituresModel>();
     bool IsBatchUpdate;
 
     public event Action ExpendituresListChanged;
-    ILiteCollection<ExpendituresModel> AllExpenditures;
 
     private readonly IDataAccessRepo dataAccessRepo;
     private readonly IUsersRepository usersRepo;
-    private const string expendituresDataCollectionName = "Expenditures";
 
     public ExpendituresRepository(IDataAccessRepo dataAccess, IUsersRepository userRepo)
     {
         dataAccessRepo = dataAccess;
         usersRepo = userRepo;
+        ExpendituresList = new ObservableCollection<ExpendituresModel>();
     }
 
-    void OpenDB()
+    public async Task<ObservableCollection<ExpendituresModel>> GetAllExpendituresAsync()
     {
-        AllExpenditures = db.GetCollection<ExpendituresModel>(expendituresDataCollectionName);
-        AllExpenditures.EnsureIndex(x => x.Id);
-    }
-
-    public async Task<List<ExpendituresModel>> GetAllExpendituresAsync()
-    {
-        if (ExpendituresList is not null && ExpendituresList.Any())
-        {
-            return ExpendituresList;
-        }
         try
         {
-            OpenDB();
-            db.Dispose();
-            ExpendituresList ??= new List<ExpendituresModel>();
+            var getUser = await usersRepo.GetUserAsync();
+            var userId = getUser.Id;
+            if (userId is null)
+            {
+                return new ObservableCollection<ExpendituresModel>();
+            }
+
+            var expends = await dataAccessRepo.GetDataFromApiAsync<ObservableCollection<ExpendituresModel>>($"api/v1/expenses/user/{userId}");
+            if (expends is not null)
+            {
+                ExpendituresList = expends;
+                ExpendituresListChanged?.Invoke();
+            }
+            else
+            {
+                ExpendituresList = new ObservableCollection<ExpendituresModel>();
+            }
 
             return ExpendituresList;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Debug.WriteLine(ex.InnerException?.Message);
-            Debug.WriteLine("Get all EXP function Exception: " + ex.Message);
-            return new List<ExpendituresModel>();
+            return ExpendituresList;
         }
+    }
+
+    public double CalculateTotalExpends()
+    {
+        return ExpendituresList.Where(expends => !expends.IsDeleted).Sum(expend => expend.AmountSpent);
     }
 
     public async Task<bool> AddExpenditureAsync(ExpendituresModel expenditure)
     {
         try
         {
-            OpenDB();
-            var result = AllExpenditures.Insert(expenditure);
-            if (result != null)
+            var postData = new
             {
-                if (ExpendituresList == null)
-                {
-                    ExpendituresList = new List<ExpendituresModel>();
-                }
+                dateSpent = expenditure.DateSpent,
+                amountSpent = expenditure.AmountSpent,
+                reason = expenditure.Reason,
+                description = expenditure.Description,
+                category = expenditure.Category,
+                userId = expenditure.UserId,
+            };
 
-                ExpendituresList.Add(expenditure);
-                ExpendituresListChanged?.Invoke();
+            var response = await dataAccessRepo.PostDataToApiAsync("api/v1/add-expenses", postData);
+            if (response.IsSuccessStatusCode)
+            {
+                await GetAllExpendituresAsync();
                 return true;
             }
             else
             {
-                Debug.WriteLine("Error while inserting Expenditure");
                 return false;
             }
         }
@@ -77,36 +84,30 @@ public class ExpendituresRepository : IExpendituresRepository
             Debug.WriteLine("Add ExpLocal Exception: " + ex.Message);
             return false;
         }
-        finally
-        {
-            db.Dispose();
-        }
     }
 
     public async Task<bool> UpdateExpenditureAsync(ExpendituresModel expenditure)
     {
         try
         {
-            OpenDB();
-            if (AllExpenditures.Update(expenditure))
+            var updateData = new
             {
-                int index = ExpendituresList.FindIndex(x => x.Id == expenditure.Id);
-                if (index >= 0)
-                {
-                    ExpendituresList[index] = expenditure;
-                }
-                else
-                {
-                    ExpendituresList.Add(expenditure);
-                }
-                ExpendituresListChanged?.Invoke();
+                dateSpent = expenditure.DateSpent,
+                amountSpent = expenditure.AmountSpent,
+                reason = expenditure.Reason,
+                description = expenditure.Description,
+                category = expenditure.Category,
+                userId = expenditure.UserId,
+            };
+
+            var response = await dataAccessRepo.PutDataToApiAsync($"api/v1/updateExpenses/{expenditure.Id}", updateData);
+            if (response.IsSuccessStatusCode)
+            {
+                await GetAllExpendituresAsync();
                 return true;
             }
-            else
-            {
-                Debug.WriteLine("Failed to update Expenditure");
-                return false;
-            }
+            
+            return false;
         }
         catch (Exception ex)
         {
@@ -115,36 +116,26 @@ public class ExpendituresRepository : IExpendituresRepository
         }
         finally
         {
-            db.Dispose();
         }
     }
 
     public async Task<bool> DeleteExpenditureAsync(ExpendituresModel expenditure)
     {
-        expenditure.IsDeleted = true;
         try
         {
-            OpenDB();
-            if (AllExpenditures.Update(expenditure))
+            var response = await dataAccessRepo.DeleteDataFromApiAsync($"api/v1/deleteExpenses/{expenditure.Id}");
+            if (response.IsSuccessStatusCode)
             {
-                ExpendituresList.RemoveAll(x => x.Id == expenditure.Id);
-                ExpendituresListChanged?.Invoke();
+                await GetAllExpendituresAsync();
                 return true;
-            }
-            else
-            {
-                Debug.WriteLine("Failed to delete Expenditure");
-                return false;
-            }
+            }    
+
+            return false;
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
             return false;
-        }
-        finally
-        {
-            db.Dispose();
         }
     }
 
@@ -152,20 +143,6 @@ public class ExpendituresRepository : IExpendituresRepository
     {
         await GetAllExpendituresAsync();
         IsBatchUpdate = false;
-        ExpendituresListChanged?.Invoke();
-    }
-
-    public async Task DropExpendituresCollection()
-    {
-        OpenDB();
-        db.DropCollection(expendituresDataCollectionName);
-        db.Dispose();
-    }
-
-    public async Task LogOutUserAsync()
-    {
-        await DropExpendituresCollection();
-        ExpendituresList.Clear();
         ExpendituresListChanged?.Invoke();
     }
 }

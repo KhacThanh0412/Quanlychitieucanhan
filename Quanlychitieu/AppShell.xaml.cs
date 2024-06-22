@@ -1,6 +1,5 @@
 ﻿using Quanlychitieu.Navigation;
 using Quanlychitieu.Views.Debts;
-using Quanlychitieu.Views.Expenditures;
 using Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp;
 using Quanlychitieu.Views.Statistics;
 
@@ -12,7 +11,6 @@ namespace Quanlychitieu
         {
             InitializeComponent();
             NavGraph.RegisterRoute();
-            Routing.RegisterRoute(nameof(ManageExpenditures), typeof(ManageExpenditures));
             Routing.RegisterRoute(nameof(UpSertExpenditurePage), typeof(UpSertExpenditurePage));
 
             Routing.RegisterRoute(nameof(UpSertIncomePage), typeof(UpSertIncomePage));

@@ -55,7 +55,6 @@
                 </material:TextField.Validations>
             </material:TextField>
             <Button
-                input:FormView.IsSubmitButton="True"
                 BackgroundColor="{StaticResource SaveBtnColor}"
                 Command="{Binding UpSertIncomeCommand}"
                 FontAttributes="Bold"

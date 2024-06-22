@@ -44,11 +44,8 @@ public class IncomeRepository : IIncomeRepository
 
             return IncomesList;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Debug.WriteLine(ex.InnerException?.Message);
-            Debug.WriteLine("Get all INC function Exception: " + ex.Message);
-            IncomesList ??= new ObservableCollection<IncomeModel>();
             return IncomesList;
         }
     }
@@ -132,7 +129,7 @@ public class IncomeRepository : IIncomeRepository
 
             if (response.IsSuccessStatusCode)
             {
-                GetAllIncomesAsync();
+                await GetAllIncomesAsync();
                 return true;
             }
             else

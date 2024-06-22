@@ -202,7 +202,7 @@
 	  <Compile Update="Views\Debts\SingleDebtDetailsPage.xaml.cs">
 	    <DependentUpon>SingleDebtDetailsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Expenditures\ManageExpenditures.xaml.cs">
+	  <Compile Update="Views\ManageExpenditures.xaml.cs">
 	    <DependentUpon>ManageExpenditures.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\DetailsOfMonthlyPlannedExpPage.xaml.cs">
@@ -268,6 +268,9 @@
 	  <MauiXaml Update="PopUpPages\UpSertInstallmentPayment.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\AddExpendituresPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\AddIncomePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -289,7 +292,7 @@
 	  <MauiXaml Update="Views\Debts\UpSertInstallmentBSheet.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Expenditures\ManageExpenditures.xaml">
+	  <MauiXaml Update="Views\ManageExpenditures.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Expenditures\PlannedExpenditures\MonthlyPlannedExp\DetailsOfMonthlyPlannedExpPage.xaml">
@@ -329,12 +332,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Statistics\StatisticsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\UpSertExpendituresPopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\UpSertIncomePopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

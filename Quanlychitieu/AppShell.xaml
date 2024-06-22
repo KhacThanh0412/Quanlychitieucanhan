@@ -6,7 +6,6 @@
     xmlns:mct="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
     xmlns:views="clr-namespace:Quanlychitieu.Views"
     xmlns:viewsDebts="clr-namespace:Quanlychitieu.Views.Debts"
-    xmlns:viewsExp="clr-namespace:Quanlychitieu.Views.Expenditures"
     xmlns:viewsPlannedExp="clr-namespace:Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
     xmlns:viewsStats="clr-namespace:Quanlychitieu.Views.Statistics">
     <Shell.Behaviors>
@@ -22,7 +21,7 @@
 
         <ShellContent
             Title="Thu chi"
-            ContentTemplate="{DataTemplate viewsExp:ManageExpenditures}"
+            ContentTemplate="{DataTemplate views:ManageExpenditures}"
             Icon="{AppThemeBinding Dark=initiate_money_transfer_d,
                                    Light=initiate_money_transfer_d}"
             Route="ManageExpenditures" />

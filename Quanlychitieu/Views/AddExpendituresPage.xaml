@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Quanlychitieu.Views.AddExpendituresPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:material="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+    xmlns:models="clr-namespace:Quanlychitieu.Models;assembly=Quanlychitieu.Models"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:utilities="clr-namespace:Quanlychitieu.Utilities"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:viewModels="clr-namespace:Quanlychitieu.ViewModels"
+    x:Name="page"
+    Title="{Binding TitlePage}">
+    <Border
+        Margin="13,10"
+        Stroke="{AppThemeBinding Light=#CBCBCB}"
+        StrokeShape="RoundRectangle 12"
+        StrokeThickness="0">
+        <Border.Resources>
+            <ResourceDictionary>
+                <utilities:EnumConverter x:Key="EnumConverter" />
+            </ResourceDictionary>
+        </Border.Resources>
+        <StackLayout>
+            <StackLayout.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="TextColor" Value="{AppThemeBinding Light=black}" />
+                    </Style>
+                </ResourceDictionary>
+            </StackLayout.Resources>
+            <StackLayout>
+                <material:TextField
+                    Title="Tiêu đề"
+                    BorderColor="DarkSlateBlue"
+                    IsTextPredictionEnabled="True"
+                    Text="{Binding ExpendituresDetails.Reason}"
+                    TextColor="{AppThemeBinding Light=blacke}"
+                    TitleColor="{AppThemeBinding Light=black}">
+                    <material:TextField.Validations>
+                        <validation:RequiredValidation />
+                    </material:TextField.Validations>
+                </material:TextField>
+                <material:DatePickerField
+                    Title="Ngày chi"
+                    BorderColor="DarkSlateBlue"
+                    Date="{Binding DateSpent}"
+                    MaximumDate="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+                    MinimumDate="01/01/2022"
+                    TextColor="{AppThemeBinding Light=black,
+                                                Dark=white}">
+
+                    <material:DatePickerField.Validations>
+                        <validation:RequiredValidation />
+                    </material:DatePickerField.Validations>
+                </material:DatePickerField>
+                <material:TextField
+                    x:Name="UnitPrice"
+                    Title="Price"
+                    Grid.Column="0"
+                    AccentColor="#CBCBCB"
+                    BorderColor="DarkSlateBlue"
+                    Keyboard="Numeric"
+                    Text="{Binding ExpendituresDetails.AmountSpent}" />
+                <material:TextField
+                    Title="Category"
+                    BorderColor="DarkSlateBlue"
+                    Text="{Binding ExpendituresDetails.Category}"
+                    TextColor="{AppThemeBinding Light=black}" />
+                <material:EditorField
+                    Title="Mô tả"
+                    BorderColor="DarkSlateBlue"
+                    HeightRequest="70"
+                    IsTextPredictionEnabled="True"
+                    Text="{Binding ExpendituresDetails.Description}"
+                    TextColor="{AppThemeBinding Light=blacke}"
+                    TitleColor="{AppThemeBinding Light=black}">
+                    <material:EditorField.Validations>
+                        <validation:RequiredValidation />
+                    </material:EditorField.Validations>
+                </material:EditorField>
+                <Button
+                    Margin="0,20,0,0"
+                    BackgroundColor="{StaticResource SaveBtnColor}"
+                    Command="{Binding UpSertSpentCommand}"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    Text="Lưu"
+                    TextColor="White" />
+            </StackLayout>
+        </StackLayout>
+    </Border>
+</ContentPage>

@@ -235,17 +235,6 @@ public partial class StatisticsPageViewModel : ObservableObject
     {
         try
         {
-            listOfPieSeries = GroupedExpenditures
-            .SelectMany(g => g)
-            .Where(exp => exp.DateSpent.Month == SelectedMonthValue && exp.DateSpent.Year == SelectedYearValue)
-            .GroupBy(exp => exp.Category)
-            .Select(g => new PieChartData
-            {
-                Category = g.Key.ToString(),
-                TotalCount = g.Count()
-            })
-            .ToList();
-
             MyPieSeries = listOfPieSeries.Select(data => new PieSeries<double>
             {
                 Values = new double[] { data.TotalCount },

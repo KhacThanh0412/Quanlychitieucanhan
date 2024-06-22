@@ -152,7 +152,6 @@ namespace Quanlychitieu.ViewModels
         {
             var newExpenditure = new ExpendituresModel() { DateSpent = DateTime.Now };
             var NewUpSertVM = new UpSertExpenditureViewModel(expenditureRepo, userRepo);
-            var newUpSertExpPopUp = new UpSertExpendituresPopUp(NewUpSertVM);
             try
             {
 
@@ -160,16 +159,6 @@ namespace Quanlychitieu.ViewModels
                 {
                     Debug.WriteLine("Không thể mở hộp thoại!");
                     await Shell.Current.DisplayAlert("Wait", "Không thể đi", "Ok");
-                }
-                else
-                {
-                    var UpSertResult = (PopUpCloseResult)await Shell.Current.ShowPopupAsync(newUpSertExpPopUp);
-
-                    if (UpSertResult.Result == PopupResult.OK)
-                    {
-                        ExpendituresModel exp = (ExpendituresModel)UpSertResult.Data;
-                        //add logic if this exp is the latest in terms of datetime
-                    }
                 }
             }
             catch (Exception ex)

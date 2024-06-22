@@ -54,20 +54,14 @@ namespace Quanlychitieu
                 .UseMauiCommunityToolkit();
 
             builder.Services.AddApplication();
-            builder.Services.AddSingleton<HttpClient>();
             /*----------------------- REGISTERING Repositories ------------------------------------------------------------------------*/
             builder.Services.AddSingleton(CalendarStore.Default);
-            builder.Services.AddSingleton<IExpendituresRepository, ExpendituresRepository>();
             builder.Services.AddSingleton<IDebtRepository, DebtRepository>();
             // builder.Services.AddSingleton<IOnlineCredentialsRepository, OnlineDataAccessRepository>();
             builder.Services.AddSingleton<IPlannedExpendituresRepository, PlannedExpendituresRepository>();
 
-            /*--------------------ADDING VIEWMODELS----------------------------------------------------------------------------------------*/
-
             /*-- Section for Expenditures --*/
             builder.Services.AddSingleton<UpSertExpenditureViewModel>();
-            builder.Services.AddSingleton<ManageExpendituresViewModel>();
-
             /* -- Section for Incomes --*/
             //builder.Services.AddSingleton<UpSertIncomeViewModel>();
 
@@ -86,7 +80,6 @@ namespace Quanlychitieu
             /*-------------------------------REGISTERING MOBILE VIEWS ---------------------------------------------------------------*/
 
             /*-- Section for Expenditures --*/
-            builder.Services.AddSingleton<ManageExpenditures>();
             builder.Services.AddSingleton<UpSertExpenditurePage>();
 
             /*-- Section for Incomes --*/

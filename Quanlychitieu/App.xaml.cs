@@ -14,8 +14,6 @@ namespace Quanlychitieu
             var settingsRepo = new SettingsServiceRepository();
             var usersRepo = new UserRepository(dataAccess);
             MainPage = new NavigationPage(new LoginPage(new LoginViewModel(settingsRepo, usersRepo)));
-
-            AppThemesSettings.ThemeSettings.SetTheme();
         }
 
         public INavigation GetNavigation()

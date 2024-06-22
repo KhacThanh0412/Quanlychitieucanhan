@@ -13,7 +13,6 @@ public partial class UpSertExpenditureViewModel : ObservableObject
     {
         expenditureRepo = expendituresRepository;
         userRepo = usersRepository;
-        ExpenditureCategory = Enum.GetValues(typeof(ExpenditureCategory)).Cast<ExpenditureCategory>().ToList();
         userRepo.UserDataChanged += UserRepo_OfflineUserDataChanged;
     }
 
@@ -41,9 +40,6 @@ public partial class UpSertExpenditureViewModel : ObservableObject
 
     [ObservableProperty]
     bool closePopUp;
-
-    [ObservableProperty]
-    List<ExpenditureCategory> expenditureCategory;
 
     double _initialUserPocketMoney;
     double _initialExpenditureAmount;

@@ -1,17 +1,18 @@
-﻿namespace Quanlychitieu.DataAccess.IRepositories;
+﻿using System.Collections.ObjectModel;
+
+namespace Quanlychitieu.DataAccess.IRepositories;
 
 public interface IExpendituresRepository
 {
     event Action ExpendituresListChanged;
-    Task<List<ExpendituresModel>> GetAllExpendituresAsync();
+    Task<ObservableCollection<ExpendituresModel>> GetAllExpendituresAsync();
 
-    List<ExpendituresModel> ExpendituresList { get; set; }
+    ObservableCollection<ExpendituresModel> ExpendituresList { get; set; }
     Task<bool> AddExpenditureAsync(ExpendituresModel expenditure);
     Task<bool> UpdateExpenditureAsync(ExpendituresModel expenditure);
     Task<bool> DeleteExpenditureAsync(ExpendituresModel expenditure);
 
     Task SynchronizeExpendituresAsync();
+    double CalculateTotalExpends();
 
-    Task LogOutUserAsync();
-    Task DropExpendituresCollection();
 }

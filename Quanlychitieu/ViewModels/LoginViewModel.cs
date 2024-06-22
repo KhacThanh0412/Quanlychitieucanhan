@@ -80,6 +80,7 @@ namespace Quanlychitieu.ViewModels
                     return;
                 }
 
+                ErrorMessageVisible = false;
                 CurrentUser = user;
                 App.Current.MainPage = new AppShell();
                 await NavigationService.PushToPageAsync<HomePage>(CurrentUser);

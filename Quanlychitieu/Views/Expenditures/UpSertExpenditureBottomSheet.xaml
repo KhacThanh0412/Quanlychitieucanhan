@@ -77,12 +77,12 @@
                     Text="{Binding SingleExpenditureDetails.UnitPrice}"
                     TextChanged="UnitPrice_TextChanged" />
 
-                <material:PickerField
+                <!--<material:PickerField
                     Title="Danh mục"
                     ItemsSource="{Binding ExpenditureCategory}"
                     SelectedItem="{Binding SingleExpenditureDetails.Category}"
                     TextColor="{AppThemeBinding Light=black,
-                                                Dark=white}" />
+                                                Dark=white}" />-->
                 <material:EditorField
                     Title="Lý do"
                     IsTextPredictionEnabled="True"

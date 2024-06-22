@@ -24,17 +24,8 @@
                 toolkit:DockLayout.DockPosition="Top"
                 FontAttributes="Bold"
                 FontSize="20"
-                HorizontalOptions="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped" />
-                </Label.GestureRecognizers>
-                <Label.Text>
-                    <MultiBinding StringFormat="{} Số dư hiện tại là : {0}">
-                        <Binding Path="UserPocketMoney" />
-                        <Binding Path="UserCurrency" />
-                    </MultiBinding>
-                </Label.Text>
-            </Label>
+                HorizontalOptions="Center"
+                Text="Danh sách các thu nhập" />
             <Label
                 Margin="5"
                 toolkit:DockLayout.DockPosition="Top"
