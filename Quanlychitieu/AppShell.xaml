@@ -8,8 +8,7 @@
     xmlns:viewsDebts="clr-namespace:Quanlychitieu.Views.Debts"
     xmlns:viewsExp="clr-namespace:Quanlychitieu.Views.Expenditures"
     xmlns:viewsPlannedExp="clr-namespace:Quanlychitieu.Views.Expenditures.PlannedExpenditures.MonthlyPlannedExp"
-    xmlns:viewsStats="clr-namespace:Quanlychitieu.Views.Statistics"
-    CurrentItem="{x:Reference login}">
+    xmlns:viewsStats="clr-namespace:Quanlychitieu.Views.Statistics">
     <Shell.Behaviors>
         <mct:StatusBarBehavior StatusBarColor="DarkSlateBlue" />
     </Shell.Behaviors>
